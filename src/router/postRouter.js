@@ -84,9 +84,15 @@ postRouter.get(
  *    tags: [Posts]
  *    parameters:
  *      - in: query
- *        name: user_id
+ *        name: title
  *        required: true
- *        description: 유저 아이디
+ *        description: 게시글 제목
+ *        schema:
+ *          type: string
+ *      - in: query
+ *        name: author
+ *        required: true
+ *        description: 게시글 작성자
  *        schema:
  *          type: string
  *    responses:

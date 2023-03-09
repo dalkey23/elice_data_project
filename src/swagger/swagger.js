@@ -7,7 +7,7 @@ const options ={
         info : {
             title : "파릇파릇",
             version : "1.0.0",
-            description : "교통봉사 중개 서비스 파릇파릇 API"
+            description : "청소년 교통사고 취약 지역을 대상으로 교통 봉사 모임의 모집을 중개해주는 서비스"
         },
         servers : [
             {
