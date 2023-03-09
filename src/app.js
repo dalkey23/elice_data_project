@@ -5,6 +5,7 @@ const config = require("./config");
 const AppError = require("./misc/AppError");
 const commonErrors = require("./misc/commonErrors");
 const apiRouter = require("./router");
+const { swaggerUi, specs } = require('./swagger/swagger');
 
 async function create() {
   // MongoDB에 연결
@@ -14,6 +15,7 @@ async function create() {
   const expressApp = express();
 
   expressApp.use(express.json());
+  expressApp.use(express.urlencoded({ extended: false }));
 
   // Health check API
   expressApp.get("/health", (req, res, next) => {
@@ -24,6 +26,9 @@ async function create() {
 
   // version 1의 api router를 등록
   expressApp.use("/api/v1", apiRouter.v1);
+
+  //swagger
+  expressApp.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
   // 해당되는 URL이 없을 때를 대비한 미들웨어
   expressApp.use((req, res, next) => {
