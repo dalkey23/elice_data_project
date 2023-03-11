@@ -15,6 +15,7 @@ async function create() {
   const expressApp = express();
 
   expressApp.use(express.json());
+  expressApp.use(express.urlencoded({ extended: false }));
 
   // Health check API
   expressApp.get("/health", (req, res, next) => {
