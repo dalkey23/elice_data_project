@@ -117,7 +117,7 @@ const meetingController = {
         meetingStatus,
         participation,
       } = req.body;
-      const meeting = await meetingService.updatePost(id, {
+      const meeting = await meetingService.updateMeeting(id, {
         title,
         comment,
         volunteerTime,
