@@ -4,7 +4,7 @@ const CarAndCar = require("./CarAndCar");
 const SeoulAccidentCases = require("./SeoulAccidentCases");
 const SeoulCarAndCarCases = require("./SeoulCarAndCarCases");
 const SeoulTeenagerAccident = require("./SeoulTeenagerAccident");
-const TeenagerAccidenet = require("./TeenagerAccidenet");
+const TeenagerAccident = require("./TeenagerAccident");
 const AgeTimeAccident = require("./AgeTimeAccident");
 const TeenagerTimeAccident = require("./TeenagerTimeAccident");
 const Meeting = require("./TeenagerTimeAccident");
@@ -16,7 +16,7 @@ module.exports = {
   SeoulAccidentCases,
   SeoulCarAndCarCases,
   SeoulTeenagerAccident,
-  TeenagerAccidenet,
+  TeenagerAccident,
   AgeTimeAccident,
   TeenagerTimeAccident,
   Meeting,
