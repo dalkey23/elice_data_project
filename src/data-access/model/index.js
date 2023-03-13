@@ -7,6 +7,7 @@ const SeoulTeenagerAccident = require("./SeoulTeenagerAccident");
 const TeenagerAccidenet = require("./TeenagerAccidenet");
 const AgeTimeAccident = require("./AgeTimeAccident");
 const TeenagerTimeAccident = require("./TeenagerTimeAccident");
+const Meeting = require("./TeenagerTimeAccident");
 
 module.exports = {
   Post,
@@ -18,4 +19,5 @@ module.exports = {
   TeenagerAccidenet,
   AgeTimeAccident,
   TeenagerTimeAccident,
+  Meeting,
 };
