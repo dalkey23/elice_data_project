@@ -15,6 +15,7 @@ const meetingDAO = {
     address,
     category,
     meetingStatus,
+    participation,
   }) {
     // Meeting 스키마를 이용하여 새로운 모집글 생성
     const meeting = new Meeting({
@@ -28,6 +29,7 @@ const meetingDAO = {
       address,
       category,
       meetingStatus,
+      participation,
     });
     // MongoDB에 저장
     await meeting.save();
@@ -56,6 +58,7 @@ const meetingDAO = {
       address: filter.address,
       category: filter.category,
       meetingStatus: filter.meetingStatus,
+      participation: filter.participation,
     });
     // MongoDB에서 필터에 해당하는 모든 모집글 검색
     const plainMeetings = await Meeting.find(sanitizedFilter).lean();
@@ -76,6 +79,7 @@ const meetingDAO = {
       address: toUpdate.address,
       category: toUpdate.category,
       meetingStatus: toUpdate.meetingStatus,
+      participation: toUpdate.participation,
     });
     // MongoDB에서 ID에 해당하는 모집글을 업데이트하고 새로운 버전의 모집글을 반환
     const plainUpdatedMeeting = await Meeting.findByIdAndUpdate(
@@ -112,6 +116,7 @@ const meetingDAO = {
       address: condition.address,
       category: condition.category,
       meetingStatus: condition.meeting,
+      participation: condition.participation,
     });
     // MongoDB에서 조건에 해당하는 모든 모집글을 삭제하고 삭제된 모집글 수를 반환
     const plainDeletedMeetings = await Meeting.deleteMany(

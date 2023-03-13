@@ -15,6 +15,7 @@ const meetingController = {
         address,
         category,
         meetingStatus,
+        participation,
       } = req.body;
       const meeting = await meetingService.createMeeting({
         title,
@@ -27,6 +28,7 @@ const meetingController = {
         address,
         category,
         meetingStatus,
+        participation,
       });
       res.status(201).json(util.buildResponse(meeting));
     } catch (error) {
@@ -55,6 +57,7 @@ const meetingController = {
         address,
         category,
         meetingStatus,
+        participation,
       } = req.query;
       const meetings = await meetingService.getMeetings({
         title,
@@ -67,6 +70,7 @@ const meetingController = {
         address,
         category,
         meetingStatus,
+        participation,
       });
       res.json(util.buildResponse(meetings));
     } catch (error) {
@@ -87,6 +91,7 @@ const meetingController = {
         address,
         category,
         meetingStatus,
+        participation,
       } = req.body;
       const meeting = await meetingService.updatePost(id, {
         title,
@@ -99,6 +104,7 @@ const meetingController = {
         address,
         category,
         meetingStatus,
+        participation,
       });
       res.json(util.buildResponse(meeting));
     } catch (error) {
@@ -127,6 +133,7 @@ const meetingController = {
         address,
         category,
         meetingStatus,
+        participation,
       } = req.body;
       const meetings = await meetingService.deleteMeetings({
         title,
@@ -139,6 +146,7 @@ const meetingController = {
         address,
         category,
         meetingStatus,
+        participation,
       });
       res.json(util.buildResponse(meetings));
     } catch (error) {

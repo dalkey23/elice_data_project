@@ -12,6 +12,7 @@ const meetingService = {
     address,
     category,
     meetingStatus,
+    participation,
   }) {
     const createdMeeting = await meetingDAO.create({
       title,
@@ -24,6 +25,7 @@ const meetingService = {
       address,
       category,
       meetingStatus,
+      participation,
     });
     return createdMeeting;
   },
@@ -42,6 +44,7 @@ const meetingService = {
     address,
     category,
     meetingStatus,
+    participation,
   }) {
     const meetings = await meetingDAO.findMany({
       title,
@@ -54,6 +57,7 @@ const meetingService = {
       address,
       category,
       meetingStatus,
+      participation,
     });
     return meetings;
   },
@@ -70,6 +74,7 @@ const meetingService = {
       address,
       category,
       meetingStatus,
+      participation,
     }
   ) {
     const updatedMeeting = await meetingDAO.updateOne(id, {
@@ -83,6 +88,7 @@ const meetingService = {
       address,
       category,
       meetingStatus,
+      participation,
     });
     return updatedMeeting;
   },
@@ -101,6 +107,7 @@ const meetingService = {
     address,
     category,
     meetingStatus,
+    participation,
   }) {
     const deletedMeetings = await meetingDAO.deleteMany({
       title,
@@ -113,6 +120,7 @@ const meetingService = {
       address,
       category,
       meetingStatus,
+      participation,
     });
     return deletedMeetings;
   },
