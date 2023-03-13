@@ -60,11 +60,31 @@ const meetingDAO = {
       meetingStatus: filter.meetingStatus,
       participation: filter.participation,
     });
-    // MongoDB에서 필터에 해당하는 모든 모집글 검색
-    const plainMeetings = await Meeting.find(sanitizedFilter).lean();
-    // 검색된 회의를 JavaScript 객체의 배열로 변환하여 반환
-    return plainMeetings;
+    const [total, meetings] = await Promise.all([
+      Meeting.countDocuments({}),
+      Meeting.find(sanitizedFilter)
+        .lean()
+        .sort({ createdAt: -1 })
+        .skip(perPage * (page - 1))
+        .limit(perPage),
+    ]);
+    const totalPage = Math.ceil(total / perPage);
+    return { meetings, total, totalPage };
   },
+  // 페이지별 모든 모집글
+  async findAll(page, perPage) {
+    const [total, meetings] = await Promise.all([
+      Meeting.countDocuments({}),
+      Meeting.find()
+        .lean()
+        .sort({ createdAt: -1 })
+        .skip(perPage * (page - 1))
+        .limit(perPage),
+    ]);
+    const totalPage = Math.ceil(total / perPage);
+    return { meetings, total, totalPage };
+  },
+
   // ID를 사용하여 모집글 정보를 업데이트
   async updateOne(id, toUpdate) {
     // 업데이트할 정보를 purify-object 모듈을 사용하여 정제

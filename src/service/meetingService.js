@@ -33,20 +33,8 @@ const meetingService = {
     const meeting = await meetingDAO.findOne(id);
     return meeting;
   },
-  async getMeetings({
-    title,
-    comment,
-    volunteerTime,
-    recruitment,
-    content,
-    author,
-    image,
-    address,
-    category,
-    meetingStatus,
-    participation,
-  }) {
-    const meetings = await meetingDAO.findMany({
+  async getMeetings(
+    {
       title,
       comment,
       volunteerTime,
@@ -58,9 +46,35 @@ const meetingService = {
       category,
       meetingStatus,
       participation,
-    });
+    },
+    page,
+    perPage
+  ) {
+    const meetings = await meetingDAO.findMany(
+      {
+        title,
+        comment,
+        volunteerTime,
+        recruitment,
+        content,
+        author,
+        image,
+        address,
+        category,
+        meetingStatus,
+        participation,
+      },
+      page,
+      perPage
+    );
     return meetings;
   },
+
+  async getAllMeetings(page, perPage) {
+    const meetings = await meetingDAO.findAll(page, perPage);
+    return meetings;
+  },
+
   async updateMeeting(
     id,
     {
