@@ -1,6 +1,5 @@
 const { userService } = require("../service");
 const util = require("../misc/util");
-const bycrypt = require("bcrypt");
 
 const userController = {
   // 회원가입
@@ -8,13 +7,10 @@ const userController = {
     try {
       const { name, email, password, address, phoneNumber, nickname } = req.body;
 
-      //password hashing
-      const hashedPassword = await bycrypt.hash(password, 12);
-
       const user = await userService.createUser({
         name,
         email,
-        password: hashedPassword,
+        password,
         address,
         phoneNumber,
         nickname,

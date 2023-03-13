@@ -1,58 +1,60 @@
 const { User } = require("./model");
+const util = require("../misc/util");
 
 const userDAO = {
   // 회원가입
   async create({ name, email, password, address, phoneNumber, nickname }) {
-    const existedEmail = await User.findOne({ email: email });
-    if (existedEmail) {
-      throw new Error("이미 가입된 이메일입니다.");
-    } else {
-      const user = await User.create({
-        name,
-        email,
-        password,
-        address,
-        phoneNumber,
-        nickname,
-      });
-      return user;
-    }
+    const user = await User.create({
+      name,
+      email,
+      password,
+      address,
+      phoneNumber,
+      nickname,
+    });
+    return user;
   },
 
   // 단일 사용자 조회
-  async findOne(_id) {
-    const user = await User.findById(_id);
-    return user;
+  async findOne(filter) {
+    const sanitizedFilter = util.sanitizeObject({
+      id: filter.id,
+      email: filter.email,
+      nickname: filter.nickname,
+    });
+    const plainUser = await User.find(sanitizedFilter).lean();
+    return plainUser;
   },
 
   // 모든 사용자 조회
   async findAll() {
-    const users = await User.find();
+    const users = await User.find().lean();
     return users;
   },
 
   // 사용자 정보 수정
-  async updateOne(_id, toUpdate) {
+  async updateOne(id, toUpdate) {
+    // 의도치 않은 값이 저장되지 않도록 소독 
+    const sanitizedToUpdate = util.sanitizeObject({
+      name: toUpdate.name, 
+      address: toUpdate.address, 
+      phoneNumber: toUpdate.phoneNumber, 
+      nickName: toUpdate.nickName, 
+      profileImage: toUpdate.profileImage, 
+    });
     const user = await User.findByIdAndUpdate(
-      _id,
-      {
-        name: toUpdate.name, 
-        password: toUpdate.password, 
-        address: toUpdate.address, 
-        phoneNumber: toUpdate.phoneNumber, 
-        nickName: toUpdate.nickName, 
-        profileImage: toUpdate.profileImage, 
-      },
+      id,
+      sanitizedToUpdate,
       {
         new: true
       }
-    );
+    ).lean();
     return user;
   },
 
   // 사용자 정보 삭제
-  async deleteOne(_id) {
-    await User.deleteOne(_id);
+  async deleteOne(id) {
+    await User.deleteOne(id);
   },
 };
 
