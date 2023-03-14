@@ -65,7 +65,7 @@ boardRouter.get("/all", boardController.getBoardAll);
 
 /**
  * @swagger
- * /api/v1/board/:id:
+ * /api/v1/board/{id}:
  *  get: 
  *    summary: "게시글 상세조회"
  *    description: "게시글 상세조회"
@@ -95,7 +95,7 @@ boardRouter.get("/:id", boardController.getBoard);
 
 
 
-boardRouter.patch("/", boardController.editBoard)
+boardRouter.patch("/:id", boardController.editBoard)
 
 
 

@@ -15,6 +15,11 @@ const boardService = {
     async getBoard(id) {
         const board = await boardDAO.findOne(id);
         return board;
+    },
+
+    async updateBoard(id, { title, content, image }) {
+        const updateBoard = await boardDAO.updateOne(id, { title, content, image });
+        return updateBoard;
     }
 
 

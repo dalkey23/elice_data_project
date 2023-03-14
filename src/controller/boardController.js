@@ -29,8 +29,6 @@ const boardController = {
     async getBoard(req, res, next) {
         try {
             const { id } = req.params;
-            console.log(req.params)
-            console.log(id)
             const board = await boardService.getBoard(id);
             res.json(board);
         } catch (error) {
@@ -38,8 +36,15 @@ const boardController = {
         }
     },
 
-    async editBoard() {
-
+    async editBoard(req, res, next) {
+        try {
+            const { id } = req.params;
+            const { title, content, image } = req.body;
+            const updatedBoard = await boardService.updateBoard(id, { title, content, image });
+            res.json(updatedBoard);
+        } catch (error) {
+            next(error);
+        }
     }
 
 };

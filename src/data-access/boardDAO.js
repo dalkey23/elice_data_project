@@ -1,4 +1,5 @@
 const { Board } = require("./model")
+const util = require("../misc/util")
 
 const boardDAO = {
 
@@ -16,6 +17,18 @@ const boardDAO = {
     async findOne(id) {
         const board = await Board.findById(id);
         return board;
+    },
+
+    async updateOne (id, toUpdate){
+        const sanitizedToUpdate = util.sanitizeObject({
+            title : toUpdate.title,
+            content : toUpdate.content,
+            image : toUpdate.image,
+        });
+        
+        const updatedBaord = await Board.findByIdAndUpdate(id, sanitizedToUpdate)
+
+        return updatedBaord;
     }
 };
 
