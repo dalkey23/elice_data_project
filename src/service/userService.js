@@ -1,26 +1,25 @@
 const { userDAO } = require("../data-access");
 const util = require("../misc/util");
-const bycrypt = require("bcrypt");
+const bcrypt = require("bcrypt");
 
 const userService = {
   async createUser({ name, email, password, address, phoneNumber, nickname }) {
-    const existedEmail = await userDAO.findOne({ email: email });
+    const existedEmail = await userDAO.findOne({ email });
     if (existedEmail) {
       throw new Error("이미 가입된 이메일입니다.");
-    } else {
-      //password hashing
-      const hashedPassword = await bycryhash(password, 10);
-
-      const createdUser = await userDAO.create({
-        name,
-        email,
-        password: hashedPassword,
-        address,
-        phoneNumber,
-        nickname,
-      });
-      return createdUser;
     }
+    //password hashing
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const createdUser = await userDAO.create({
+      name,
+      email,
+      password: hashedPassword,
+      address,
+      phoneNumber,
+      nickname,
+    });
+    return createdUser;
   },
 
   async getUser(id) {
@@ -36,8 +35,8 @@ const userService = {
       return map;
     }, []);
     const servedUsers = {
-      data: sanitzedUsers
-    }
+      data: sanitzedUsers,
+    };
     return servedUsers;
   },
 
