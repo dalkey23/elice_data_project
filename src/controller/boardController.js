@@ -45,6 +45,17 @@ const boardController = {
         } catch (error) {
             next(error);
         }
+    },
+
+    async deleteBoard(req, res, next) {
+        try {
+            const { id } = req.params;
+            const board = await boardService.deleteBoard(id);
+            res.json(board);
+
+        } catch (error) {
+            next(error);
+        }
     }
 
 };

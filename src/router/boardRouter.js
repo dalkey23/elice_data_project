@@ -95,8 +95,9 @@ boardRouter.get("/:id", boardController.getBoard);
 
 
 
-boardRouter.patch("/:id", boardController.editBoard)
+boardRouter.put("/:id", boardController.editBoard)
 
 
+boardRouter.delete("/:id", boardController.deleteBoard)
 
 module.exports = boardRouter;

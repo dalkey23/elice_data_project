@@ -20,6 +20,11 @@ const boardService = {
     async updateBoard(id, { title, content, image }) {
         const updateBoard = await boardDAO.updateOne(id, { title, content, image });
         return updateBoard;
+    },
+
+    async deleteBoard(id) {
+        const deleteBoard = await boardDAO.deleteOne(id);
+        return deleteBoard;
     }
 
 

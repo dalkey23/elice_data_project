@@ -19,16 +19,22 @@ const boardDAO = {
         return board;
     },
 
-    async updateOne (id, toUpdate){
+    async updateOne(id, toUpdate) {
         const sanitizedToUpdate = util.sanitizeObject({
-            title : toUpdate.title,
-            content : toUpdate.content,
-            image : toUpdate.image,
+            title: toUpdate.title,
+            content: toUpdate.content,
+            image: toUpdate.image,
         });
-        
+
         const updatedBaord = await Board.findByIdAndUpdate(id, sanitizedToUpdate)
 
         return updatedBaord;
+    },
+
+    async deleteOne(id) {
+        const deleteBoard = await Board.findByIdAndDelete(id)
+        return deleteBoard;
+
     }
 };
 
