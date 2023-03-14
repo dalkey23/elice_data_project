@@ -13,13 +13,13 @@ const userRouter = express.Router();
 
 /**
  * @swagger
- * /api/v1/users:
+ * /api/v1/users/join:
  *  post:
  *    summary: "회원가입"
  *    description: "POST method로 새로운 사용자 생성."
  *    tags: [Users]
  *    requestBody:
- *      description: 사용자가 서버로 전달하는 값에 따라 결과 값은 다릅니다. (게시글 등록)
+ *      description: 사용자가 서버로 전달하는 값에 따라 결과 값은 다릅니다.
  *      required: true
  *      content:
  *        application/x-www-form-urlencoded:
@@ -48,7 +48,7 @@ const userRouter = express.Router();
 
 // 회원가입
 userRouter.post(
-  "/",
+  "/join",
   userMiddleware.checkJoinFrom("body"),
   userController.createUser
 );

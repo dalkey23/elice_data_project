@@ -14,8 +14,8 @@ const phoneNumberPattern = "^[0-9]{2,3}-[0-9]{3,4}-[0-9]{4}$";
 // 닉네임은 최소 2자 최대 10자, 한글, 알파벳 대소문자 (a~z, A~Z), 숫자(0~9)로 구성
 const nicknamePattern = "^[ㄱ-ㅎ|가-힣|a-z|A-Z|0-9]{2,10}$";
 
-// 사용자 스키마
-const userSchema = Joi.object().keys({
+// 회원가입 스키마
+const joinSchema = Joi.object().keys({
   name: Joi.string().pattern(new RegExp(namePattern)).required(),
   email: Joi.string().pattern(new RegExp(emailPattern)).required().messages({
     "string.base": "Email은 문자열이어야 합니다.",
@@ -52,7 +52,7 @@ const checkJoinFrom = (from) => async (req, res, next) => {
   } = req[from];
 
   try {
-    await userSchema.validateAsync({
+    await joinSchema.validateAsync({
       name,
       email,
       password,

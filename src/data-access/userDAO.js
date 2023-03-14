@@ -22,7 +22,7 @@ const userDAO = {
       email: filter.email,
       nickname: filter.nickname,
     });
-    const plainUser = await User.find(sanitizedFilter).lean();
+    const plainUser = await User.findOne(sanitizedFilter).lean();
     return plainUser;
   },
 
