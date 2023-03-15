@@ -1,7 +1,7 @@
 const postService = require("./postService");
-const meetingService = require("./meetingService");
+const recruitmentService = require("./recruitmentService");
 
 module.exports = {
   postService,
-  meetingService,
+  recruitmentService,
 };

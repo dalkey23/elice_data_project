@@ -1,14 +1,14 @@
-const { meetingService } = require("../service");
+const { recruitmentService } = require("../service");
 const util = require("../misc/util");
 
-const meetingController = {
-  async createMeeting(req, res, next) {
+const recruitmentController = {
+  async createRecruitment(req, res, next) {
     try {
       const {
         title,
         comment,
         volunteerTime,
-        recruitment,
+        recruitments,
         content,
         author,
         image,
@@ -17,11 +17,11 @@ const meetingController = {
         meetingStatus,
         participation,
       } = req.body;
-      const meeting = await meetingService.createMeeting({
+      const recruitment = await recruitmentService.createRecruitment({
         title,
         comment,
         volunteerTime,
-        recruitment,
+        recruitments,
         content,
         author,
         image,
@@ -30,27 +30,27 @@ const meetingController = {
         meetingStatus,
         participation,
       });
-      res.status(201).json(util.buildResponse(meeting));
+      res.status(201).json(util.buildResponse(recruitment));
     } catch (error) {
       next(error);
     }
   },
-  async getMeeting(req, res, next) {
+  async getRecruitment(req, res, next) {
     try {
       const { id } = req.params;
-      const meeting = await meetingService.getMeeting(id);
-      res.json(util.buildResponse(meeting));
+      const recruitment = await recruitmentService.getRecruitment(id);
+      res.json(util.buildResponse(recruitment));
     } catch (error) {
       next(error);
     }
   },
-  async getMeetings(req, res, next) {
+  async getRecruitments(req, res, next) {
     try {
       const {
         title,
         comment,
         volunteerTime,
-        recruitment,
+        recruitments,
         content,
         author,
         image,
@@ -59,11 +59,11 @@ const meetingController = {
         meetingStatus,
         participation,
       } = req.query;
-      const meetings = await meetingService.getMeetings({
+      const Recruitments = await recruitmentService.getRecruitments({
         title,
         comment,
         volunteerTime,
-        recruitment,
+        recruitments,
         content,
         author,
         image,
@@ -72,28 +72,28 @@ const meetingController = {
         meetingStatus,
         participation,
       });
-      res.json(util.buildResponse(meetings));
+      res.json(util.buildResponse(Recruitments));
     } catch (error) {
       next(error);
     }
   },
 
-  async getAllMeetings(req, res, next) {
+  async getAllRecruitments(req, res, next) {
     try {
       //페이지 번호
       const page = Number(req.query.page || 1);
       //페이지 당 상품 개수
-      const perPage = Number(req.query.perPage || 10);
+      const perPage = Number(req.query.perPage || 6);
 
-      const { meetings, total, totalPage } =
-        await meetingService.getAllMeetings(page, perPage);
+      const { recruitments, total, totalPage } =
+        await recruitmentService.getAllRecruitments(page, perPage);
       res.json(
         util.buildResponse({
           page: page,
           perPage: perPage,
           totalPage: totalPage,
-          meetingCount: total,
-          meetings,
+          recruitmentCount: total,
+          recruitments,
         })
       );
     } catch (error) {
@@ -101,14 +101,14 @@ const meetingController = {
     }
   },
 
-  async putMeeting(req, res, next) {
+  async putRecruitment(req, res, next) {
     try {
       const { id } = req.params;
       const {
         title,
         comment,
         volunteerTime,
-        recruitment,
+        recruitments,
         content,
         author,
         image,
@@ -117,11 +117,11 @@ const meetingController = {
         meetingStatus,
         participation,
       } = req.body;
-      const meeting = await meetingService.updateMeeting(id, {
+      const recruitment = await recruitmentService.updateRecruitment(id, {
         title,
         comment,
         volunteerTime,
-        recruitment,
+        recruitments,
         content,
         author,
         image,
@@ -135,22 +135,22 @@ const meetingController = {
       next(error);
     }
   },
-  async deleteMeeting(req, res, next) {
+  async deleteRecruitment(req, res, next) {
     try {
       const { id } = req.params;
-      const meeting = await meetingService.deleteMeeting(id);
-      res.json(util.buildResponse(meeting));
+      const recruitment = await recruitmentService.deleteRecruitment(id);
+      res.json(util.buildResponse(recruitment));
     } catch (error) {
       next(error);
     }
   },
-  async deleteMeetings(req, res, next) {
+  async deleteRecruitments(req, res, next) {
     try {
       const {
         title,
         comment,
         volunteerTime,
-        recruitment,
+        recruitments,
         content,
         author,
         image,
@@ -159,11 +159,11 @@ const meetingController = {
         meetingStatus,
         participation,
       } = req.body;
-      const meetings = await meetingService.deleteMeetings({
+      const Recruitments = await recruitmentService.deleteRecruitments({
         title,
         comment,
         volunteerTime,
-        recruitment,
+        recruitments,
         content,
         author,
         image,
@@ -172,11 +172,11 @@ const meetingController = {
         meetingStatus,
         participation,
       });
-      res.json(util.buildResponse(meetings));
+      res.json(util.buildResponse(Recruitments));
     } catch (error) {
       next(error);
     }
   },
 };
 
-module.exports = meetingController;
+module.exports = recruitmentController;

@@ -1,7 +1,7 @@
 const postController = require("./postController");
-const meetingController = require("./meetingController");
+const recruitmentController = require("./recruitmentController");
 
 module.exports = {
   postController,
-  meetingController,
+  recruitmentController,
 };

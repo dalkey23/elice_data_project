@@ -1,7 +1,7 @@
 const postDAO = require("./postDAO");
-const meetingDAO = require("./meetingDAO");
+const recruitmentDAO = require("./recruitmentDAO");
 
 module.exports = {
   postDAO,
-  meetingDAO,
+  recruitmentDAO,
 };

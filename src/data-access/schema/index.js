@@ -1,5 +1,5 @@
 const postSchema = require("./post");
-const meetingSchema = require("./meeting");
+const recruitmentSchema = require("./recruitment");
 const allAccidentTypeSchema = require("./allAccidentType");
 const carAndCarSchema = require("./carAndCar");
 const seoulAccidentTypeSchema = require("./seoulAccidentType");
@@ -9,7 +9,7 @@ const seoulTeenagerAccidentSchema = require("./seoulTeenagerAccident");
 
 module.exports = {
   postSchema,
-  meetingSchema,
+  recruitmentSchema,
   allAccidentTypeSchema,
   carAndCarSchema,
   seoulAccidentTypeSchema,

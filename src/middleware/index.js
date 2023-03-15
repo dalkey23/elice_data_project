@@ -1,7 +1,7 @@
 const postMiddleware = require("./postMiddleware");
-const meetingMiddleware = require("./meetingMiddleware");
+const recruitmentMiddleware = require("./recruitmentMiddleware");
 
 module.exports = {
   postMiddleware,
-  meetingMiddleware,
+  recruitmentMiddleware,
 };

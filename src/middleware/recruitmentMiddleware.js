@@ -6,7 +6,7 @@ const schema = Joi.object({
   author: Joi.string().required(),
   comment: Joi.string().required(),
   volunteerTime: Joi.string().required(),
-  recruitment: Joi.number().required(),
+  recruitments: Joi.number().required(),
   content: Joi.string().required(),
   category: Joi.string().required(),
   address: Joi.string().required(),
@@ -15,12 +15,12 @@ const schema = Joi.object({
   participation: Joi.number().required(),
 });
 
-const checkCompleteMeetingFrom = (from) => async (req, res, next) => {
+const checkCompleteRecruitmentFrom = (from) => async (req, res, next) => {
   const {
     title,
     comment,
     volunteerTime,
-    recruitment,
+    recruitments,
     content,
     author,
     image,
@@ -34,7 +34,7 @@ const checkCompleteMeetingFrom = (from) => async (req, res, next) => {
       title,
       comment,
       volunteerTime,
-      recruitment,
+      recruitments,
       content,
       author,
       image,
@@ -61,7 +61,7 @@ const checkCompleteMeetingFrom = (from) => async (req, res, next) => {
   next();
 };
 
-const checkMeetingIdFrom = (from) => (req, res, next) => {
+const checkRecruitmentIdFrom = (from) => (req, res, next) => {
   const { id } = req[from];
   if (id === undefined) {
     next(
@@ -71,12 +71,12 @@ const checkMeetingIdFrom = (from) => (req, res, next) => {
   next();
 };
 
-const checkMinMeetingConditionFrom = (from) => (req, res, next) => {
+const checkMinRecruitmentConditionFrom = (from) => (req, res, next) => {
   const {
     title,
     comment,
     volunteerTime,
-    recruitment,
+    recruitments,
     content,
     author,
     image,
@@ -91,7 +91,7 @@ const checkMinMeetingConditionFrom = (from) => (req, res, next) => {
     author === undefined &&
     comment === undefined &&
     volunteerTime === undefined &&
-    recruitment === undefined &&
+    recruitments === undefined &&
     image === undefined &&
     address === undefined &&
     category === undefined &&
@@ -110,7 +110,7 @@ const checkMinMeetingConditionFrom = (from) => (req, res, next) => {
 };
 
 module.exports = {
-  checkCompleteMeetingFrom,
-  checkMeetingIdFrom,
-  checkMinMeetingConditionFrom,
+  checkCompleteRecruitmentFrom,
+  checkRecruitmentIdFrom,
+  checkMinRecruitmentConditionFrom,
 };

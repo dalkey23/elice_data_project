@@ -1,14 +1,14 @@
-const { Meeting } = require("./model");
+const { Recruitment } = require("./model");
 const util = require("../misc/util");
 
-// mongoose 모듈에서 생성된 Meeting 스키마를 사용하여 CRUD 작업을 수행하는 meetingDAO 객체
-const meetingDAO = {
+// mongoose 모듈에서 생성된 Recruitment 스키마를 사용하여 CRUD 작업을 수행하는 recruitmentDAO 객체
+const recruitmentDAO = {
   // 새로운 모집글 생성
   async create({
     title,
     comment,
     volunteerTime,
-    recruitment,
+    recruitments,
     content,
     author,
     image,
@@ -17,12 +17,16 @@ const meetingDAO = {
     meetingStatus,
     participation,
   }) {
-    // Meeting 스키마를 이용하여 새로운 모집글 생성
-    const meeting = new Meeting({
+    // Recruitment 스키마를 이용하여 새로운 모집글 생성
+    // author를 nickname으로 찾아서 변환
+    const author = await User.findOne({
+      nickname: req.user.nickname,
+    });
+    const recruitment = new Recruitment({
       title,
       comment,
       volunteerTime,
-      recruitment,
+      recruitments,
       content,
       author,
       image,
@@ -32,57 +36,60 @@ const meetingDAO = {
       participation,
     });
     // MongoDB에 저장
-    await meeting.save();
+    await recruitment.save();
     // 생성된 회의를 JavaScript 객체로 변환하여 반환
-    return meeting.toObject();
+    return recruitment.toObject();
   },
   // ID를 사용하여 모집글을 검색
   async findOne(id) {
     // MongoDB에서 ID에 해당하는 모집글 검색
-    const plainMeeting = await Meeting.findById(id).lean();
+    const plainRecruitment = await Recruitment.findById(id).lean();
     // 검색된 회의를 JavaScript 객체로 변환하여 반환
-    return plainMeeting;
+    return plainRecruitment;
   },
-  // 필터를 사용하여 회의를 검색
+
+  // 지원한 봉사모집글
+
+  // 개설한 봉사모집글
+
+  // 필터를 사용하여 모집글을 검색
   async findMany(filter) {
     // 검색 조건에 사용될 필터를 purify-object 모듈을 사용하여 정제
-    // 제목, 작성자, 주소, 카테고리, 모집상태
+    // 제목, 작성자, 주소, 카테고리, 모집인원
     const sanitizedFilter = util.sanitizeObject({
       title: filter.title,
       author: filter.author,
-      comment: filter.comment,
-      volunteerTime: filter.volunteerTime,
-      recruitment: filter.recruitment,
+      recruitments: filter.recruitments,
       content: filter.content,
-      image: filter.image,
       address: filter.address,
       category: filter.category,
       meetingStatus: filter.meetingStatus,
       participation: filter.participation,
     });
-    const [total, meetings] = await Promise.all([
-      Meeting.countDocuments({}),
-      Meeting.find(sanitizedFilter)
+    const [total, recruitments] = await Promise.all([
+      Recruitment.countDocuments({}),
+      Recruitment.find(sanitizedFilter)
         .lean()
         .sort({ createdAt: -1 })
         .skip(perPage * (page - 1))
         .limit(perPage),
     ]);
     const totalPage = Math.ceil(total / perPage);
-    return { meetings, total, totalPage };
+    return { recruitments, total, totalPage };
   },
+
   // 페이지별 모든 모집글
   async findAll(page, perPage) {
-    const [total, meetings] = await Promise.all([
-      Meeting.countDocuments({}),
-      Meeting.find()
+    const [total, recruitments] = await Promise.all([
+      Recruitment.countDocuments({}),
+      Recruitment.find()
         .lean()
         .sort({ createdAt: -1 })
         .skip(perPage * (page - 1))
         .limit(perPage),
     ]);
     const totalPage = Math.ceil(total / perPage);
-    return { meetings, total, totalPage };
+    return { recruitments, total, totalPage };
   },
 
   // ID를 사용하여 모집글 정보를 업데이트
@@ -93,7 +100,7 @@ const meetingDAO = {
       author: toUpdate.author,
       comment: toUpdate.comment,
       volunteerTime: toUpdate.volunteerTime,
-      recruitment: toUpdate.recruitment,
+      recruitments: toUpdate.recruitments,
       content: toUpdate.content,
       image: toUpdate.image,
       address: toUpdate.address,
@@ -102,7 +109,7 @@ const meetingDAO = {
       participation: toUpdate.participation,
     });
     // MongoDB에서 ID에 해당하는 모집글을 업데이트하고 새로운 버전의 모집글을 반환
-    const plainUpdatedMeeting = await Meeting.findByIdAndUpdate(
+    const plainUpdatedRecruitment = await Recruitment.findByIdAndUpdate(
       id,
       sanitizedToUpdate,
       {
@@ -111,17 +118,19 @@ const meetingDAO = {
       }
     ).lean();
     // 업데이트된 회의를 JavaScript 객체로 변환하여 반환
-    return plainUpdatedMeeting;
+    return plainUpdatedRecruitment;
   },
+
   // ID를 사용하여 회의를 삭제
   async deleteOne(id) {
     // MongoDB에서 ID에 해당하는 모집글 삭제하고 삭제된 모집글을 반환
-    const plainDeletedMeeting = await Meeting.findByIdAndDelete({
+    const plainDeletedRecruitment = await Recruitment.findByIdAndDelete({
       _id: id,
     }).lean();
     // 삭제된 회의를 JavaScript 객체로 변환하여 반환
-    return plainDeletedMeeting;
+    return plainDeletedRecruitment;
   },
+
   // 필터를 사용하여 여러 모집글을 삭제
   async deleteMany(condition) {
     // 삭제 조건에 사용될 필터를 purify-object 모듈을 사용하여 정제
@@ -130,7 +139,7 @@ const meetingDAO = {
       author: condition.author,
       comment: condition.comment,
       volunteerTime: condition.volunteerTime,
-      recruitment: condition.recruitment,
+      recruitments: condition.recruitments,
       content: condition.content,
       image: condition.image,
       address: condition.address,
@@ -139,12 +148,12 @@ const meetingDAO = {
       participation: condition.participation,
     });
     // MongoDB에서 조건에 해당하는 모든 모집글을 삭제하고 삭제된 모집글 수를 반환
-    const plainDeletedMeetings = await Meeting.deleteMany(
+    const plainDeletedRecruitments = await Recruitment.deleteMany(
       sanitizedCondition
     ).lean();
     // 삭제된 모집글의 수를 반환
-    return plainDeletedMeetings;
+    return plainDeletedRecruitments;
   },
 };
 
-module.exports = meetingDAO;
+module.exports = recruitmentDAO;

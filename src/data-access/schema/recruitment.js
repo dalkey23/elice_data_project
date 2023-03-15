@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const meetingSchema = new mongoose.Schema(
+const recruitmentSchema = new mongoose.Schema(
   {
     title: {
       type: String,
@@ -14,7 +14,7 @@ const meetingSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    recruitment: {
+    recruitments: {
       type: Number,
       required: true,
     },
@@ -23,8 +23,9 @@ const meetingSchema = new mongoose.Schema(
       required: true,
     },
     author: {
-      type: String,
+      type: Schema.Types.ObjectId,
       required: true,
+      ref: "User",
     },
     image: {
       type: String,
@@ -55,4 +56,4 @@ const meetingSchema = new mongoose.Schema(
   }
 );
 
-module.exports = meetingSchema;
+module.exports = recruitmentSchema;

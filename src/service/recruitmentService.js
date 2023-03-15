@@ -1,11 +1,12 @@
-const { meetingDAO } = require("../data-access");
+const { recruitmentDAO } = require("../data-access");
 
-const meetingService = {
-  async createMeeting({
+const recruitmentService = {
+  //생성
+  async createRecruitment({
     title,
     comment,
     volunteerTime,
-    recruitment,
+    recruitments,
     content,
     author,
     image,
@@ -14,11 +15,11 @@ const meetingService = {
     meetingStatus,
     participation,
   }) {
-    const createdMeeting = await meetingDAO.create({
+    const createdRecruitment = await recruitmentDAO.create({
       title,
       comment,
       volunteerTime,
-      recruitment,
+      recruitments,
       content,
       author,
       image,
@@ -27,18 +28,22 @@ const meetingService = {
       meetingStatus,
       participation,
     });
-    return createdMeeting;
+    return createdRecruitment;
   },
-  async getMeeting(id) {
-    const meeting = await meetingDAO.findOne(id);
-    return meeting;
+
+  // id값으로 모집글 하나 찾기
+  async getRecruitment(id) {
+    const recruitment = await recruitmentDAO.findOne(id);
+    return recruitment;
   },
-  async getMeetings(
+
+  //모집글들 찾기
+  async getRecruitments(
     {
       title,
       comment,
       volunteerTime,
-      recruitment,
+      recruitments,
       content,
       author,
       image,
@@ -50,12 +55,12 @@ const meetingService = {
     page,
     perPage
   ) {
-    const meetings = await meetingDAO.findMany(
+    const recruitments = await recruitmentDAO.findMany(
       {
         title,
         comment,
         volunteerTime,
-        recruitment,
+        recruitments,
         content,
         author,
         image,
@@ -67,21 +72,22 @@ const meetingService = {
       page,
       perPage
     );
-    return meetings;
+    return recruitments;
   },
 
-  async getAllMeetings(page, perPage) {
-    const meetings = await meetingDAO.findAll(page, perPage);
-    return meetings;
+  //모든 모집글 찾기
+  async getAllRecruitments(page, perPage) {
+    const recruitments = await recruitmentDAO.findAll(page, perPage);
+    return recruitments;
   },
 
-  async updateMeeting(
+  async updateRecruitment(
     id,
     {
       title,
       comment,
       volunteerTime,
-      recruitment,
+      recruitments,
       content,
       author,
       image,
@@ -91,11 +97,11 @@ const meetingService = {
       participation,
     }
   ) {
-    const updatedMeeting = await meetingDAO.updateOne(id, {
+    const updatedRecruitment = await recruitmentDAO.updateOne(id, {
       title,
       comment,
       volunteerTime,
-      recruitment,
+      recruitments,
       content,
       author,
       image,
@@ -104,17 +110,17 @@ const meetingService = {
       meetingStatus,
       participation,
     });
-    return updatedMeeting;
+    return updatedRecruitment;
   },
-  async deleteMeeting(id) {
-    const deletedMeeting = await meetingDAO.deleteOne(id);
-    return deletedMeeting;
+  async deleteRecruitment(id) {
+    const deletedRecruitment = await recruitmentDAO.deleteOne(id);
+    return deletedRecruitment;
   },
-  async deleteMeeting({
+  async deleteRecruitments({
     title,
     comment,
     volunteerTime,
-    recruitment,
+    recruitments,
     content,
     author,
     image,
@@ -123,11 +129,11 @@ const meetingService = {
     meetingStatus,
     participation,
   }) {
-    const deletedMeetings = await meetingDAO.deleteMany({
+    const deletedRecruitments = await recruitmentDAO.deleteMany({
       title,
       comment,
       volunteerTime,
-      recruitment,
+      recruitments,
       content,
       author,
       image,
@@ -136,8 +142,8 @@ const meetingService = {
       meetingStatus,
       participation,
     });
-    return deletedMeetings;
+    return deletedRecruitments;
   },
 };
 
-module.exports = meetingService;
+module.exports = recruitmentService;
