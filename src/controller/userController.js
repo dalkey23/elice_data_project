@@ -49,6 +49,18 @@ const userController = {
       next(error);
     }
   },
+
+  // 사용자 정보 조회
+  async getUser(req, res, next) {
+    try {
+      const { id } = req.params;
+      const user = await userService.getUser(id);
+      res.json(util.buildResponse(user));
+    } catch(error) {
+      next(error);
+    }
+  },
+
 };
 
 module.exports = userController;

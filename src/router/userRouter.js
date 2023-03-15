@@ -80,7 +80,7 @@ const userRouter = express.Router();
 userRouter.post(
   "/join",
   userMiddleware.checkJoinFrom("body"),
-  userController.createUser
+  userController.createUser,
 );
 
 userRouter.put(
@@ -89,5 +89,10 @@ userRouter.put(
   userController.updateUser,
 );
 
+userRouter.get(
+  "/:id",
+  userMiddleware.checkUserIdFrom("params"),
+  userController.getUser,
+);
 
 module.exports = userRouter;

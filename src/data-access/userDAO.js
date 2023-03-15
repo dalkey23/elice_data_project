@@ -18,7 +18,7 @@ const userDAO = {
   // 단일 사용자 조회
   async findOne(filter) {
     const sanitizedFilter = util.sanitizeObject({
-      id: filter.id,
+      _id: filter.id,
       name: filter.name,
       email: filter.email,
       address: filter.address,
