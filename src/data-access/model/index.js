@@ -1,8 +1,8 @@
 const Post = require("./Post");
 const AllAccidentType = require("./AllAccidentType");
-const CarAndCar = require("./CarAndCar");
+const CarAndPeo = require("./CarAndCar");
 const SeoulAccidentCases = require("./SeoulAccidentCases");
-const SeoulCarAndCarCases = require("./SeoulCarAndCarCases");
+const SeoulCarAndPeoCases = require("./SeoulCarAndPeoCases");
 const SeoulTeenagerAccident = require("./SeoulTeenagerAccident");
 const TeenagerAccident = require("./TeenagerAccident");
 const AgeTimeAccident = require("./AgeTimeAccident");
@@ -12,9 +12,9 @@ const Meeting = require("./TeenagerTimeAccident");
 module.exports = {
   Post,
   AllAccidentType,
-  CarAndCar,
+  CarAndPeo,
   SeoulAccidentCases,
-  SeoulCarAndCarCases,
+  SeoulCarAndPeoCases,
   SeoulTeenagerAccident,
   TeenagerAccident,
   AgeTimeAccident,

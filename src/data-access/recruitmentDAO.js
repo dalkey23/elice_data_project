@@ -78,6 +78,8 @@ const recruitmentDAO = {
     return { recruitments, total, totalPage };
   },
 
+  //
+
   // 페이지별 모든 모집글
   async findAll(page, perPage) {
     const [total, recruitments] = await Promise.all([
