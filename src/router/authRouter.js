@@ -8,7 +8,7 @@ const authRouter = express.Router();
  * @swagger
  * tags:
  *   name: Users
- *   description: 인증 관리
+ *   description: 사용자 관리
  */
 
 /**
@@ -40,6 +40,24 @@ authRouter.post(
   authMiddleware.existsToken,
   authController.login
 );
+
+/**
+ * @swagger
+ * /api/v1/auth/login:
+ *  post:
+ *    summary: "로그아웃"
+ *    description: "인증 해제"
+ *    tags: [Users]
+ *    requestBody:
+ *      description: 
+ *      required: false
+ *      content:
+ *        application/x-www-form-urlencoded:
+ *          schema:
+ *            type: object
+ *            properties:
+ */
+
 
 authRouter.post(
   "/logout", 
