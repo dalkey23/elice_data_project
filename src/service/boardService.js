@@ -7,8 +7,8 @@ const boardService = {
         return createBoard;
     },
 
-    async getBoardAll() {
-        const boardAll = await boardDAO.findAll();
+    async getBoardAll(page, perPage) {
+        const boardAll = await boardDAO.findAll(page, perPage);
         return boardAll;
     },
 

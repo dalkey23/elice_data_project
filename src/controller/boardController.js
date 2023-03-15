@@ -14,10 +14,15 @@ const boardController = {
         }
     },
 
-    async getBoardAll(req, res, next) {
+    async getBoards(req, res, next) {
         try {
-            const boardAll = await boardService.getBoardAll();
-            res.json(boardAll);
+            //page:현재페이지, perPage:페이지 당 게시글 수수
+            console.log(req.query.page)
+            console.log(req.query.perPage)
+            const page = Number(req.query.page || 1);
+            const perPage = Number(req.query.perPage || 5);
+            const { boards, total, totalPage } = await boardService.getBoardAll(page, perPage);
+            res.json({ boards, page, perPage, total, totalPage });
 
         } catch (error) {
             next(error);

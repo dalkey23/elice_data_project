@@ -9,9 +9,14 @@ const boardDAO = {
         return newBoard.toObject();
     },
 
-    async findAll() {
-        const boardAll = await Board.find({});
-        return boardAll;
+    async findAll(page, perPage) {
+        const [total, boards] = await Promise.all([
+            Board.countDocuments({}),
+            Board.find().lean().sort({ createdAt: -1 }).skip(perPage * (page - 1)).limit(perPage),
+        ]);
+        const totalPage = Math.ceil(total / perPage);
+
+        return { boards, total, totalPage };
     },
 
     async findOne(id) {

@@ -42,11 +42,24 @@ boardRouter.post("/", boardController.createBoard);
 
 /**
  * @swagger
- * /api/v1/board/all:
+ * /api/v1/board?page={page}&perPage={perPage}:
  *  get: 
  *    summary: "게시글조회"
  *    description: "모든 게시글 조회"
  *    tags: [Board]
+ *    parameters:
+ *      - in: query
+ *        name: page
+ *        required: false
+ *        description: 현재페이지
+ *        schema:
+ *          type: string
+ *      - in: query
+ *        name: perPage
+ *        required: false
+ *        description: 게시글 수
+ *        schema:
+ *          type: string
  *    responses:
  *      "200":
  *        description: 게시글 조회
@@ -61,7 +74,7 @@ boardRouter.post("/", boardController.createBoard);
  *                  type: object
  *                  example: [{"_id": "640b1b002269b4729b8881e9","title": "test123","content": "test content","author": "t123","image": []}]
  */
-boardRouter.get("/all", boardController.getBoardAll);
+boardRouter.get("/", boardController.getBoards);
 
 /**
  * @swagger
