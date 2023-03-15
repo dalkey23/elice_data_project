@@ -40,6 +40,7 @@ const joinSchema = Joi.object().keys({
   }),
 });
 
+
 // 회원가입 유효성 검사
 const checkJoinFrom = (from) => async (req, res, next) => {
   const {
@@ -70,6 +71,25 @@ const checkJoinFrom = (from) => async (req, res, next) => {
   next();
 };
 
+const checkUserIdFrom = (from) => (req, res, next) => {
+  const { id } = req[from];
+  console.log(id);
+  if(id == ":id") {
+    next(
+      new AppError(
+        commonErrors.inputError,
+        400,
+        `${from}: id는 필수값입니다.`
+        )
+    );
+  }
+  next();
+};
+
+
+
 module.exports = {
   checkJoinFrom,
+  checkUserIdFrom,
+
 };

@@ -19,8 +19,12 @@ const userDAO = {
   async findOne(filter) {
     const sanitizedFilter = util.sanitizeObject({
       id: filter.id,
+      name: filter.name,
       email: filter.email,
+      address: filter.address,
+      phoneNumber: filter.phoneNumber,
       nickname: filter.nickname,
+      userType: filter.userType,
     });
     const plainUser = await User.findOne(sanitizedFilter).lean();
     return plainUser;
@@ -37,6 +41,8 @@ const userDAO = {
     // 의도치 않은 값이 저장되지 않도록 소독 
     const sanitizedToUpdate = util.sanitizeObject({
       name: toUpdate.name, 
+      email: toUpdate.email,
+      password: toUpdate.password,
       address: toUpdate.address, 
       phoneNumber: toUpdate.phoneNumber, 
       nickName: toUpdate.nickName, 
