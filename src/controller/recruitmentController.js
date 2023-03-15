@@ -130,7 +130,7 @@ const recruitmentController = {
         meetingStatus,
         participation,
       });
-      res.json(util.buildResponse(meeting));
+      res.json(util.buildResponse(recruitment));
     } catch (error) {
       next(error);
     }

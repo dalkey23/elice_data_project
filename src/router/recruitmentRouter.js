@@ -95,16 +95,20 @@ recruitmentRouter.post(
  *                  type: object
  *                  example: [{ "id": 1, "name": "post1" }]
  */
-meetingRouter.get(
+recruitmentRouter.get(
   "/:id",
-  meetingMiddleware.checkMeetingIdFrom("params"),
-  meetingController.getMeeting
+  recruitmentMiddleware.checkRecruitmentIdFrom("params"),
+  recruitmentController.getRecruitment
 );
 
 // 모든 모집글
-meetingRouter.get("/all", meetingController.getAllMeetings);
+recruitmentRouter.get("/all", recruitmentController.getAllRecruitments);
 
 //구 별 모집글
+// recruitmentRouter.get(
+//   "/borough",
+//   recruitmentController.getBoroughRecruitmentController
+// );
 
 //모집글 수정
 meetingRouter.put(
