@@ -40,6 +40,31 @@ const joinSchema = Joi.object().keys({
   }),
 });
 
+// 사용자 스키마
+const userSchema = Joi.object().keys({
+  name: Joi.string().pattern(new RegExp(namePattern)),
+  email: Joi.string().pattern(new RegExp(emailPattern)).messages({
+    "string.base": "Email은 문자열이어야 합니다.",
+    "any.required": "Email을 입력해주세요.",
+    "string.pattern.base": "Email이 형식에 맞지 않습니다.",
+  }),
+  password: Joi.string().pattern(new RegExp(passwordPattern)).messages({
+    "string.base": "비밀번호는 문자열이어야 합니다.",
+    "any.required": "비밀번호를 입력해주세요.",
+    "string.pattern.base": "비밀번호가 형식에 맞지 않습니다.",
+  }),
+  address: Joi.string().min(1).max(30),
+  phoneNumber: Joi.string().pattern(new RegExp(phoneNumberPattern)).messages({
+    "string.base": "전화번호는 문자열이어야 합니다.",
+    "any.required": "전화번호를 입력해주세요.",
+    "string.pattern.base": "전화번호가 형식에 맞지 않습니다.",
+  }),
+  nickname: Joi.string().pattern(new RegExp(nicknamePattern)).messages({
+    "string.base": "닉네임은 문자열이어야 합니다.",
+    "any.required": "닉네임을 입력해주세요.",
+    "string.pattern.base": "닉네임이 형식에 맞지 않습니다.",
+  }),
+});
 
 // 회원가입 유효성 검사
 const checkJoinFrom = (from) => async (req, res, next) => {
@@ -71,6 +96,7 @@ const checkJoinFrom = (from) => async (req, res, next) => {
   next();
 };
 
+// params에 id 값 유무 검사
 const checkUserIdFrom = (from) => (req, res, next) => {
   const { id } = req[from];
   console.log(id);
@@ -86,10 +112,37 @@ const checkUserIdFrom = (from) => (req, res, next) => {
   next();
 };
 
-
+// 사용자 정보 유효성 검사
+const checkUserInfoFrom = (from) => async (req, res, next) => {
+  const {
+    name,
+    email,
+    password,
+    address,
+    phoneNumber,
+    nickname,
+  } = req[from];
+  try {
+    await userSchema.validateAsync({
+      name,
+      email,
+      password,
+      address,
+      phoneNumber,
+      nickname,
+    });
+  } catch(error){
+    next(new AppError(
+        commonErrors.inputError,
+        400,
+        `${error}`
+    ))
+  }
+  next();
+};
 
 module.exports = {
   checkJoinFrom,
   checkUserIdFrom,
-
+  checkUserInfoFrom,
 };

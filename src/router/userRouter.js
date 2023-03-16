@@ -1,6 +1,6 @@
 const express = require("express");
 const { userController } = require("../controller");
-const { userMiddleware } = require("../middleware");
+const { userMiddleware, authMiddleware } = require("../middleware");
 
 const userRouter = express.Router();
 
@@ -83,16 +83,29 @@ userRouter.post(
   userController.createUser,
 );
 
+// 사용자 정보 수정
 userRouter.put(
   "/:id",
+  authMiddleware.verifyAuthorizedUser("params"),
   userMiddleware.checkUserIdFrom("params"),
+  userMiddleware.checkUserInfoFrom("body"),
   userController.updateUser,
 );
 
+// 사용자 정보 조회
 userRouter.get(
   "/:id",
+  authMiddleware.verifyAuthorizedUser("params"),
   userMiddleware.checkUserIdFrom("params"),
   userController.getUser,
+);
+
+// 사용자 정보 삭제 (회원 탈퇴)
+userRouter.delete(
+  "/:id",
+  authMiddleware.verifyAuthorizedUser("params"),
+  userMiddleware.checkUserIdFrom("params"),
+  userController.deleteUser,
 );
 
 module.exports = userRouter;
