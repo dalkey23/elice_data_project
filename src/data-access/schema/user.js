@@ -8,6 +8,7 @@ const userSchema = new Schema(
     },
     email: {
       type: String,
+      unique: true,
       required: true,
     },
     password: {
@@ -34,6 +35,7 @@ const userSchema = new Schema(
     },
     userType: {
       type: String,
+      enum: ['user', 'admin'],
       required: true,
       default: "user",
     },
