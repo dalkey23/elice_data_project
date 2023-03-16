@@ -8,6 +8,11 @@ const userService = {
     if (existedEmail) {
       throw new Error("이미 가입된 이메일입니다.");
     }
+
+    const existedNickname = await userDAO.findOne({ nickname });
+    if (existedNickname) {
+      throw new Error("중복되는 닉네임입니다.");
+    }
     //password hashing
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -42,11 +47,31 @@ const userService = {
 
   async updateUser(
     id,
-    { name, password, address, phoneNumber, nickname, profileImage }
+    { name, email, password, address, phoneNumber, nickname, profileImage }
   ) {
+    // email 수정하는 경우 이메일 중복 검사
+    if (email !== undefined) {
+      const existedEmail = await userDAO.findOne({ email });
+      if (existedEmail) {
+        throw new Error("이미 가입된 이메일입니다.");
+      }
+    }
+
+    // email 수정하는 경우 닉네임 중복 검사
+    if(nickname !== undefined) {
+      const existedNickname = await userDAO.findOne({ nickname });
+    if (existedNickname) {
+      throw new Error("중복되는 닉네임입니다.");
+    }
+    }
+
+    // password 수정하는 경우 해싱
+    const hashedPassword = await password? bcrypt.hash(password, 10) : password;
+
     const updatedUser = await userDAO.updateOne(id, {
       name,
-      password,
+      email,
+      password: hashedPassword,
       address,
       phoneNumber,
       nickname,
@@ -56,7 +81,8 @@ const userService = {
   },
 
   async deleteUser(id) {
-    await userDAO.deleteOne(id);
+    const deletedUser = await userDAO.deleteOne(id);
+    return deletedUser;
   },
 };
 

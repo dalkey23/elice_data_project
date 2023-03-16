@@ -21,7 +21,59 @@ const userController = {
     }
   },
 
+  // 사용자 정보 수정
+  async updateUser(req, res, next) {
+    try {
+      const { id } = req.params;
+      const {
+        name,
+        email,
+        password,
+        address,
+        phoneNumber,
+        nickname,
+        profileImage,
+      } = req.body;
 
+      const user = await userService.updateUser(id, {
+        name,
+        email,
+        password,
+        address,
+        phoneNumber,
+        nickname,
+        profileImage,
+      });
+      res.json(util.buildResponse(user));
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  // 사용자 정보 조회
+  async getUser(req, res, next) {
+    try {
+      const { id } = req.params;
+      const user = await userService.getUser(id);
+      res.json(util.buildResponse(user));
+    } catch(error) {
+      next(error);
+    }
+  },
+
+  // 사용자 정보 삭제 (회원 탈퇴)
+  async deleteUser(req, res, next) {
+    try{
+      const { id } = req.params;
+      const user = await userService.deleteUser(id);
+      if(!user) {
+        throw new Error(`탈퇴할 사용자가 존재하지 않습니다.`);
+      }
+      res.json(`탈퇴가 완료되었습니다.`);
+    } catch(error) {
+      next(error);
+    }
+  },
 };
 
 module.exports = userController;
