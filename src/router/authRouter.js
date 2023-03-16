@@ -1,4 +1,5 @@
 const express = require("express");
+const passport = require("passport");
 const { userMiddleware } = require("../middleware");
 const { authMiddleware } = require("../middleware");
 const { authController } = require("../controller");
@@ -38,6 +39,7 @@ authRouter.post(
   "/login",
   authMiddleware.checkLoginFrom("body"),
   authMiddleware.existsToken,
+  passport.authenticate("local"),
   authController.login
 );
 

@@ -1,17 +1,10 @@
-const { userService } = require("../service");
-const passport = require("passport");
-const { setUserToken } = require("../misc/util");
+const jwt = require("jsonwebtoken");
 const util = require("../misc/util");
 
 const authController = {
   async login(req, res, next) {
-    passport.authenticate("local", (err, user) => {
-      if (err) return next(err);
-      req.logIn(user, { session: false }, (err) => {
-        if (err) return next(err);
-        return setUserToken(res, user);
-      });
-    })(req, res, next);
+    const accessToken = jwt.sign(user, process.env.SECRET, { expiresIn: "1h" });
+    res.cookie('accessToken', accessToken, { httpOnly: true }).json(req.user);
   },
 
   async logout(req, res, next) {
