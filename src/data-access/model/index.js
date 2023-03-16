@@ -1,6 +1,6 @@
 const Post = require("./Post");
 const AllAccidentType = require("./AllAccidentType");
-const CarAndPeo = require("./CarAndCar");
+const CarAndPeo = require("./CarAndPeo");
 const SeoulAccidentCases = require("./SeoulAccidentCases");
 const SeoulCarAndPeoCases = require("./SeoulCarAndPeoCases");
 const SeoulTeenagerAccident = require("./SeoulTeenagerAccident");
