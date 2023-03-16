@@ -1,4 +1,3 @@
-const { createBoard } = require("../data-access/boardDAO");
 const { boardService } = require("../service");
 
 
@@ -29,8 +28,6 @@ const boardController = {
         }
     },
 
-
-
     async getBoard(req, res, next) {
         try {
             const { id } = req.params;
@@ -57,6 +54,19 @@ const boardController = {
             const { id } = req.params;
             const board = await boardService.deleteBoard(id);
             res.json(board);
+
+        } catch (error) {
+            next(error);
+        }
+    },
+
+    async createComment(req, res, next) {
+        try {
+            const { id } = req.params;
+            const { writer, content } = req.body;
+            const board = await boardService.createComment(id, { writer, content })
+            res.json(board);
+
 
         } catch (error) {
             next(error);

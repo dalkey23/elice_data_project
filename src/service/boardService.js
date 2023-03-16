@@ -25,6 +25,11 @@ const boardService = {
     async deleteBoard(id) {
         const deleteBoard = await boardDAO.deleteOne(id);
         return deleteBoard;
+    },
+
+    async createComment(id, { writer, content }) {
+        const board = await boardDAO.createComment(id, { writer, content })
+        return board
     }
 
 

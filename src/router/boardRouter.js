@@ -107,10 +107,15 @@ boardRouter.get("/", boardController.getBoards);
 boardRouter.get("/:id", boardController.getBoard);
 
 
-
 boardRouter.put("/:id", boardController.editBoard)
 
 
 boardRouter.delete("/:id", boardController.deleteBoard)
+
+
+
+// 댓글
+boardRouter.post("/:id/comment", boardController.createComment);
+
 
 module.exports = boardRouter;

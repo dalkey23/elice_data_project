@@ -1,4 +1,5 @@
 const { mongoose, Schema } = require("mongoose");
+const CommentSchema = require("./comment")
 
 const boardSchema = new mongoose.Schema(
   {
@@ -20,12 +21,7 @@ const boardSchema = new mongoose.Schema(
       type: String,
       required: false,
     },
-    comments: {
-      type: [Schema.Types.ObjectId],
-      ref: 'Comment',
-      required: false,
-
-    },
+    comments: [CommentSchema] ,
   },
   {
     collection: "Board",

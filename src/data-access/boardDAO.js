@@ -40,6 +40,15 @@ const boardDAO = {
         const deleteBoard = await Board.findByIdAndDelete(id)
         return deleteBoard;
 
+    },
+
+    async createComment(id, { writer, content }) {
+        const board = await Board.findByIdAndUpdate(id, {
+            $push: { comments: { writer, content } }
+        })
+
+        return board
+
     }
 };
 
