@@ -21,7 +21,7 @@ const userController = {
     }
   },
 
-  //회원정보 수정
+  // 사용자 정보 수정
   async updateUser(req, res, next) {
     try {
       const { id } = req.params;
@@ -61,6 +61,19 @@ const userController = {
     }
   },
 
+  // 사용자 정보 삭제 (회원 탈퇴)
+  async deleteUser(req, res, next) {
+    try{
+      const { id } = req.params;
+      const user = await userService.deleteUser(id);
+      if(!user) {
+        throw new Error(`탈퇴할 사용자가 존재하지 않습니다.`);
+      }
+      res.json(`탈퇴가 완료되었습니다.`);
+    } catch(error) {
+      next(error);
+    }
+  },
 };
 
 module.exports = userController;

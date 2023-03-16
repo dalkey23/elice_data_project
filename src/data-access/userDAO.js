@@ -45,8 +45,9 @@ const userDAO = {
       password: toUpdate.password,
       address: toUpdate.address, 
       phoneNumber: toUpdate.phoneNumber, 
-      nickName: toUpdate.nickName, 
+      nickname: toUpdate.nickname, 
       profileImage: toUpdate.profileImage, 
+      userType: toUpdate.userType,
     });
     const user = await User.findByIdAndUpdate(
       id,
@@ -60,7 +61,8 @@ const userDAO = {
 
   // 사용자 정보 삭제
   async deleteOne(id) {
-    await User.deleteOne(id);
+    const user = await User.findByIdAndDelete(id).lean();
+    return user;
   },
 };
 
