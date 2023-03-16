@@ -5,7 +5,7 @@ const { recruitmentMiddleware } = require("../middleware");
 /**
  * @swagger
  * tags:
- *   name: recruitment
+ *   name: Recruitment
  *   description: 모집글 관리
  */
 const recruitmentRouter = express.Router();
@@ -15,50 +15,20 @@ const recruitmentRouter = express.Router();
  * /api/v1/recruitment:
  *  post:
  *    summary: "모집글 등록"
- *    description: "POST 방식으로 게시글를 등록한다."
- *    tags: [Meetings]
+ *    tags: [Recruitment]
  *    requestBody:
- *      description: 사용자가 서버로 전달하는 값에 따라 결과 값은 다릅니다. (모집글 등록)
  *      required: true
  *      content:
- *        application/x-www-form-urlencoded:
+ *        application/json:
  *          schema:
- *            type: object
- *            properties:
- *              title:
- *                type: string
- *                description: "모집글 제목"
- *              content:
- *                type: string
- *                description: "모집글 내용"
- *              author:
- *                type: string
- *                description: "모집글 작성자"
- *              comment:
- *                type: string
- *                description: "모집글 댓글"
- *              volunteerTime:
- *                type: string
- *                description: "봉사시간 대"
- *              recruitment:
- *                type: number
- *                description: "모집 인원수"
- *              image:
- *                type: string
- *                description: "사진"
- *              address:
- *                type: string
- *                description: "모집 장소"
- *              category:
- *                type: string
- *                description: "장기봉사랑 일회성봉사를 나누는 카테고리"
- *              participation:
- *                type: number
- *                default: 0,
- *                description: "현재 참여인원"
- *              meetingStatus:
- *                type: string,
- *                description: "모집 완료 유무"
+ *            $ref: '#/components/schemas/Recruitment'
+ *    responses:
+ *      201:
+ *        description: 생성된 모집글 정보
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Recruitment'
  */
 recruitmentRouter.post(
   "/",
@@ -66,34 +36,26 @@ recruitmentRouter.post(
   recruitmentController.createRecruitment
 );
 
-// 특정id 모집글 조회
 /**
  * @swagger
- * /api/v1/recruitment/comment/{_id}:
+ * /api/v1/recruitment/{id}:
  *  get:
- *    summary: "특정 게시글조회 Path 방식"
- *    description: "요청 경로에 값을 담아 서버에 보낸다."
- *    tags: [Recruitments]
+ *    summary: "특정 모집글 조회"
+ *    tags: [Recruitment]
  *    parameters:
  *      - in: path
- *        name: post_id
+ *        name: id
  *        required: true
- *        description: 게시글 아이디
+ *        description: 모집글 아이디
  *        schema:
  *          type: string
  *    responses:
- *      "200":
- *        description: 사용자가 서버로 전달하는 값에 따라 결과 값은 다릅니다. (게시글 조회)
+ *      200:
+ *        description: 조회된 모집글 정보
  *        content:
  *          application/json:
  *            schema:
- *              type: object
- *              properties:
- *                ok:
- *                  type: boolean
- *                users:
- *                  type: object
- *                  example: [{ "id": 1, "name": "post1" }]
+ *              $ref: '#/components/schemas/Recruitment'
  */
 recruitmentRouter.get(
   "/:id",
@@ -101,28 +63,83 @@ recruitmentRouter.get(
   recruitmentController.getRecruitment
 );
 
-// 모든 모집글
+/**
+ * @swagger
+ * /api/v1/recruitment/all:
+ *  get:
+ *    summary: "모든 모집글 조회"
+ *    tags: [Recruitment]
+ *    responses:
+ *      200:
+ *        description: 조회된 모든 모집글 목록
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: array
+ *              items:
+ *                $ref: '#/components/schemas/Recruitment'
+ */
 recruitmentRouter.get("/all", recruitmentController.getAllRecruitments);
 
-//구 별 모집글
-// recruitmentRouter.get(
-//   "/borough",
-//   recruitmentController.getBoroughRecruitmentController
-// );
-
-//모집글 수정
-meetingRouter.put(
+/**
+ * @swagger
+ * /api/v1/recruitment/{id}:
+ *  put:
+ *    summary: "모집글 수정"
+ *    tags: [Recruitment]
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        required: true
+ *        description: 모집글 아이디
+ *        schema:
+ *          type: string
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/Recruitment'
+ *    responses:
+ *      200:
+ *        description: 수정된 모집글 정보
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Recruitment'
+ */
+recruitmentRouter.put(
   "/:id",
-  meetingMiddleware.checkMeetingIdFrom("params"),
-  meetingMiddleware.checkMinMeetingConditionFrom("body"),
-  meetingController.putMeeting
+  recruitmentMiddleware.checkRecruitmentIdFrom("params"),
+  meetingMiddleware.checkMinRecruitmentConditionFrom("body"),
+  recruitmentController.putRecruitment
 );
 
-//모집글 삭제
-meetingRouter.delete(
+/**
+ * @swagger
+ * /api/v1/recruitment/{id}:
+ *  delete:
+ *    summary: "모집글 삭제"
+ *    tags: [Recruitment]
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        required: true
+ *        description: 모집글 아이디
+ *        schema:
+ *          type: string
+ *    responses:
+ *      200:
+ *        description: 삭제된 모집글 정보
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Recruitment'
+ */
+recruitmentRouter.delete(
   "/:id",
-  meetingMiddleware.checkPostIdFrom("params"),
-  meetingController.deleteMeeting
+  recruitmentMiddleware.checkRecruitmentIdFrom("params"),
+  recruitmentController.deleteRecruitment
 );
 
 module.exports = router;

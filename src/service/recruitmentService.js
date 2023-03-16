@@ -112,6 +112,7 @@ const recruitmentService = {
     });
     return updatedRecruitment;
   },
+
   async deleteRecruitment(id) {
     const deletedRecruitment = await recruitmentDAO.deleteOne(id);
     return deletedRecruitment;

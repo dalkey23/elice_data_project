@@ -1,9 +1,11 @@
+const Joi = require("joi");
+const JoiObjectId = require("@hapi/joi-objectid")(Joi);
 const AppError = require("../misc/AppError");
 const commonErrors = require("../misc/commonErrors");
 
 const schema = Joi.object({
   title: Joi.string().required(),
-  author: Joi.string().required(),
+  author: JoiObjectId().required(),
   comment: Joi.string().required(),
   volunteerTime: Joi.string().required(),
   recruitments: Joi.number().required(),
@@ -12,7 +14,7 @@ const schema = Joi.object({
   address: Joi.string().required(),
   image: Joi.string().required(),
   meetingStatus: Joi.string().required(),
-  participation: Joi.number().required(),
+  participation: JoiObjectId().required(),
 });
 
 const checkCompleteRecruitmentFrom = (from) => async (req, res, next) => {

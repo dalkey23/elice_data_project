@@ -18,10 +18,6 @@ const recruitmentDAO = {
     participation,
   }) {
     // Recruitment 스키마를 이용하여 새로운 모집글 생성
-    // author를 nickname으로 찾아서 변환
-    const author = await User.findOne({
-      nickname: req.user.nickname,
-    });
     const recruitment = new Recruitment({
       title,
       comment,
@@ -43,7 +39,10 @@ const recruitmentDAO = {
   // ID를 사용하여 모집글을 검색
   async findOne(id) {
     // MongoDB에서 ID에 해당하는 모집글 검색
-    const plainRecruitment = await Recruitment.findById(id).lean();
+    const plainRecruitment = await Recruitment.findById(id)
+      .populate("author")
+      .populate("participation")
+      .lean();
     // 검색된 회의를 JavaScript 객체로 변환하여 반환
     return plainRecruitment;
   },
@@ -53,7 +52,7 @@ const recruitmentDAO = {
   // 개설한 봉사모집글
 
   // 필터를 사용하여 모집글을 검색
-  async findMany(filter) {
+  async findMany(filter, page, perPage) {
     // 검색 조건에 사용될 필터를 purify-object 모듈을 사용하여 정제
     // 제목, 작성자, 주소, 카테고리, 모집인원
     const sanitizedFilter = util.sanitizeObject({
@@ -69,6 +68,8 @@ const recruitmentDAO = {
     const [total, recruitments] = await Promise.all([
       Recruitment.countDocuments({}),
       Recruitment.find(sanitizedFilter)
+        .populate("author")
+        .populate("participation")
         .lean()
         .sort({ createdAt: -1 })
         .skip(perPage * (page - 1))
@@ -85,6 +86,8 @@ const recruitmentDAO = {
     const [total, recruitments] = await Promise.all([
       Recruitment.countDocuments({}),
       Recruitment.find()
+        .populate("author")
+        .populate("participation")
         .lean()
         .sort({ createdAt: -1 })
         .skip(perPage * (page - 1))
@@ -118,7 +121,10 @@ const recruitmentDAO = {
         runValidators: true, // 유효성 검사를 실행
         new: true, // 업데이트된 버전의 모집글을 반환
       }
-    ).lean();
+    )
+      .populate("author")
+      .populate("participation")
+      .lean();
     // 업데이트된 회의를 JavaScript 객체로 변환하여 반환
     return plainUpdatedRecruitment;
   },
