@@ -6,9 +6,7 @@ const authRouter = require("./authRouter");
 const adminRouter = require("./adminRouter");
 
 const v1Router = express.Router();
-const cors = require("cors");
 
-v1Router.use(cors());
 v1Router.use("/posts", postRouter);
 v1Router.use("/board", boardRouter);
 v1Router.use("/users", userRouter);
