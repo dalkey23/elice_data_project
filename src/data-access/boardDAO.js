@@ -46,9 +46,15 @@ const boardDAO = {
         const board = await Board.findByIdAndUpdate(id, {
             $push: { comments: { writer, content } }
         })
-
         return board
 
+    },
+
+    async deleteComment(boardId, commentId){
+        const board = await Board.findByIdAndUpdate(boardId, {
+            $pull: { comments: { _id : commentId } }
+        })
+        return board
     }
 };
 

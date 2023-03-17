@@ -15,9 +15,7 @@ const boardController = {
 
     async getBoards(req, res, next) {
         try {
-            //page:현재페이지, perPage:페이지 당 게시글 수수
-            console.log(req.query.page)
-            console.log(req.query.perPage)
+            //page:현재페이지, perPage:페이지 당 게시글 수
             const page = Number(req.query.page || 1);
             const perPage = Number(req.query.perPage || 5);
             const { boards, total, totalPage } = await boardService.getBoardAll(page, perPage);
@@ -70,6 +68,14 @@ const boardController = {
 
         } catch (error) {
             next(error);
+        }
+    },
+
+    async deleteComment(req, res, next) {
+        try {
+            
+        } catch (error) {
+            
         }
     }
 

@@ -30,6 +30,11 @@ const boardService = {
     async createComment(id, { writer, content }) {
         const board = await boardDAO.createComment(id, { writer, content })
         return board
+    },
+
+    async deleteComment(boardId, commentId){
+        const board = await boardDAO.deleteComment(boardId, commentId)
+        return board
     }
 
 

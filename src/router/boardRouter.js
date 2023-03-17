@@ -42,7 +42,7 @@ boardRouter.post("/", boardController.createBoard);
 
 /**
  * @swagger
- * /api/v1/board?page={page}&perPage={perPage}:
+ * /api/v1/board:
  *  get: 
  *    summary: "게시글조회"
  *    description: "모든 게시글 조회"
