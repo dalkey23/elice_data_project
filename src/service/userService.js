@@ -33,16 +33,13 @@ const userService = {
     return servedUser;
   },
 
-  async getAllUsers() {
-    const users = await userDAO.findAll();
+  async getAllUsers(page, perPage) {
+    const { users, total, totalPage } = await userDAO.findAll(page, perPage);
     const sanitzedUsers = users.reduce((map, object) => {
       map.push(util.removePassword(object));
       return map;
     }, []);
-    const servedUsers = {
-      data: sanitzedUsers,
-    };
-    return servedUsers;
+    return { sanitzedUsers, total, totalPage };
   },
 
   async updateUser(
@@ -85,7 +82,8 @@ const userService = {
       profileImage,
       userType,
     });
-    return updatedUser;
+    const servedUser = util.removePassword(updatedUser);
+    return servedUser;
   },
 
   async deleteUser(id) {
