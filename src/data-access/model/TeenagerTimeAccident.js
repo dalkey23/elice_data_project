@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
-const { ageTimeAccidentSchema } = require("../schema");
+const { teenagerTimeAccidentSchema } = require("../schema");
 
 const TeenagerTimeAccident = mongoose.model(
   "TeenagerTimeAccident",
-  ageTimeAccidentSchema
+  teenagerTimeAccidentSchema
 );
 
 module.exports = TeenagerTimeAccident;

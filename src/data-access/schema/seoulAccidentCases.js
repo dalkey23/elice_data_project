@@ -1,27 +1,27 @@
 const mongoose = require("mongoose");
 
-const carAndPeoSchema = new mongoose.Schema(
+const seoulAccidentCasesSchema = new mongoose.Schema(
   {
-    accident_type2: {
+    borough: {
       type: String,
       required: true,
     },
-    number_of_accidents: {
+    latitude: {
       type: Number,
       required: true,
     },
-    death_toll: {
+    longitude: {
       type: Number,
       required: true,
     },
-    number_of_injured: {
+    number_of_cases: {
       type: Number,
       required: true,
     },
   },
   {
-    collection: "CarAndPeo",
+    collection: "SeoulAccidentCases",
   }
 );
 
-module.exports = carAndPeoSchema;
+module.exports = seoulAccidentCasesSchema;

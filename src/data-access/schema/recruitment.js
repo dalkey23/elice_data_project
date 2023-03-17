@@ -1,13 +1,13 @@
-const mongoose = require("mongoose");
+const { Schema, mongoose } = require("mongoose");
 
 const recruitmentSchema = new mongoose.Schema(
   {
     // 자치구별
-    borough: {
-      type: Schema.Types.ObjectId,
-      required: true,
-      ref: "Borough",
-    },
+    // borough: {
+    //   type: Schema.Types.ObjectId,
+    //   required: true,
+    //   ref: "Borough",
+    // },
     // 제목
     title: {
       type: String,
@@ -54,14 +54,14 @@ const recruitmentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    // 참가자명단
-    participation: [
-      {
-        type: Schema.Types.ObjectId,
-        required: false,
-        ref: "RecruitmentParticipaint",
-      },
-    ],
+    // // 참가자명단
+    // participation: [
+    //   {
+    //     type: Schema.Types.ObjectId,
+    //     required: false,
+    //     ref: "RecruitmentParticipaint",
+    //   },
+    // ],
     // 모집중, 모집완료
     meetingStatus: {
       type: String,
@@ -69,7 +69,7 @@ const recruitmentSchema = new mongoose.Schema(
     },
   },
   {
-    collection: "Meeting",
+    collection: "Recruitment",
     timestamps: true,
     versionKey: false,
   }

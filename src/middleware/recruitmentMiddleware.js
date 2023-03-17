@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const JoiObjectId = require("@hapi/joi-objectid")(Joi);
+const JoiObjectId = require("joi-objectid")(Joi);
 const AppError = require("../misc/AppError");
 const commonErrors = require("../misc/commonErrors");
 

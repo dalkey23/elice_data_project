@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
-const { seoulAccidentTypeSchema } = require("../schema");
+const { seoulCarAndPeoCasesSchema } = require("../schema");
 
 const SeoulCarAndPeoCases = mongoose.model(
   "SeoulCarAndPeoCases",
-  seoulAccidentTypeSchema
+  seoulCarAndPeoCasesSchema
 );
 
 module.exports = SeoulCarAndPeoCases;

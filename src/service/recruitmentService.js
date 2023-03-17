@@ -55,7 +55,7 @@ const recruitmentService = {
     page,
     perPage
   ) {
-    const recruitments = await recruitmentDAO.findMany(
+    const recruitment = await recruitmentDAO.findMany(
       {
         title,
         comment,
@@ -72,7 +72,7 @@ const recruitmentService = {
       page,
       perPage
     );
-    return recruitments;
+    return recruitment;
   },
 
   //모든 모집글 찾기

@@ -111,7 +111,7 @@ recruitmentRouter.get("/all", recruitmentController.getAllRecruitments);
 recruitmentRouter.put(
   "/:id",
   recruitmentMiddleware.checkRecruitmentIdFrom("params"),
-  meetingMiddleware.checkMinRecruitmentConditionFrom("body"),
+  recruitmentMiddleware.checkMinRecruitmentConditionFrom("body"),
   recruitmentController.putRecruitment
 );
 
@@ -142,4 +142,4 @@ recruitmentRouter.delete(
   recruitmentController.deleteRecruitment
 );
 
-module.exports = router;
+module.exports = recruitmentRouter;

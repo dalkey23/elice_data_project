@@ -1,9 +1,9 @@
 const mongoose = require("mongoose");
 const { teenagerAccidentSchema } = require("../schema");
 
-const TeenagerAccidenet = mongoose.model(
-  "TeenagerAccidenet",
+const TeenagerAccident = mongoose.model(
+  "TeenagerAccident",
   teenagerAccidentSchema
 );
 
-module.exports = TeenagerAccidenet;
+module.exports = TeenagerAccident;

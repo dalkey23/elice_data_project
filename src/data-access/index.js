@@ -1,7 +1,7 @@
 const postDAO = require("./postDAO");
 const recruitmentDAO = require("./recruitmentDAO");
 const teenagerTimeAccidentDAO = require("./teenagerTimeAccidentDAO");
-const teenagerAccidenetDAO = require("./teenagerAccidenetDAO");
+const teenagerAccidentDAO = require("./teenagerAccidentDAO");
 const seoulTeenagerAccidentDAO = require("./seoulTeenagerAccidentDAO");
 const seoulCarAndPeoCasesDAO = require("./seoulCarAndPeoCasesDAO");
 const seoulAccidentCasesDAO = require("./seoulAccidentCasesDAO");
@@ -13,7 +13,7 @@ module.exports = {
   postDAO,
   recruitmentDAO,
   teenagerTimeAccidentDAO,
-  teenagerAccidenetDAO,
+  teenagerAccidentDAO,
   seoulTeenagerAccidentDAO,
   seoulCarAndPeoCasesDAO,
   seoulAccidentCasesDAO,

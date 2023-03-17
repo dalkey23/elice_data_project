@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const ageTimeAccidentSchema = new mongoose.Schema(
+const teenagerTimeAccidentSchema = new mongoose.Schema(
   {
     by_time: {
       type: String,
@@ -16,8 +16,8 @@ const ageTimeAccidentSchema = new mongoose.Schema(
     },
   },
   {
-    collection: "AgeTimeAccident",
+    collection: "TeenagerTimeAccident",
   }
 );
 
-module.exports = ageTimeAccidentSchema;
+module.exports = teenagerTimeAccidentSchema;

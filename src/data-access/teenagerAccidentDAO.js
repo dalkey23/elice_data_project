@@ -1,10 +1,10 @@
-const { TeenagerAccidenet } = require("./model");
+const { TeenagerAccident } = require("./model");
 
-const teenagerAccidenetDAO = {
+const teenagerAccidentDAO = {
   async findAll() {
-    const plainTeenagerAccidenet = await TeenagerAccidenet.find().lean();
+    const plainTeenagerAccidenet = await TeenagerAccident.find().lean();
     return plainTeenagerAccidenet;
   },
 };
 
-module.exports = teenagerAccidenetDAO;
+module.exports = teenagerAccidentDAO;
