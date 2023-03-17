@@ -35,8 +35,8 @@ const userService = {
 
   async getAllUsers() {
     const users = await userDAO.findAll();
-    const sanitzedUsers = users["data"].reduce((map, object) => {
-      map.push(removePassword(object));
+    const sanitzedUsers = users.reduce((map, object) => {
+      map.push(util.removePassword(object));
       return map;
     }, []);
     const servedUsers = {
@@ -47,7 +47,7 @@ const userService = {
 
   async updateUser(
     id,
-    { name, email, password, address, phoneNumber, nickname, profileImage }
+    { name, email, password, address, phoneNumber, nickname, profileImage, userType }
   ) {
     // email 수정하는 경우 이메일 중복 검사
     if (email !== undefined) {
@@ -57,14 +57,21 @@ const userService = {
       }
     }
 
-    // email 수정하는 경우 닉네임 중복 검사
+    // nickname 수정하는 경우 닉네임 중복 검사
     if(nickname !== undefined) {
       const existedNickname = await userDAO.findOne({ nickname });
-    if (existedNickname) {
-      throw new Error("중복되는 닉네임입니다.");
-    }
+      if (existedNickname) {
+        throw new Error("중복되는 닉네임입니다.");
+      }
     }
 
+    //userType 수정하는 경우 유효값 검사
+    if(userType !== undefined){
+      if(userType !== 'user' && userType !== 'admin') {
+        throw new Error("userType은 user 혹은 admin만 가능합니다.");
+      }
+    }
+    
     // password 수정하는 경우 해싱
     const hashedPassword = await password? bcrypt.hash(password, 10) : password;
 
@@ -76,12 +83,16 @@ const userService = {
       phoneNumber,
       nickname,
       profileImage,
+      userType,
     });
     return updatedUser;
   },
 
   async deleteUser(id) {
     const deletedUser = await userDAO.deleteOne(id);
+    if(!deletedUser) {
+      throw new Error(`탈퇴할 사용자가 존재하지 않습니다.`);
+    }
     return deletedUser;
   },
 };

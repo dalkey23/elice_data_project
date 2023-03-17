@@ -53,6 +53,7 @@ const userDAO = {
       id,
       sanitizedToUpdate,
       {
+        runValidators: true,
         new: true
       }
     ).lean();

@@ -66,10 +66,7 @@ const userController = {
     try{
       const { id } = req.params;
       const user = await userService.deleteUser(id);
-      if(!user) {
-        throw new Error(`탈퇴할 사용자가 존재하지 않습니다.`);
-      }
-      res.json(`탈퇴가 완료되었습니다.`);
+      res.json(`${user.nickname}님의 탈퇴가 완료되었습니다.`);
     } catch(error) {
       next(error);
     }
