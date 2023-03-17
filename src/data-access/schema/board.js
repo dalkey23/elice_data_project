@@ -1,10 +1,11 @@
-const {mongoose, Schema} = require("mongoose");
+const { mongoose, Schema } = require("mongoose");
+const CommentSchema = require("./comment")
 
 const boardSchema = new mongoose.Schema(
   {
     author: {
       // type: Schema.Types.ObjectId,
-      // ref : "User",
+      // ref: "User",
       type: String,
       required: true,
     },
@@ -16,21 +17,11 @@ const boardSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    image: [
-      {
-        imageUrl: {
-          type: String,
-          required: false,
-        }
-      },
-    ],
-    comments: {
-      type: Schema.Types.ObjectId,
-      ref: 'Comment',
-      // type: String,
+    image: {
+      type: String,
       required: false,
-
     },
+    comments: [CommentSchema] ,
   },
   {
     collection: "Board",
