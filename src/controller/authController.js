@@ -3,7 +3,7 @@ const util = require("../misc/util");
 
 const authController = {
   async login(req, res, next) {
-    const accessToken = jwt.sign(user, process.env.SECRET, { expiresIn: "1h" });
+    const accessToken = jwt.sign(req.user, process.env.SECRET, { expiresIn: "1h" });
     res.cookie('accessToken', accessToken, { httpOnly: true }).json(req.user);
   },
 

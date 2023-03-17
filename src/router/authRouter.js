@@ -39,7 +39,7 @@ authRouter.post(
   "/login",
   authMiddleware.checkLoginFrom("body"),
   authMiddleware.existsToken,
-  passport.authenticate("local"),
+  passport.authenticate("local", { session: false }),
   authController.login
 );
 

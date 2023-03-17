@@ -49,16 +49,31 @@ const checkLoginFrom = (from) => async (req, res, next) => {
   next();
 };
 
-// 이미 로그인된 사용자인지 확인(토큰 유무 검증)
+// 이미 로그인된 사용자인지 확인(토큰이 있다면 토큰 유효 검증)
 const existsToken = (req, res, next) => {
-  if (req.cookies.accessToken) {
-    next(
-      new AppError(
-        commonErrors.inputError, 
-        400, 
-        "이미 로그인되어 있습니다."
-      )
-    );
+  try{
+    // 토큰이 존재할 경우
+    if (req.cookies.accessToken) {
+      const user = jwt.verify(req.cookies.accessToken, process.env.SECRET);
+      // 토큰이 유효한 경우
+      if(user){
+        throw new AppError(
+          commonErrors.inputError, 
+          400, 
+          "이미 로그인되어 있습니다."
+        )
+      }  
+    }
+  } catch(error) {
+    // 토큰이 만료된 경우
+    if(error.name == 'TokenExpiredError') {
+      next(new AppError(
+        commonErrors.authorizationError,
+        401,
+        "이전 로그인한 사용자의 토큰 유효기간이 만료되었습니다. 강제 로그아웃 해주세요."
+      ))
+    }
+    next(error);
   }
   next();
 };
@@ -96,8 +111,8 @@ const verifyAuthorizedUser = (from) => (req, res, next) => {
 // 토큰 유효 검증, 관리자 계정인지 검사
 const verifyAdmin = (req, res, next) => {
   try{
-    jwt.verify(req.cookies.accessToken, process.env.SECRET).id;
-    const { userType } = req.cookies.accessToken;
+    const userType = jwt.verify(req.cookies.accessToken, process.env.SECRET).userType;
+
     if(userType !== "admin") {
       next(
         new AppError(

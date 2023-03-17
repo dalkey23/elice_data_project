@@ -1,7 +1,4 @@
 const passport = require("passport");
-const passportJWT = require("passport-jwt");
-const JWTStrategy = passportJWT.Strategy;
-const ExtractJWT = passportJWT.ExtractJwt;
 const LocalStrategy = require("passport-local").Strategy;
 const userDAO = require("../data-access/userDAO");
 const bcrypt = require("bcrypt");
@@ -40,20 +37,4 @@ module.exports = () => {
     )
   );
 
-  // JWT Strategy
-  const cookieExtractor = (req) => {
-    const { token } = req.cookies;
-    return token;
-  };
-
-  const opts = {
-    secretOrKey: process.env.SECRET,
-    jwtFromRequest: cookieExtractor,
-  };
-
-  passport.use(
-    new JWTStrategy(opts, (user, done) => {
-      done(null, user);
-    })
-  );
 };
