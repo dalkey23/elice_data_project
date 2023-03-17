@@ -6,6 +6,8 @@ const seoulAccidentTypeSchema = require("./seoulAccidentType");
 const teenagerAccidentSchema = require("./teenagerAccident");
 const ageTimeAccidentSchema = require("./ageTimeAccident");
 const seoulTeenagerAccidentSchema = require("./seoulTeenagerAccident");
+const boroughSchema = require("./seoulTeenagerAccident");
+const recruitmentParticipaintSchema = require("./recruitmentParticipaintSchema");
 
 module.exports = {
   postSchema,
@@ -16,4 +18,6 @@ module.exports = {
   teenagerAccidentSchema,
   ageTimeAccidentSchema,
   seoulTeenagerAccidentSchema,
+  boroughSchema,
+  recruitmentParticipaintSchema,
 };
