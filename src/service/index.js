@@ -8,6 +8,7 @@ const seoulCarAndPeoCasesService = require("./seoulCarAndPeoCasesService");
 const seoulTeenagerAccidentService = require("./seoulTeenagerAccidentService");
 const teenagerAccidentService = require("./teenagerAccidentService");
 const teenagerTimeAccidentService = require("./teenagerTimeAccidentService");
+const participantsService = require("./participantsService");
 
 module.exports = {
   postService,
@@ -20,4 +21,5 @@ module.exports = {
   seoulTeenagerAccidentService,
   teenagerAccidentService,
   teenagerTimeAccidentService,
+  participantsService,
 };

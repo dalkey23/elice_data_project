@@ -7,9 +7,10 @@ const teenagerAccidentSchema = require("./teenagerAccident");
 const ageTimeAccidentSchema = require("./ageTimeAccident");
 const seoulTeenagerAccidentSchema = require("./seoulTeenagerAccident");
 const boroughSchema = require("./seoulTeenagerAccident");
-const recruitmentParticipaintSchema = require("./recruitmentParticipaint");
+const recruitmentParticipaintSchema = require("./participants");
 const seoulCarAndPeoCasesSchema = require("./seoulCarAndPeoCases");
 const teenagerTimeAccidentSchema = require("./teenagerTimeAccident");
+const participantsSchema = require("./participants");
 
 module.exports = {
   postSchema,
@@ -24,4 +25,5 @@ module.exports = {
   recruitmentParticipaintSchema,
   seoulCarAndPeoCasesSchema,
   teenagerTimeAccidentSchema,
+  participantsSchema,
 };

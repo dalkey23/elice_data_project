@@ -1,6 +1,8 @@
 const express = require("express");
 const { recruitmentController } = require("../controller");
 const { recruitmentMiddleware } = require("../middleware");
+const { participantsMiddleware } = require("../middleware");
+const { participantsController } = require("../controller");
 
 /**
  * @swagger
@@ -79,7 +81,7 @@ recruitmentRouter.get(
  *              items:
  *                $ref: '#/components/schemas/Recruitment'
  */
-recruitmentRouter.get("/all", recruitmentController.getAllRecruitments);
+recruitmentRouter.get("/", recruitmentController.getAllRecruitments);
 
 /**
  * @swagger
@@ -140,6 +142,33 @@ recruitmentRouter.delete(
   "/:id",
   recruitmentMiddleware.checkRecruitmentIdFrom("params"),
   recruitmentController.deleteRecruitment
+);
+
+// 자치구별 모집글 조회
+recruitmentRouter.get(
+  "/borough/:borough",
+  recruitmentController.getRecruitments
+);
+
+// 모집글 별 참여자 목록조회
+recruitmentRouter.get(
+  "/:recruitmentId/participants",
+  participantsController.getParticipantsByRecruitmentId
+);
+
+// 참여자 추가
+recruitmentRouter.post(
+  "/:recruitmentId/participants",
+  participantsMiddleware.checkRecruitmentIdFrom("params"),
+  participantsController.addParticipant
+);
+
+// 모집글 별 참가자 탈퇴
+recruitmentRouter.delete(
+  "/:recruitmentId/participants/:participantId",
+  participantsMiddleware.checkRecruitmentIdFrom("params"),
+  participantsMiddleware.checkMinParticipantIdConditionFrom("body"),
+  participantsController.deleteParticipant
 );
 
 module.exports = recruitmentRouter;
