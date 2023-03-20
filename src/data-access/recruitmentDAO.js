@@ -50,10 +50,6 @@ const recruitmentDAO = {
     return plainRecruitment;
   },
 
-  // 지원한 봉사모집글
-
-  // 개설한 봉사모집글
-
   // 필터를 사용하여 모집글을 검색
   async findMany(filter, page, perPage) {
     // 검색 조건에 사용될 필터를 purify-object 모듈을 사용하여 정제
@@ -62,8 +58,6 @@ const recruitmentDAO = {
       borough: filter.borough,
       title: filter.title,
       author: filter.author,
-      recruitments: filter.recruitments,
-      content: filter.content,
       address: filter.address,
       category: filter.category,
       meetingStatus: filter.meetingStatus,

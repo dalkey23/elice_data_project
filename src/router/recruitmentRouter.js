@@ -2,6 +2,7 @@ const express = require("express");
 const { recruitmentController } = require("../controller");
 const { recruitmentMiddleware } = require("../middleware");
 const { participantsMiddleware } = require("../middleware");
+const { authMiddleware } = require("../middleware");
 const { participantsController } = require("../controller");
 
 /**
@@ -112,6 +113,7 @@ recruitmentRouter.get("/", recruitmentController.getAllRecruitments);
  */
 recruitmentRouter.put(
   "/:id",
+  authMiddleware.verifyAuthorizedUser("params"),
   recruitmentMiddleware.checkRecruitmentIdFrom("params"),
   recruitmentMiddleware.checkMinRecruitmentConditionFrom("body"),
   recruitmentController.putRecruitment
@@ -140,6 +142,7 @@ recruitmentRouter.put(
  */
 recruitmentRouter.delete(
   "/:id",
+  authMiddleware.verifyAuthorizedUser("params"),
   recruitmentMiddleware.checkRecruitmentIdFrom("params"),
   recruitmentController.deleteRecruitment
 );
@@ -169,6 +172,18 @@ recruitmentRouter.delete(
   participantsMiddleware.checkRecruitmentIdFrom("params"),
   participantsMiddleware.checkMinParticipantIdConditionFrom("body"),
   participantsController.deleteParticipant
+);
+
+// 참여한 개시글 목록
+recruitmentRouter.get(
+  "/:id/:participantId/:recruitmentId",
+  participantsController.getParticipantsByRecruitmentIds
+);
+
+// 개설한 게시글 목록
+recruitmentRouter.get(
+  "/:id/:recruitmentId",
+  authMiddleware.verifyAuthorizedUser("params")
 );
 
 module.exports = recruitmentRouter;

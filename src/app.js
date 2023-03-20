@@ -7,6 +7,11 @@ const commonErrors = require("./misc/commonErrors");
 const apiRouter = require("./router");
 const { swaggerUi, specs } = require('./swagger/swagger');
 
+const logger = require("morgan");
+const cookieParser = require("cookie-parser");
+const passport = require("passport");
+const passportConfig = require("./config/passport");
+
 async function create() {
   // MongoDB에 연결
   await loader.connectMongoDB();
@@ -14,7 +19,13 @@ async function create() {
   console.log("express application을 초기화합니다.");
   const expressApp = express();
 
+  expressApp.use(logger('dev'));
   expressApp.use(express.json());
+  expressApp.use(express.urlencoded({ extended: false }));
+
+  expressApp.use(cookieParser());
+  expressApp.use(passport.initialize());
+  passportConfig();
 
   // Health check API
   expressApp.get("/health", (req, res, next) => {

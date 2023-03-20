@@ -9,9 +9,13 @@ const seoulTeenagerAccidentService = require("./seoulTeenagerAccidentService");
 const teenagerAccidentService = require("./teenagerAccidentService");
 const teenagerTimeAccidentService = require("./teenagerTimeAccidentService");
 const participantsService = require("./participantsService");
+const boardService = require("./boardService");
+const userService = require("./userService");
 
 module.exports = {
   postService,
+  boardService,
+  userService,
   recruitmentService,
   allAccidentTypeService,
   ageTimeAccidentService,

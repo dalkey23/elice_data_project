@@ -20,6 +20,26 @@ const participationDAO = {
     return participants;
   },
 
+  // 참가/개설한 게시글 목록
+  async findMany(filter, page, perPage) {
+    const sanitizedFilter = util.sanitizeObject({
+      recruitmentId: filter.recruitmentId,
+      participantId: filter.participantId,
+    });
+    const [total, participants] = await Promise.all([
+      Participants.countDocuments({}),
+      Participants.find(sanitizedFilter)
+        .populate("recruitmentId")
+        .populate("participantId")
+        .lean()
+        .sort({ createdAt: -1 })
+        .skip(perPage * (page - 1))
+        .limit(perPage),
+    ]);
+    const totalPage = Math.ceil(total / perPage);
+    return { participants, total, totalPage };
+  },
+
   // 모집글 별 참가자 삭제
   async deleteParticipant(recruitmentId, participantId) {
     const deletedParticipant = await Participants.findOneAndDelete({

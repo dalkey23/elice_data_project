@@ -18,8 +18,22 @@ const participantsService = {
     return participants;
   },
 
+  // 개설/참여한 모든 게시글 목록 조회
+  async getParticipantsByRecruitmentIds(
+    { recruitmentId, participantId },
+    page,
+    perPage
+  ) {
+    const recruitmentIds = await participantsDAO.findMany(
+      { recruitmentId, participantId },
+      page,
+      perPage
+    );
+    return recruitmentIds;
+  },
+
   // 모집글 별 참가자 삭제
-  async removeParticipant(recruitmentId, participantId) {
+  async deleteParticipant(recruitmentId, participantId) {
     const deletedParticipant = await participantsDAO.deleteParticipant(
       recruitmentId,
       participantId

@@ -1,4 +1,7 @@
 const postSchema = require("./post");
+const boardSchema = require("./board");
+const commentSchema = require("./comment");
+const userSchema = require("./user");
 const recruitmentSchema = require("./recruitment");
 const allAccidentTypeSchema = require("./allAccidentType");
 const carAndPeoSchema = require("./carAndPeo");
@@ -14,6 +17,9 @@ const participantsSchema = require("./participants");
 
 module.exports = {
   postSchema,
+  boardSchema,
+  commentSchema,
+  userSchema,
   recruitmentSchema,
   allAccidentTypeSchema,
   carAndPeoSchema,

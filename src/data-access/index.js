@@ -1,4 +1,6 @@
 const postDAO = require("./postDAO");
+const boardDAO = require("./boardDAO");
+const userDAO = require("./userDAO");
 const recruitmentDAO = require("./recruitmentDAO");
 const teenagerTimeAccidentDAO = require("./teenagerTimeAccidentDAO");
 const teenagerAccidentDAO = require("./teenagerAccidentDAO");
@@ -12,6 +14,8 @@ const participantsDAO = require("./participantsDAO");
 
 module.exports = {
   postDAO,
+  boardDAO,
+  userDAO,
   recruitmentDAO,
   teenagerTimeAccidentDAO,
   teenagerAccidentDAO,

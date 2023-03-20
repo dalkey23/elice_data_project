@@ -59,6 +59,7 @@ const recruitmentSchema = new mongoose.Schema(
       {
         type: Schema.Types.ObjectId,
         required: false,
+        default: 0,
         ref: "Participants",
       },
     ],

@@ -48,15 +48,13 @@ const recruitmentController = {
   },
   async getRecruitments(req, res, next) {
     try {
+      const page = Number(req.query.page ?? 1);
+      const perPage = Number(req.query.perPage ?? 6);
       const {
         borough,
         title,
-        comment,
         volunteerTime,
-        recruitments,
-        content,
         author,
-        image,
         address,
         category,
         meetingStatus,
@@ -65,16 +63,14 @@ const recruitmentController = {
       const Recruitments = await recruitmentService.getRecruitments({
         borough,
         title,
-        comment,
         volunteerTime,
-        recruitments,
-        content,
         author,
-        image,
         address,
         category,
         meetingStatus,
         participants,
+        page,
+        perPage,
       });
       res.json(util.buildResponse(Recruitments));
     } catch (error) {

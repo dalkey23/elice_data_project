@@ -15,7 +15,19 @@ function buildResponse(data, errorMessage) {
   };
 }
 
+// password 제거
+function removePassword(obj) {
+  const result = Object.entries(obj).reduce((map, [key, value]) => {
+    if(key !== "password") {
+      map[key] = value;
+    }
+    return map;
+  }, {})
+  return result;
+}
+
 module.exports = {
   sanitizeObject,
   buildResponse,
+  removePassword,
 };

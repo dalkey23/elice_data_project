@@ -1,4 +1,7 @@
 const Post = require("./Post");
+const Board = require("./Board");
+const Comment = require("./Comment");
+const User = require("./User");
 const AllAccidentType = require("./AllAccidentType");
 const CarAndPeo = require("./CarAndPeo");
 const SeoulAccidentCases = require("./SeoulAccidentCases");
@@ -13,6 +16,9 @@ const Participants = require("./Participants");
 
 module.exports = {
   Post,
+  Board,
+  Comment,
+  User,
   AllAccidentType,
   CarAndPeo,
   SeoulAccidentCases,
