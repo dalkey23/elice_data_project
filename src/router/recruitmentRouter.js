@@ -15,7 +15,7 @@ const recruitmentRouter = express.Router();
 
 /**
  * @swagger
- * /api/v1/recruitment:
+ * /api/v1/recruitment
  *  post:
  *    summary: "모집글 등록"
  *    tags: [Recruitment]
@@ -35,6 +35,7 @@ const recruitmentRouter = express.Router();
  */
 recruitmentRouter.post(
   "/",
+  authMiddleware.verifyLogin,
   recruitmentMiddleware.checkCompleteRecruitmentFrom("body"),
   recruitmentController.createRecruitment
 );
@@ -68,7 +69,7 @@ recruitmentRouter.get(
 
 /**
  * @swagger
- * /api/v1/recruitment/all:
+ * /api/v1/recruitment?:
  *  get:
  *    summary: "모든 모집글 조회"
  *    tags: [Recruitment]
@@ -113,7 +114,7 @@ recruitmentRouter.get("/", recruitmentController.getAllRecruitments);
  */
 recruitmentRouter.put(
   "/:id",
-  authMiddleware.verifyAuthorizedUser("body"),
+  authMiddleware.verifyAuthorizedUser("params"),
   recruitmentMiddleware.checkRecruitmentIdFrom("params"),
   recruitmentMiddleware.checkMinRecruitmentConditionFrom("body"),
   recruitmentController.putRecruitment
@@ -149,7 +150,7 @@ recruitmentRouter.delete(
 
 // 자치구별 모집글 조회
 recruitmentRouter.get(
-  "/borough/:borough",
+  "/borough/:boroughId",
   recruitmentController.getRecruitments
 );
 

@@ -40,13 +40,7 @@ const checkLoginFrom = (from) => async (req, res, next) => {
     });
     next();
   } catch (error) {
-    next(
-      new AppError(
-        commonErrors.inputError, 
-        400, 
-        `${error}`
-      )
-    );
+    next(new AppError(commonErrors.inputError, 400, `${error}`));
   }
 };
 
@@ -56,11 +50,12 @@ const existsToken = (req, res, next) => {
     // 토큰이 존재할 경우
     if (req.cookies.accessToken) {
       const user = jwt.verify(
-        req.cookies.accessToken, 
-        process.env.SECRET, 
+        req.cookies.accessToken,
+        process.env.SECRET,
         (err, decode) => {
           return decode;
-      });
+        }
+      );
       // 토큰이 유효한 경우
       if (user) {
         throw new AppError(
@@ -94,7 +89,7 @@ const verifyLogin = (req, res, next) => {
       jwt.verify(req.cookies.accessToken, process.env.SECRET);
     }
     next();
-  } catch(error) {
+  } catch (error) {
     // 토큰이 만료된 경우
     if (error.name == "TokenExpiredError") {
       next(
@@ -116,9 +111,9 @@ const verifyAuthorizedUser = (from) => (req, res, next) => {
     const { id, author } = req[from];
     const sanitizedUserId = util.sanitizeObject({
       id,
-      author
+      author,
     });
-    
+
     // 소독된 객체에서 id 추출
     let userId = "";
     for (let data in sanitizedUserId) {
@@ -133,6 +128,8 @@ const verifyAuthorizedUser = (from) => (req, res, next) => {
         return decoded.id;
       }
     );
+    console.log(userId);
+    console.log(loginedUser);
 
     // 각 사용자의 id 비교
     if (userId !== loginedUser) {

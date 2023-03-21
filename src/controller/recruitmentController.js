@@ -4,6 +4,7 @@ const util = require("../misc/util");
 const recruitmentController = {
   async createRecruitment(req, res, next) {
     try {
+      const author = req.userId;
       const {
         borough,
         title,
@@ -11,7 +12,6 @@ const recruitmentController = {
         volunteerTime,
         recruitments,
         content,
-        author,
         image,
         address,
         category,
@@ -48,10 +48,10 @@ const recruitmentController = {
   },
   async getRecruitments(req, res, next) {
     try {
+      const boroughId = req.query.boroughId;
       const page = Number(req.query.page ?? 1);
       const perPage = Number(req.query.perPage ?? 6);
       const {
-        borough,
         title,
         volunteerTime,
         author,
@@ -61,7 +61,7 @@ const recruitmentController = {
         participants,
       } = req.query;
       const Recruitments = await recruitmentService.getRecruitments({
-        borough,
+        borough: boroughId,
         title,
         volunteerTime,
         author,
@@ -108,7 +108,6 @@ const recruitmentController = {
         volunteerTime,
         recruitments,
         content,
-        author,
         image,
         address,
         category,
@@ -122,7 +121,6 @@ const recruitmentController = {
         volunteerTime,
         recruitments,
         content,
-        author,
         image,
         address,
         category,
