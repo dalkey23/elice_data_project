@@ -129,7 +129,7 @@ const verifyAuthorizedUser = (from) => (req, res, next) => {
         return decoded.id;
       }
     );
-
+    
     // 각 사용자의 id 비교
     if (id !== loginedUser) {
       next(
@@ -155,10 +155,10 @@ const verifyAuthorizedUser = (from) => (req, res, next) => {
 // 토큰 유효 검증, 로그인된 사용자와 모집글 접근 권한을 가진 사용자(글 작성자)가 일치하는지 검사
 const verifyRecuitmentUser = (from) => async (req, res, next) => {
   try {
-    // 접근하려는 기능의 권한을 가진 사용자 id
     const { id } = req[from];
-    const author = await recruitmentService.getRecruitment(id).author;
-    
+     // 접근하려는 기능의 권한을 가진 사용자 id
+    const author = await recruitmentService.getRecruitment(id);
+
     // 로그인한 사용자의 id
     const loginedUser = jwt.verify(
       req.cookies.accessToken,
@@ -169,7 +169,7 @@ const verifyRecuitmentUser = (from) => async (req, res, next) => {
     );
 
     // 각 사용자의 id 비교
-    if (author !== loginedUser) {
+    if (JSON.stringify(author.author._id).replace(/"/g, '') !== loginedUser) {
       next(
         new AppError(
           commonErrors.authorizationError,
@@ -184,7 +184,7 @@ const verifyRecuitmentUser = (from) => async (req, res, next) => {
       new AppError(
         commonErrors.authorizationError,
         401,
-        "토큰이 유효하지 않습니다."
+        "토큰이 유효하지 않거나 요청 id가 잘못되었습니다."
       )
     );
   }
@@ -193,9 +193,9 @@ const verifyRecuitmentUser = (from) => async (req, res, next) => {
 // 토큰 유효 검증, 로그인된 사용자와 커뮤니티 글 접근 권한을 가진 사용자(글 작성자)가 일치하는지 검사
 const verifyBoardUser = (from) => async (req, res, next) => {
   try {
-    // 접근하려는 기능의 권한을 가진 사용자 id
     const { id } = req[from];
-    const author = await boardService.getBoard(id).author;
+    // 접근하려는 기능의 권한을 가진 사용자 id
+    const author = await boardService.getBoard(id);
     
     // 로그인한 사용자의 id
     const loginedUser = jwt.verify(
@@ -206,7 +206,7 @@ const verifyBoardUser = (from) => async (req, res, next) => {
       }
     );
     // 각 사용자의 id 비교
-    if (author !== loginedUser) {
+    if (JSON.stringify(author.board.author).replace(/"/g, '') !== loginedUser) {
       next(
         new AppError(
           commonErrors.authorizationError,
