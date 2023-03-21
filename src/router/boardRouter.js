@@ -1,7 +1,6 @@
 const express = require("express");
 const { boardController } = require("../controller");
-const { boardMiddleware } = require("../middleware");
-const { authMiddleware } = require("../middleware");
+const { boardMiddleware, authMiddleware } = require("../middleware");
 
 /**
  * @swagger
@@ -41,6 +40,7 @@ const boardRouter = express.Router();
  */
 boardRouter.post(
   "/",
+  authMiddleware.verifyLogin,
   boardMiddleware.checkCompleteBoardFrom("body"),
   boardController.createBoard
 );
@@ -79,11 +79,7 @@ boardRouter.post(
  *                  type: object
  *                  example: [{"_id": "640b1b002269b4729b8881e9","title": "test123","content": "test content","author": "t123","image": []}]
  */
-boardRouter.get(
-  "/",
-  boardMiddleware.checkBoardIdFrom("params"),
-  boardController.getBoards
-);
+boardRouter.get("/", boardController.getBoards);
 
 /**
  * @swagger
@@ -113,10 +109,15 @@ boardRouter.get(
  *                  type: object
  *                  example: [{"_id": "640b1b002269b4729b8881e9","title": "test123","content": "test content","author": "t123","image": []}]
  */
-boardRouter.get("/:id", boardController.getBoard);
+boardRouter.get(
+  "/:id",
+  boardMiddleware.checkBoardIdFrom("params"),
+  boardController.getBoard
+);
 
 boardRouter.put(
   "/:id",
+  authMiddleware.verifyAuthorizedUser("body"),
   boardMiddleware.checkBoardIdFrom("params"),
   boardMiddleware.checkMinBoardConditionFrom("body"),
   boardController.editBoard
@@ -124,15 +125,23 @@ boardRouter.put(
 
 boardRouter.delete(
   "/:id",
+  authMiddleware.verifyAuthorizedUser("body"),
   boardMiddleware.checkBoardIdFrom("params"),
   boardController.deleteBoard
 );
 
 // 댓글
-boardRouter.post("/:board_id/comment", boardController.createComment);
+boardRouter.post(
+  "/:boardId/comment",
+  authMiddleware.verifyLogin,
+  boardController.createComment
+);
 
-boardRouter.put("/:id/comment/:comment_id", boardController.editComment);
+boardRouter.put("/:boardId/comment/:commentId", boardController.editComment);
 
-boardRouter.delete("/:id/comment/:comment_id", boardController.deleteComment);
+boardRouter.delete(
+  "/:boardId/comment/:commentId",
+  boardController.deleteComment
+);
 
 module.exports = boardRouter;

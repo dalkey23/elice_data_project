@@ -1,9 +1,8 @@
 const { boardDAO } = require("../data-access");
 
 const boardService = {
-  async createBoard({ id, title, content, image }) {
-    const createBoard = await boardDAO.createBoard({
-      id,
+  async createBoard(userId, { title, content, image }) {
+    const createBoard = await boardDAO.createBoard(userId, {
       title,
       content,
       image,
@@ -31,8 +30,11 @@ const boardService = {
     return deleteBoard;
   },
 
-  async createComment({board_id, id, content}) {
-    const comment = await boardDAO.createComment({board_id, id, content});
+  async createComment(userId, { boardId, content }) {
+    const comment = await boardDAO.createComment(userId, {
+      boardId,
+      content,
+    });
     return comment;
   },
   async updateComment(id, comment_id, { title, content }) {

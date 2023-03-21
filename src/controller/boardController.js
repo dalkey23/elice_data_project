@@ -1,14 +1,11 @@
-const jwtDecode = require("jwt-decode");
 const { boardService } = require("../service");
 
 const boardController = {
   async createBoard(req, res, next) {
     try {
-      const decodedToken = jwtDecode(req.cookies.accessToken);
-      const { id } = decodedToken;
+      const userId = req.userId;
       const { title, content, image } = req.body;
-      const newBoard = await boardService.createBoard({
-        id,
+      const newBoard = await boardService.createBoard(userId, {
         title,
         content,
         image,
@@ -71,13 +68,12 @@ const boardController = {
 
   async createComment(req, res, next) {
     try {
-      const { board_id } = req.params;
+      const { boardId } = req.params;
       const { content } = req.body;
-      const decodedToken = jwtDecode(req.cookies.accessToken);
-      const { id } = decodedToken;
-      const comment = await boardService.createComment({
-        board_id,
-        id,
+      const userId = req.userId;
+
+      const comment = await boardService.createComment(userId, {
+        boardId,
         content,
       });
       res.json(comment);
@@ -88,9 +84,11 @@ const boardController = {
 
   async editComment(req, res, next) {
     try {
-      const { id, comment_id } = req.params;
+      const { boardId, commentId } = req.params;
       const { title, content } = req.body;
-      const updatedComment = await boardService.updateComment(id, comment_id, {
+      const updatedComment = await boardService.updateComment({
+        boardId,
+        commentId,
         title,
         content,
       });

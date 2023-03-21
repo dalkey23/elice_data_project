@@ -12,9 +12,14 @@ const commentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    boardId: {
-      type: Schema.Types.ObjectId,
-      ref: "Board",
+    parentId: {
+      // type: Schema.Types.ObjectId,
+      // ref: "Board",
+      type : String,
+      required: true,
+    },
+    category: {
+      type: String,
       required: true,
     },
   },

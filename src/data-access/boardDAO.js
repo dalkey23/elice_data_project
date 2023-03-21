@@ -2,8 +2,8 @@ const { Board, Comment, User } = require("./model");
 const util = require("../misc/util");
 
 const boardDAO = {
-  async createBoard({ id, title, content, image }) {
-    const newBoard = new Board({ author: id, title, content, image });
+  async createBoard(userId, { title, content, image }) {
+    const newBoard = new Board({ author: userId, title, content, image });
     await newBoard.save();
     return newBoard.toObject();
   },
@@ -24,7 +24,7 @@ const boardDAO = {
   async findOne(id) {
     const [board, comments] = await Promise.all([
       Board.findById(id),
-      Comment.find({ boardId: id }),
+      Comment.find({ parentId: id, category: "board" }),
     ]);
     return { board, comments };
   },
@@ -44,8 +44,13 @@ const boardDAO = {
     return deleteBoard;
   },
 
-  async createComment({board_id, id, content}) {
-    const newComment = new Comment({ boardId : board_id, writer: id, content });
+  async createComment(userId, { boardId, content }) {
+    const newComment = new Comment({
+      parentId: boardId,
+      writer: userId,
+      content,
+      category: "board",
+    });
     await newComment.save();
     return newComment.toObject();
   },
