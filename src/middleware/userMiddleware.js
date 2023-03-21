@@ -86,6 +86,7 @@ const checkJoinFrom = (from) => async (req, res, next) => {
       phoneNumber,
       nickname,
     });
+    next();
   } catch(error){
     next(new AppError(
         commonErrors.inputError,
@@ -93,14 +94,12 @@ const checkJoinFrom = (from) => async (req, res, next) => {
         `${error}`
     ))
   }
-  next();
 };
 
 // params에 id 값 유무 검사
 const checkUserIdFrom = (from) => (req, res, next) => {
   const { id } = req[from];
-  console.log(id);
-  if(id == ":id") {
+  if(id === ":id") {
     next(
       new AppError(
         commonErrors.inputError,
@@ -108,6 +107,7 @@ const checkUserIdFrom = (from) => (req, res, next) => {
         `${from}: id는 필수값입니다.`
         )
     );
+    return;
   }
   next();
 };
@@ -131,6 +131,7 @@ const checkUserInfoFrom = (from) => async (req, res, next) => {
       phoneNumber,
       nickname,
     });
+    next();
   } catch(error){
     next(new AppError(
         commonErrors.inputError,
@@ -138,7 +139,6 @@ const checkUserInfoFrom = (from) => async (req, res, next) => {
         `${error}`
     ))
   }
-  next();
 };
 
 module.exports = {

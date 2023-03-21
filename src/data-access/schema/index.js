@@ -9,10 +9,10 @@ const seoulAccidentCasesSchema = require("./seoulAccidentCases");
 const teenagerAccidentSchema = require("./teenagerAccident");
 const ageTimeAccidentSchema = require("./ageTimeAccident");
 const seoulTeenagerAccidentSchema = require("./seoulTeenagerAccident");
-const boroughSchema = require("./seoulTeenagerAccident");
-const recruitmentParticipaintSchema = require("./recruitmentParticipaint");
+const boroughSchema = require("./borough");
 const seoulCarAndPeoCasesSchema = require("./seoulCarAndPeoCases");
 const teenagerTimeAccidentSchema = require("./teenagerTimeAccident");
+const participantsSchema = require("./participants");
 
 module.exports = {
   postSchema,
@@ -27,7 +27,7 @@ module.exports = {
   ageTimeAccidentSchema,
   seoulTeenagerAccidentSchema,
   boroughSchema,
-  recruitmentParticipaintSchema,
   seoulCarAndPeoCasesSchema,
   teenagerTimeAccidentSchema,
+  participantsSchema,
 };

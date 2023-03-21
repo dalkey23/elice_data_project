@@ -12,7 +12,7 @@ const AgeTimeAccident = require("./AgeTimeAccident");
 const TeenagerTimeAccident = require("./TeenagerTimeAccident");
 const Recruitment = require("./Recruitment");
 const Borough = require("./Borough");
-const RecruitmentParticipaint = require("./RecruitmentParticipaint");
+const Participants = require("./Participants");
 
 module.exports = {
   Post,
@@ -29,5 +29,5 @@ module.exports = {
   TeenagerTimeAccident,
   Recruitment,
   Borough,
-  RecruitmentParticipaint,
+  Participants,
 };

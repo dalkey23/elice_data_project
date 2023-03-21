@@ -1,5 +1,5 @@
 const express = require("express");
-const { adminController } = require("../controller");
+const { adminController, recruitmentController, boardController } = require("../controller");
 const { authMiddleware } = require("../middleware");
 
 const adminRouter = express.Router();
@@ -24,5 +24,32 @@ adminRouter.delete(
   authMiddleware.verifyAdmin,
   adminController.deleteUser
 );
+
+// 모집글 삭제
+adminRouter.delete(
+  "/recruitment/:id",
+  authMiddleware.verifyAdmin,
+  recruitmentController.deleteRecruitment
+)
+
+// 게시글 삭제
+adminRouter.delete(
+  "/board/:id",
+  authMiddleware.verifyAdmin,
+  boardController.deleteBoard
+)
+
+// 모집글 댓글 삭제
+adminRouter.delete(
+  "/",
+  authMiddleware.verifyAdmin,
+  boardController.deleteComment
+)
+
+// 게시글 댓글 삭제(보완 필요)
+adminRouter.delete(
+  "/",
+  authMiddleware.verifyAdmin,
+)
 
 module.exports = adminRouter;

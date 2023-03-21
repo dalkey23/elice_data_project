@@ -3,6 +3,7 @@ const { recruitmentDAO } = require("../data-access");
 const recruitmentService = {
   //생성
   async createRecruitment({
+    borough,
     title,
     comment,
     volunteerTime,
@@ -13,9 +14,10 @@ const recruitmentService = {
     address,
     category,
     meetingStatus,
-    participation,
+    participants,
   }) {
     const createdRecruitment = await recruitmentDAO.create({
+      borough,
       title,
       comment,
       volunteerTime,
@@ -26,7 +28,7 @@ const recruitmentService = {
       address,
       category,
       meetingStatus,
-      participation,
+      participants,
     });
     return createdRecruitment;
   },
@@ -40,34 +42,28 @@ const recruitmentService = {
   //모집글들 찾기
   async getRecruitments(
     {
+      borough,
       title,
-      comment,
       volunteerTime,
-      recruitments,
-      content,
       author,
-      image,
       address,
       category,
       meetingStatus,
-      participation,
+      participants,
     },
     page,
     perPage
   ) {
     const recruitment = await recruitmentDAO.findMany(
       {
+        borough,
         title,
-        comment,
         volunteerTime,
-        recruitments,
-        content,
         author,
-        image,
         address,
         category,
         meetingStatus,
-        participation,
+        participants,
       },
       page,
       perPage
@@ -84,6 +80,7 @@ const recruitmentService = {
   async updateRecruitment(
     id,
     {
+      borough,
       title,
       comment,
       volunteerTime,
@@ -94,10 +91,11 @@ const recruitmentService = {
       address,
       category,
       meetingStatus,
-      participation,
+      participants,
     }
   ) {
     const updatedRecruitment = await recruitmentDAO.updateOne(id, {
+      borough,
       title,
       comment,
       volunteerTime,
@@ -108,7 +106,7 @@ const recruitmentService = {
       address,
       category,
       meetingStatus,
-      participation,
+      participants,
     });
     return updatedRecruitment;
   },
@@ -118,6 +116,7 @@ const recruitmentService = {
     return deletedRecruitment;
   },
   async deleteRecruitments({
+    borough,
     title,
     comment,
     volunteerTime,
@@ -128,9 +127,10 @@ const recruitmentService = {
     address,
     category,
     meetingStatus,
-    participation,
+    participants,
   }) {
     const deletedRecruitments = await recruitmentDAO.deleteMany({
+      borough,
       title,
       comment,
       volunteerTime,
@@ -141,7 +141,7 @@ const recruitmentService = {
       address,
       category,
       meetingStatus,
-      participation,
+      participants,
     });
     return deletedRecruitments;
   },
