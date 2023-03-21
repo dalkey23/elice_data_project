@@ -29,8 +29,8 @@ const participationDAO = {
     const [total, participants] = await Promise.all([
       Participants.countDocuments({}),
       Participants.find(sanitizedFilter)
-        .populate("recruitmentId")
         .populate("participantId")
+        .populate("recruitmentId")
         .lean()
         .sort({ createdAt: -1 })
         .skip(perPage * (page - 1))

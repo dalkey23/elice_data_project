@@ -113,7 +113,7 @@ recruitmentRouter.get("/", recruitmentController.getAllRecruitments);
  */
 recruitmentRouter.put(
   "/:id",
-  authMiddleware.verifyAuthorizedUser("params"),
+  authMiddleware.verifyAuthorizedUser("body"),
   recruitmentMiddleware.checkRecruitmentIdFrom("params"),
   recruitmentMiddleware.checkMinRecruitmentConditionFrom("body"),
   recruitmentController.putRecruitment
@@ -142,7 +142,7 @@ recruitmentRouter.put(
  */
 recruitmentRouter.delete(
   "/:id",
-  authMiddleware.verifyAuthorizedUser("params"),
+  authMiddleware.verifyAuthorizedUser("body"),
   recruitmentMiddleware.checkRecruitmentIdFrom("params"),
   recruitmentController.deleteRecruitment
 );
@@ -176,14 +176,14 @@ recruitmentRouter.delete(
 
 // 참여한 개시글 목록
 recruitmentRouter.get(
-  "/:id/:participantId/:recruitmentId",
-  participantsController.getParticipantsByRecruitmentIds
+  "/:participantId",
+  participantsController.getParticipantIds
 );
 
 // 개설한 게시글 목록
 recruitmentRouter.get(
-  "/:id/:recruitmentId",
-  authMiddleware.verifyAuthorizedUser("params")
+  "/:recruitmentId",
+  authMiddleware.verifyAuthorizedUser("body")
 );
 
 module.exports = recruitmentRouter;

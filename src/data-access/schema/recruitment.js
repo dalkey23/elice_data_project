@@ -16,7 +16,7 @@ const recruitmentSchema = new mongoose.Schema(
     // 댓글
     comment: {
       type: String,
-      required: true,
+      required: false,
     },
     // 봉사 시간
     volunteerTime: {
@@ -59,7 +59,7 @@ const recruitmentSchema = new mongoose.Schema(
       {
         type: Schema.Types.ObjectId,
         required: false,
-        default: 0,
+        default: [],
         ref: "Participants",
       },
     ],

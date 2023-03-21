@@ -3,7 +3,7 @@ const util = require("../misc/util");
 
 const participantsController = {
   // 새로운 참가자 추가
-  async addParticipant(req, res) {
+  async addParticipant(req, res, next) {
     try {
       const { recruitmentId, participantId } = req.body;
       const createdParticipant = await participantsService.addParticipant({
@@ -17,7 +17,7 @@ const participantsController = {
   },
 
   // 특정 모집글에 대한 참가자 목록 조회
-  async getParticipantsByRecruitmentId(req, res) {
+  async getParticipantsByRecruitmentId(req, res, next) {
     try {
       const { recruitmentId } = req.params;
       const participants =
@@ -28,8 +28,27 @@ const participantsController = {
     }
   },
 
+  // 참여한 개시글 조회
+  async getParticipantIds(req, res, next) {
+    try {
+      const page = Number(req.query.page ?? 1);
+      const perPage = Number(req.query.perPage ?? 6);
+      const { participantId, recruitmentId } = req.query;
+      const participants =
+        await participantsService.getParticipantsByRecruitmentIds({
+          participantId,
+          recruitmentId,
+          page,
+          perPage,
+        });
+      res.status(200).json(util.buildResponse(participants));
+    } catch (error) {
+      next(error);
+    }
+  },
+
   // 모집글 별 참가자 삭제
-  async deleteParticipant(req, res) {
+  async deleteParticipant(req, res, next) {
     try {
       const { recruitmentId, participantId } = req.params;
       const deletedParticipant = await participantsService.deleteParticipant(

@@ -80,11 +80,8 @@ const recruitmentController = {
 
   async getAllRecruitments(req, res, next) {
     try {
-      //페이지 번호
       const page = Number(req.query.page ?? 1);
-      //페이지 당 상품 개수
       const perPage = Number(req.query.perPage ?? 6);
-
       const { recruitments, total, totalPage } =
         await recruitmentService.getAllRecruitments(page, perPage);
       res.json(

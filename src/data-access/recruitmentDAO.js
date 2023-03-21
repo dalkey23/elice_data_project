@@ -103,7 +103,6 @@ const recruitmentDAO = {
     const sanitizedToUpdate = util.sanitizeObject({
       borough: toUpdate.borough,
       title: toUpdate.title,
-      author: toUpdate.author,
       comment: toUpdate.comment,
       volunteerTime: toUpdate.volunteerTime,
       recruitments: toUpdate.recruitments,

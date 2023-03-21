@@ -7,7 +7,7 @@ const schema = Joi.object({
   borough: JoiObjectId().required(),
   title: Joi.string().required(),
   author: JoiObjectId().required(),
-  comment: Joi.string().required(),
+  comment: Joi.string(),
   volunteerTime: Joi.string().required(),
   recruitments: Joi.number().required(),
   content: Joi.string().required(),
@@ -15,7 +15,7 @@ const schema = Joi.object({
   address: Joi.string().required(),
   image: Joi.string(),
   meetingStatus: Joi.string().required(),
-  participants: JoiObjectId(),
+  participants: Joi.array().items(JoiObjectId()).default([]),
 });
 
 const checkCompleteRecruitmentFrom = (from) => async (req, res, next) => {
