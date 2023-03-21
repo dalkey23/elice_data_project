@@ -70,7 +70,7 @@ const userService = {
     }
     
     // password 수정하는 경우 해싱
-    const hashedPassword = await password? bcrypt.hash(password, 10) : password;
+    const hashedPassword = password !== undefined ? await bcrypt.hash(password, 10) : await Promise.resolve(undefined);
 
     const updatedUser = await userDAO.updateOne(id, {
       name,
