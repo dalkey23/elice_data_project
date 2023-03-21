@@ -1,6 +1,9 @@
 const express = require("express");
 const { recruitmentController } = require("../controller");
 const { recruitmentMiddleware } = require("../middleware");
+const { participantsMiddleware } = require("../middleware");
+const { authMiddleware } = require("../middleware");
+const { participantsController } = require("../controller");
 
 /**
  * @swagger
@@ -79,7 +82,7 @@ recruitmentRouter.get(
  *              items:
  *                $ref: '#/components/schemas/Recruitment'
  */
-recruitmentRouter.get("/all", recruitmentController.getAllRecruitments);
+recruitmentRouter.get("/", recruitmentController.getAllRecruitments);
 
 /**
  * @swagger
@@ -110,6 +113,7 @@ recruitmentRouter.get("/all", recruitmentController.getAllRecruitments);
  */
 recruitmentRouter.put(
   "/:id",
+  authMiddleware.verifyAuthorizedUser("body"),
   recruitmentMiddleware.checkRecruitmentIdFrom("params"),
   recruitmentMiddleware.checkMinRecruitmentConditionFrom("body"),
   recruitmentController.putRecruitment
@@ -138,8 +142,48 @@ recruitmentRouter.put(
  */
 recruitmentRouter.delete(
   "/:id",
+  authMiddleware.verifyAuthorizedUser("body"),
   recruitmentMiddleware.checkRecruitmentIdFrom("params"),
   recruitmentController.deleteRecruitment
+);
+
+// 자치구별 모집글 조회
+recruitmentRouter.get(
+  "/borough/:borough",
+  recruitmentController.getRecruitments
+);
+
+// 모집글 별 참여자 목록조회
+recruitmentRouter.get(
+  "/:recruitmentId/participants",
+  participantsController.getParticipantsByRecruitmentId
+);
+
+// 참여자 추가
+recruitmentRouter.post(
+  "/:recruitmentId/participants",
+  participantsMiddleware.checkRecruitmentIdFrom("params"),
+  participantsController.addParticipant
+);
+
+// 모집글 별 참가자 탈퇴
+recruitmentRouter.delete(
+  "/:recruitmentId/participants/:participantId",
+  participantsMiddleware.checkRecruitmentIdFrom("params"),
+  participantsMiddleware.checkMinParticipantIdConditionFrom("body"),
+  participantsController.deleteParticipant
+);
+
+// 참여한 개시글 목록
+recruitmentRouter.get(
+  "/:participantId",
+  participantsController.getParticipantIds
+);
+
+// 개설한 게시글 목록
+recruitmentRouter.get(
+  "/:recruitmentId",
+  authMiddleware.verifyAuthorizedUser("body")
 );
 
 module.exports = recruitmentRouter;

@@ -5,6 +5,7 @@ const util = require("../misc/util");
 const recruitmentDAO = {
   // 새로운 모집글 생성
   async create({
+    borough,
     title,
     comment,
     volunteerTime,
@@ -15,10 +16,11 @@ const recruitmentDAO = {
     address,
     category,
     meetingStatus,
-    participation,
+    participants,
   }) {
     // Recruitment 스키마를 이용하여 새로운 모집글 생성
     const recruitment = new Recruitment({
+      borough,
       title,
       comment,
       volunteerTime,
@@ -29,7 +31,7 @@ const recruitmentDAO = {
       address,
       category,
       meetingStatus,
-      participation,
+      participants,
     });
     // MongoDB에 저장
     await recruitment.save();
@@ -40,36 +42,33 @@ const recruitmentDAO = {
   async findOne(id) {
     // MongoDB에서 ID에 해당하는 모집글 검색
     const plainRecruitment = await Recruitment.findById(id)
+      .populate("borough")
       .populate("author")
-      .populate("participation")
+      .populate("participants")
       .lean();
     // 검색된 회의를 JavaScript 객체로 변환하여 반환
     return plainRecruitment;
   },
-
-  // 지원한 봉사모집글
-
-  // 개설한 봉사모집글
 
   // 필터를 사용하여 모집글을 검색
   async findMany(filter, page, perPage) {
     // 검색 조건에 사용될 필터를 purify-object 모듈을 사용하여 정제
     // 제목, 작성자, 주소, 카테고리, 모집인원
     const sanitizedFilter = util.sanitizeObject({
+      borough: filter.borough,
       title: filter.title,
       author: filter.author,
-      recruitments: filter.recruitments,
-      content: filter.content,
       address: filter.address,
       category: filter.category,
       meetingStatus: filter.meetingStatus,
-      participation: filter.participation,
+      participants: filter.participants,
     });
     const [total, recruitments] = await Promise.all([
       Recruitment.countDocuments({}),
       Recruitment.find(sanitizedFilter)
+        .populate("borough")
         .populate("author")
-        .populate("participation")
+        .populate("participants")
         .lean()
         .sort({ createdAt: -1 })
         .skip(perPage * (page - 1))
@@ -86,8 +85,9 @@ const recruitmentDAO = {
     const [total, recruitments] = await Promise.all([
       Recruitment.countDocuments({}),
       Recruitment.find()
+        .populate("borough")
         .populate("author")
-        .populate("participation")
+        .populate("participants")
         .lean()
         .sort({ createdAt: -1 })
         .skip(perPage * (page - 1))
@@ -101,8 +101,8 @@ const recruitmentDAO = {
   async updateOne(id, toUpdate) {
     // 업데이트할 정보를 purify-object 모듈을 사용하여 정제
     const sanitizedToUpdate = util.sanitizeObject({
+      borough: toUpdate.borough,
       title: toUpdate.title,
-      author: toUpdate.author,
       comment: toUpdate.comment,
       volunteerTime: toUpdate.volunteerTime,
       recruitments: toUpdate.recruitments,
@@ -111,7 +111,7 @@ const recruitmentDAO = {
       address: toUpdate.address,
       category: toUpdate.category,
       meetingStatus: toUpdate.meetingStatus,
-      participation: toUpdate.participation,
+      participants: toUpdate.participants,
     });
     // MongoDB에서 ID에 해당하는 모집글을 업데이트하고 새로운 버전의 모집글을 반환
     const plainUpdatedRecruitment = await Recruitment.findByIdAndUpdate(
@@ -122,8 +122,9 @@ const recruitmentDAO = {
         new: true, // 업데이트된 버전의 모집글을 반환
       }
     )
+      .populate("borough")
       .populate("author")
-      .populate("participation")
+      .populate("participants")
       .lean();
     // 업데이트된 회의를 JavaScript 객체로 변환하여 반환
     return plainUpdatedRecruitment;
@@ -132,9 +133,9 @@ const recruitmentDAO = {
   // ID를 사용하여 회의를 삭제
   async deleteOne(id) {
     // MongoDB에서 ID에 해당하는 모집글 삭제하고 삭제된 모집글을 반환
-    const plainDeletedRecruitment = await Recruitment.findByIdAndDelete({
-      _id: id,
-    }).lean();
+    const plainDeletedRecruitment = await Recruitment.findByIdAndDelete(
+      id
+    ).lean();
     // 삭제된 회의를 JavaScript 객체로 변환하여 반환
     return plainDeletedRecruitment;
   },
@@ -143,6 +144,7 @@ const recruitmentDAO = {
   async deleteMany(condition) {
     // 삭제 조건에 사용될 필터를 purify-object 모듈을 사용하여 정제
     const sanitizedCondition = util.sanitizeObject({
+      borough: condition.borough,
       title: condition.title,
       author: condition.author,
       comment: condition.comment,
@@ -153,7 +155,7 @@ const recruitmentDAO = {
       address: condition.address,
       category: condition.category,
       meetingStatus: condition.meeting,
-      participation: condition.participation,
+      participants: condition.participants,
     });
     // MongoDB에서 조건에 해당하는 모든 모집글을 삭제하고 삭제된 모집글 수를 반환
     const plainDeletedRecruitments = await Recruitment.deleteMany(
