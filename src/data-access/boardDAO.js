@@ -1,61 +1,76 @@
-const { Board } = require("./model")
-const util = require("../misc/util")
+const { Board, Comment, User } = require("./model");
+const util = require("../misc/util");
 
 const boardDAO = {
+  async createBoard(userId, { title, content, image }) {
+    const newBoard = new Board({ author: userId, title, content, image });
+    await newBoard.save();
+    return newBoard.toObject();
+  },
 
-    async createBoard({ author, title, content, image }) {
-        const newBoard = new Board({ author, title, content, image });
-        await newBoard.save();
-        return newBoard.toObject();
-    },
+  async findAll(page, perPage) {
+    const [total, boards] = await Promise.all([
+      Board.countDocuments({}),
+      Board.find()
+        .lean()
+        .sort({ createdAt: -1 })
+        .skip(perPage * (page - 1))
+        .limit(perPage),
+    ]);
+    const totalPage = Math.ceil(total / perPage);
+    return { boards, total, totalPage };
+  },
 
-    async findAll(page, perPage) {
-        const [total, boards] = await Promise.all([
-            Board.countDocuments({}),
-            Board.find().lean().sort({ createdAt: -1 }).skip(perPage * (page - 1)).limit(perPage),
-        ]);
-        const totalPage = Math.ceil(total / perPage);
+  async findOne(id) {
+    const [board, comments] = await Promise.all([
+      Board.findById(id),
+      Comment.find({ parentId: id, category: "board" }),
+    ]);
+    return { board, comments };
+  },
 
-        return { boards, total, totalPage };
-    },
+  async updateOne(id, toUpdate) {
+    const sanitizedToUpdate = util.sanitizeObject({
+      title: toUpdate.title,
+      content: toUpdate.content,
+      image: toUpdate.image,
+    });
+    const updatedBaord = await Board.findByIdAndUpdate(id, sanitizedToUpdate);
+    return updatedBaord;
+  },
 
-    async findOne(id) {
-        const board = await Board.findById(id);
-        return board;
-    },
+  async deleteOne(id) {
+    const deleteBoard = await Board.findByIdAndDelete(id);
+    return deleteBoard;
+  },
 
-    async updateOne(id, toUpdate) {
-        const sanitizedToUpdate = util.sanitizeObject({
-            title: toUpdate.title,
-            content: toUpdate.content,
-            image: toUpdate.image,
-        });
+  async createComment(userId, { boardId, content }) {
+    const newComment = new Comment({
+      parentId: boardId,
+      writer: userId,
+      content,
+      category: "board",
+    });
+    await newComment.save();
+    return newComment.toObject();
+  },
 
-        const updatedBaord = await Board.findByIdAndUpdate(id, sanitizedToUpdate)
+  async updateComment(id, comment_id, toUpdate) {
+    const sanitizedToUpdate = util.sanitizeObject({
+      title: toUpdate.title,
+      content: toUpdate.content,
+    });
+    const updateComment = await Comment.findByIdAndUpdate(
+      { _id: comment_id },
+      sanitizedToUpdate
+    );
+    return updateComment;
+  },
 
-        return updatedBaord;
-    },
-
-    async deleteOne(id) {
-        const deleteBoard = await Board.findByIdAndDelete(id)
-        return deleteBoard;
-
-    },
-
-    async createComment(id, { writer, content }) {
-        const board = await Board.findByIdAndUpdate(id, {
-            $push: { comments: { writer, content } }
-        })
-        return board
-
-    },
-
-    async deleteComment(boardId, commentId){
-        const board = await Board.findByIdAndUpdate(boardId, {
-            $pull: { comments: { _id : commentId } }
-        })
-        return board
-    }
+  async deleteComment(id, comment_id) {
+    const deletedComment = await Comment.findByIdAndDelete({ _id: comment_id });
+    return deletedComment;
+  },
 };
 
 module.exports = boardDAO;

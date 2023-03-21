@@ -59,7 +59,7 @@ const existsToken = (req, res, next) => {
       // 토큰이 유효한 경우
       if (user) {
         throw new AppError(
-          commonErrors.inputError,
+          commonErrors.authenticationError,
           400,
           "이미 로그인되어 있습니다."
         );
@@ -81,13 +81,19 @@ const existsToken = (req, res, next) => {
   }
 };
 
-// 로그인 상태인지 확인
+// 로그인 상태인지 확인하고 토큰 안의 userId 반환
 const verifyLogin = (req, res, next) => {
   try {
-    // 토큰이 존재할 경우
-    if (req.cookies.accessToken) {
-      jwt.verify(req.cookies.accessToken, process.env.SECRET);
+    // 토큰이 존재하지 않을 경우
+    if (!req.cookies.accessToken) {
+      throw new AppError(
+        commonErrors.authenticationError,
+        401,
+        "토큰이 존재하지 않습니다."
+      );
     }
+    const user = jwt.verify(req.cookies.accessToken, process.env.SECRET);
+    req.userId = user.id;
     next();
   } catch (error) {
     // 토큰이 만료된 경우

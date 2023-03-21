@@ -1,8 +1,8 @@
-const express = require("express")
-const { boardController } = require("../controller")
+const express = require("express");
+const { boardController } = require("../controller");
+const { boardMiddleware, authMiddleware } = require("../middleware");
 
-
-/**  
+/**
  * @swagger
  * tags:
  *   name: Board
@@ -38,12 +38,17 @@ const boardRouter = express.Router();
  *                type: string
  *                description: "게시들 이미지"
  */
-boardRouter.post("/", boardController.createBoard);
+boardRouter.post(
+  "/",
+  authMiddleware.verifyLogin,
+  boardMiddleware.checkCompleteBoardFrom("body"),
+  boardController.createBoard
+);
 
 /**
  * @swagger
  * /api/v1/board:
- *  get: 
+ *  get:
  *    summary: "게시글조회"
  *    description: "모든 게시글 조회"
  *    tags: [Board]
@@ -79,7 +84,7 @@ boardRouter.get("/", boardController.getBoards);
 /**
  * @swagger
  * /api/v1/board/{id}:
- *  get: 
+ *  get:
  *    summary: "게시글 상세조회"
  *    description: "게시글 상세조회"
  *    tags: [Board]
@@ -104,18 +109,39 @@ boardRouter.get("/", boardController.getBoards);
  *                  type: object
  *                  example: [{"_id": "640b1b002269b4729b8881e9","title": "test123","content": "test content","author": "t123","image": []}]
  */
-boardRouter.get("/:id", boardController.getBoard);
+boardRouter.get(
+  "/:id",
+  boardMiddleware.checkBoardIdFrom("params"),
+  boardController.getBoard
+);
 
+boardRouter.put(
+  "/:id",
+  authMiddleware.verifyAuthorizedUser("body"),
+  boardMiddleware.checkBoardIdFrom("params"),
+  boardMiddleware.checkMinBoardConditionFrom("body"),
+  boardController.editBoard
+);
 
-boardRouter.put("/:id", boardController.editBoard)
-
-
-boardRouter.delete("/:id", boardController.deleteBoard)
-
-
+boardRouter.delete(
+  "/:id",
+  authMiddleware.verifyAuthorizedUser("body"),
+  boardMiddleware.checkBoardIdFrom("params"),
+  boardController.deleteBoard
+);
 
 // 댓글
-boardRouter.post("/:id/comment", boardController.createComment);
+boardRouter.post(
+  "/:boardId/comment",
+  authMiddleware.verifyLogin,
+  boardController.createComment
+);
 
+boardRouter.put("/:boardId/comment/:commentId", boardController.editComment);
+
+boardRouter.delete(
+  "/:boardId/comment/:commentId",
+  boardController.deleteComment
+);
 
 module.exports = boardRouter;

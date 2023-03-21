@@ -2,6 +2,7 @@ const postMiddleware = require("./postMiddleware");
 const userMiddleware = require("./userMiddleware");
 const authMiddleware = require("./authMiddleware");
 const recruitmentMiddleware = require("./recruitmentMiddleware");
+const boardMiddleware = require("./boardMiddleware");
 const participantsMiddleware = require("./participantsMiddleware");
 
 module.exports = {
@@ -9,5 +10,6 @@ module.exports = {
   userMiddleware,
   authMiddleware,
   recruitmentMiddleware,
+  boardMiddleware,
   participantsMiddleware,
 };

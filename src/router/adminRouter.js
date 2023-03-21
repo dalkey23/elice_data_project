@@ -39,17 +39,18 @@ adminRouter.delete(
   boardController.deleteBoard
 )
 
-// 모집글 댓글 삭제
+// 모집글 댓글 삭제(보완 필요)
 adminRouter.delete(
-  "/",
+  "/recruitment/:recruitmentId/comment/:commentId",
   authMiddleware.verifyAdmin,
-  boardController.deleteComment
+  //recruitmentController.
 )
 
 // 게시글 댓글 삭제(보완 필요)
 adminRouter.delete(
-  "/",
+  "/board/:boardId/comment/:commentId",
   authMiddleware.verifyAdmin,
+  boardController.deleteComment
 )
 
 module.exports = adminRouter;
