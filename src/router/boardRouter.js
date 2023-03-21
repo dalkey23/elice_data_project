@@ -1,8 +1,9 @@
-const express = require("express")
-const { boardController } = require("../controller")
+const express = require("express");
+const { boardController } = require("../controller");
+const { authMiddleware } = require("../middleware");
+const imageUploader = require("../middleware/imageMiddleware");
 
-
-/**  
+/**
  * @swagger
  * tags:
  *   name: Board
@@ -43,7 +44,7 @@ boardRouter.post("/", boardController.createBoard);
 /**
  * @swagger
  * /api/v1/board:
- *  get: 
+ *  get:
  *    summary: "게시글조회"
  *    description: "모든 게시글 조회"
  *    tags: [Board]
@@ -79,7 +80,7 @@ boardRouter.get("/", boardController.getBoards);
 /**
  * @swagger
  * /api/v1/board/{id}:
- *  get: 
+ *  get:
  *    summary: "게시글 상세조회"
  *    description: "게시글 상세조회"
  *    tags: [Board]
@@ -106,16 +107,17 @@ boardRouter.get("/", boardController.getBoards);
  */
 boardRouter.get("/:id", boardController.getBoard);
 
+boardRouter.put("/:id", boardController.editBoard);
 
-boardRouter.put("/:id", boardController.editBoard)
-
-
-boardRouter.delete("/:id", boardController.deleteBoard)
-
-
+boardRouter.delete("/:id", boardController.deleteBoard);
 
 // 댓글
 boardRouter.post("/:id/comment", boardController.createComment);
+
+boardRouter.put("/:id/comment/:comment_id", boardController.editComment);
+
+boardRouter.delete("/:id/comment/:comment_id", boardController.deleteComment);
+
 
 
 module.exports = boardRouter;

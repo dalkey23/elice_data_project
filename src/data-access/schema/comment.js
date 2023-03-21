@@ -11,7 +11,12 @@ const commentSchema = new mongoose.Schema(
     content: {
       type: String,
       required: true,
-    }
+    },
+    boardId: {
+      type: Schema.Types.ObjectId,
+      ref: "Board",
+      required: true,
+    },
   },
   {
     collection: "Comment",
