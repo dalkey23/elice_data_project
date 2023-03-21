@@ -29,6 +29,7 @@ module.exports = () => {
             nickname: user.nickname,
             email: user.email,
             userType: user.userType,
+            profileImage: user.profileImage
           });
         } catch (error) {
           done(error, null);

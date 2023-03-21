@@ -2,7 +2,7 @@ const AppError = require("../misc/AppError");
 const commonErrors = require("../misc/commonErrors");
 const Joi = require("joi");
 const jwt = require("jsonwebtoken");
-const userService = require("../service");
+const { recruitmentService, boardService } = require("../service");
 const util = require("../misc/util");
 
 // 이메일
@@ -119,17 +119,7 @@ const verifyLogin = (req, res, next) => {
 const verifyAuthorizedUser = (from) => (req, res, next) => {
   try {
     // 접근하려는 기능의 권한을 가진 사용자 id
-    const { id, author } = req[from];
-    const sanitizedUserId = util.sanitizeObject({
-      id,
-      author
-    });
-    
-    // 소독된 객체에서 id 추출
-    let userId = "";
-    for (let data in sanitizedUserId) {
-      userId = sanitizedUserId[data];
-    }
+    const { id } = req[from];
 
     // 로그인한 사용자의 id
     const loginedUser = jwt.verify(
@@ -141,7 +131,82 @@ const verifyAuthorizedUser = (from) => (req, res, next) => {
     );
 
     // 각 사용자의 id 비교
-    if (userId !== loginedUser) {
+    if (id !== loginedUser) {
+      next(
+        new AppError(
+          commonErrors.authorizationError,
+          403,
+          "권한이 없는 사용자입니다."
+        )
+      );
+    }
+    next();
+  } catch (error) {
+    next(
+      new AppError(
+        commonErrors.authorizationError,
+        401,
+        "토큰이 유효하지 않습니다."
+      )
+    );
+  }
+};
+
+// 토큰 유효 검증, 로그인된 사용자와 모집글 접근 권한을 가진 사용자(글 작성자)가 일치하는지 검사
+const verifyRecuitmentUser = (from) => async (req, res, next) => {
+  try {
+    // 접근하려는 기능의 권한을 가진 사용자 id
+    const { id } = req[from];
+    const author = await recruitmentService.getRecruitment(id).author;
+    
+    // 로그인한 사용자의 id
+    const loginedUser = jwt.verify(
+      req.cookies.accessToken,
+      process.env.SECRET,
+      (err, decoded) => {
+        return decoded.id;
+      }
+    );
+
+    // 각 사용자의 id 비교
+    if (author !== loginedUser) {
+      next(
+        new AppError(
+          commonErrors.authorizationError,
+          403,
+          "권한이 없는 사용자입니다."
+        )
+      );
+    }
+    next();
+  } catch (error) {
+    next(
+      new AppError(
+        commonErrors.authorizationError,
+        401,
+        "토큰이 유효하지 않습니다."
+      )
+    );
+  }
+};
+
+// 토큰 유효 검증, 로그인된 사용자와 커뮤니티 글 접근 권한을 가진 사용자(글 작성자)가 일치하는지 검사
+const verifyBoardUser = (from) => async (req, res, next) => {
+  try {
+    // 접근하려는 기능의 권한을 가진 사용자 id
+    const { id } = req[from];
+    const author = await boardService.getBoard(id).author;
+    
+    // 로그인한 사용자의 id
+    const loginedUser = jwt.verify(
+      req.cookies.accessToken,
+      process.env.SECRET,
+      (err, decoded) => {
+        return decoded.id;
+      }
+    );
+    // 각 사용자의 id 비교
+    if (author !== loginedUser) {
       next(
         new AppError(
           commonErrors.authorizationError,
@@ -200,4 +265,6 @@ module.exports = {
   verifyLogin,
   verifyAdmin,
   verifyAuthorizedUser,
+  verifyRecuitmentUser,
+  verifyBoardUser,
 };
