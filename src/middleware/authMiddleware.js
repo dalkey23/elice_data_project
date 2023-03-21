@@ -50,12 +50,17 @@ const checkLoginFrom = (from) => async (req, res, next) => {
   }
 };
 
-// 이미 로그인된 사용자인지 확인(토큰이 있다면 토큰 유효 검증)
+// 로그인 시도 시, 이미 로그인된 사용자인지 확인(토큰이 있다면 토큰 유효 검증)
 const existsToken = (req, res, next) => {
   try {
     // 토큰이 존재할 경우
     if (req.cookies.accessToken) {
-      const user = jwt.verify(req.cookies.accessToken, process.env.SECRET);
+      const user = jwt.verify(
+        req.cookies.accessToken, 
+        process.env.SECRET, 
+        (err, decode) => {
+          return decode;
+      });
       // 토큰이 유효한 경우
       if (user) {
         throw new AppError(
@@ -81,6 +86,29 @@ const existsToken = (req, res, next) => {
   }
 };
 
+// 로그인 상태인지 확인
+const verifyLogin = (req, res, next) => {
+  try {
+    // 토큰이 존재할 경우
+    if (req.cookies.accessToken) {
+      jwt.verify(req.cookies.accessToken, process.env.SECRET);
+    }
+    next();
+  } catch(error) {
+    // 토큰이 만료된 경우
+    if (error.name == "TokenExpiredError") {
+      next(
+        new AppError(
+          commonErrors.authorizationError,
+          401,
+          "이전 로그인한 사용자의 토큰 유효기간이 만료되었습니다. 강제 로그아웃 해주세요."
+        )
+      );
+    }
+    next(error);
+  }
+};
+
 // 토큰 유효 검증, 로그인된 사용자와 기능 접근 권한을 가진 사용자가 일치하는지 검사
 const verifyAuthorizedUser = (from) => (req, res, next) => {
   try {
@@ -91,7 +119,7 @@ const verifyAuthorizedUser = (from) => (req, res, next) => {
       author
     });
     
-    // 걸러진 객체에서 id 추출
+    // 소독된 객체에서 id 추출
     let userId = "";
     for (let data in sanitizedUserId) {
       userId = sanitizedUserId[data];
@@ -163,6 +191,7 @@ const verifyAdmin = (req, res, next) => {
 module.exports = {
   checkLoginFrom,
   existsToken,
+  verifyLogin,
   verifyAdmin,
   verifyAuthorizedUser,
 };

@@ -46,7 +46,7 @@ adminRouter.delete(
   boardController.deleteComment
 )
 
-// 게시글 댓글 삭제
+// 게시글 댓글 삭제(보완 필요)
 adminRouter.delete(
   "/",
   authMiddleware.verifyAdmin,
