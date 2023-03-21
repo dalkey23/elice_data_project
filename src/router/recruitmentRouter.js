@@ -113,7 +113,7 @@ recruitmentRouter.get("/", recruitmentController.getAllRecruitments);
  */
 recruitmentRouter.put(
   "/:id",
-  authMiddleware.verifyAuthorizedUser("body"),
+  authMiddleware.verifyRecuitmentUser("params"),
   recruitmentMiddleware.checkRecruitmentIdFrom("params"),
   recruitmentMiddleware.checkMinRecruitmentConditionFrom("body"),
   recruitmentController.putRecruitment
@@ -142,7 +142,7 @@ recruitmentRouter.put(
  */
 recruitmentRouter.delete(
   "/:id",
-  authMiddleware.verifyAuthorizedUser("body"),
+  authMiddleware.verifyRecuitmentUser("params"),
   recruitmentMiddleware.checkRecruitmentIdFrom("params"),
   recruitmentController.deleteRecruitment
 );

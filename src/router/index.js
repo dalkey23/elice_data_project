@@ -1,7 +1,7 @@
 const express = require("express");
 const postRouter = require("./postRouter");
 const boardRouter = require("./boardRouter");
-const userRouter = require("./userRouter");
+const myRouter = require("./myRouter");
 const authRouter = require("./authRouter");
 const adminRouter = require("./adminRouter");
 const recruitmentRouter = require("./recruitmentRouter");
@@ -13,7 +13,7 @@ const v1Router = express.Router();
 // v1Router.use(cors());
 v1Router.use("/posts", postRouter);
 v1Router.use("/board", boardRouter);
-v1Router.use("/users", userRouter);
+v1Router.use("/my", myRouter);
 v1Router.use("/auth", authRouter);
 v1Router.use("/admin", adminRouter);
 v1Router.use("/recruitment", recruitmentRouter);
