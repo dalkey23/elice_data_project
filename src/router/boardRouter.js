@@ -1,7 +1,7 @@
 const express = require("express");
 const { boardController } = require("../controller");
+const { boardMiddleware } = require("../middleware");
 const { authMiddleware } = require("../middleware");
-const imageUploader = require("../middleware/imageMiddleware");
 
 /**
  * @swagger
@@ -39,7 +39,11 @@ const boardRouter = express.Router();
  *                type: string
  *                description: "게시들 이미지"
  */
-boardRouter.post("/", boardController.createBoard);
+boardRouter.post(
+  "/",
+  boardMiddleware.checkCompleteBoardFrom("body"),
+  boardController.createBoard
+);
 
 /**
  * @swagger
@@ -75,7 +79,11 @@ boardRouter.post("/", boardController.createBoard);
  *                  type: object
  *                  example: [{"_id": "640b1b002269b4729b8881e9","title": "test123","content": "test content","author": "t123","image": []}]
  */
-boardRouter.get("/", boardController.getBoards);
+boardRouter.get(
+  "/",
+  boardMiddleware.checkBoardIdFrom("params"),
+  boardController.getBoards
+);
 
 /**
  * @swagger
@@ -107,17 +115,24 @@ boardRouter.get("/", boardController.getBoards);
  */
 boardRouter.get("/:id", boardController.getBoard);
 
-boardRouter.put("/:id", boardController.editBoard);
+boardRouter.put(
+  "/:id",
+  boardMiddleware.checkBoardIdFrom("params"),
+  boardMiddleware.checkMinBoardConditionFrom("body"),
+  boardController.editBoard
+);
 
-boardRouter.delete("/:id", boardController.deleteBoard);
+boardRouter.delete(
+  "/:id",
+  boardMiddleware.checkBoardIdFrom("params"),
+  boardController.deleteBoard
+);
 
 // 댓글
-boardRouter.post("/:id/comment", boardController.createComment);
+boardRouter.post("/:board_id/comment", boardController.createComment);
 
 boardRouter.put("/:id/comment/:comment_id", boardController.editComment);
 
 boardRouter.delete("/:id/comment/:comment_id", boardController.deleteComment);
-
-
 
 module.exports = boardRouter;

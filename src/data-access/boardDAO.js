@@ -2,9 +2,8 @@ const { Board, Comment, User } = require("./model");
 const util = require("../misc/util");
 
 const boardDAO = {
-  async createBoard(user, {title, content, image }) {
-    const author = await User.findById(user)
-    const newBoard = new Board({ author, title, content, image });
+  async createBoard({ id, title, content, image }) {
+    const newBoard = new Board({ author: id, title, content, image });
     await newBoard.save();
     return newBoard.toObject();
   },
@@ -45,8 +44,8 @@ const boardDAO = {
     return deleteBoard;
   },
 
-  async createComment(boardId, writer, content) {
-    const newComment = new Comment({ boardId, writer, content });
+  async createComment({board_id, id, content}) {
+    const newComment = new Comment({ boardId : board_id, writer: id, content });
     await newComment.save();
     return newComment.toObject();
   },
