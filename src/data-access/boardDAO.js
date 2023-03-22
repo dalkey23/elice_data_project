@@ -11,7 +11,7 @@ const boardDAO = {
   async findAll(page, perPage) {
     const [total, boards] = await Promise.all([
       Board.countDocuments({}),
-      Board.find()
+      Board.find().populate("author", "nickname")
         .lean()
         .sort({ createdAt: -1 })
         .skip(perPage * (page - 1))
@@ -24,7 +24,7 @@ const boardDAO = {
   async findOne(id) {
     const [board, comments] = await Promise.all([
       Board.findById(id),
-      Comment.find({ parentId: id, category: "board" }),
+      Comment.find({ parentId: id, category: "board" }).populate("writer", "nickname"),
     ]);
     return { board, comments };
   },
