@@ -26,7 +26,7 @@ const boardRouter = express.Router();
  *            type: object
  *            properties:
  *              author:
- *                type: string
+ *                type: ObjectId
  *                description: "작성자"
  *              title:
  *                type: string
@@ -37,6 +37,19 @@ const boardRouter = express.Router();
  *              image:
  *                type: string
  *                description: "게시들 이미지"
+ *    responses:
+ *      "200":
+ *        description: 게시글 작성
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                ok:
+ *                  type: boolean
+ *                boards:
+ *                  type: object
+ *                  example: [{"_id": "640b1b002269b4729b8881e9","title": "test123","content": "test content","author": "t123","image": "image url"}]
  */
 boardRouter.post(
   "/",
@@ -50,7 +63,7 @@ boardRouter.post(
  * /api/v1/board:
  *  get:
  *    summary: "게시글조회"
- *    description: "모든 게시글 조회"
+ *    description: "게시글 목록을 조회한다"
  *    tags: [Board]
  *    parameters:
  *      - in: query
@@ -75,9 +88,9 @@ boardRouter.post(
  *              properties:
  *                ok:
  *                  type: boolean
- *                users:
+ *                boards:
  *                  type: object
- *                  example: [{"_id": "640b1b002269b4729b8881e9","title": "test123","content": "test content","author": "t123","image": []}]
+ *                  example: [{"_id": "640b1b002269b4729b8881e9","title": "test123","content": "test content","author": "t123","image": "image url"}, ...]
  */
 boardRouter.get("/", boardController.getBoards);
 
@@ -86,7 +99,7 @@ boardRouter.get("/", boardController.getBoards);
  * /api/v1/board/{id}:
  *  get:
  *    summary: "게시글 상세조회"
- *    description: "게시글 상세조회"
+ *    description: "특정 게시물 내용과 댓글을 조회한다"
  *    tags: [Board]
  *    parameters:
  *      - in: path
@@ -105,9 +118,12 @@ boardRouter.get("/", boardController.getBoards);
  *              properties:
  *                ok:
  *                  type: boolean
- *                users:
+ *                boards:
  *                  type: object
- *                  example: [{"_id": "640b1b002269b4729b8881e9","title": "test123","content": "test content","author": "t123","image": []}]
+ *                  example: [{"_id": "640b1b002269b4729b8881e9","title": "test123","content": "test content","author": "t123","image": "image url"}]
+ *                comments:
+ *                  type: object
+ *                  example: [{"_id": "640b1b002269b4729b8881e9","content": "test content","writer": "t123"}, ...]
  */
 boardRouter.get(
   "/:id",
@@ -115,18 +131,100 @@ boardRouter.get(
   boardController.getBoard
 );
 
+/**
+ * @swagger
+ * /api/v1/board:
+ *  put:
+ *    summary: "게시글 수정"
+ *    description: "PUT 방식으로 게시글을 수정한다."
+ *    tags: [Board]
+ *    requestBody:
+ *      description: 사용자가 서버로 전달하는 값에 따라 결과 값은 다릅니다. (게시글 수정정)
+ *      required: true
+ *      content:
+ *        application/x-www-form-urlencoded:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              author:
+ *                type: ObjectId
+ *                description: "작성자"
+ *              title:
+ *                type: string
+ *                description: "게시글 제목"
+ *              content:
+ *                type: string
+ *                description: "게시들 내용"
+ *              image:
+ *                type: string
+ *                description: "게시들 이미지"
+ *    responses:
+ *      "200":
+ *        description: 게시글 조회
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                ok:
+ *                  type: boolean
+ *                boards:
+ *                  type: object
+ *                  example: [{"_id": "640b1b002269b4729b8881e9","title": "test123","content": "test content","author": "t123","image": "image url"}]
+ */
 boardRouter.put(
   "/:id",
-  authMiddleware.verifyAuthorizedUser("body"),
   boardMiddleware.checkBoardIdFrom("params"),
+  authMiddleware.verifyBoardUser("params"),
   boardMiddleware.checkMinBoardConditionFrom("body"),
   boardController.editBoard
 );
 
+/**
+ * @swagger
+ * /api/v1/board:
+ *  put:
+ *    summary: "게시글 수정"
+ *    description: "PUT 방식으로 게시글을 수정한다."
+ *    tags: [Board]
+ *    requestBody:
+ *      description: 사용자가 서버로 전달하는 값에 따라 결과 값은 다릅니다. (게시글 수정정)
+ *      required: true
+ *      content:
+ *        application/x-www-form-urlencoded:
+ *          schema:
+ *            type: object
+ *            properties:
+ *              author:
+ *                type: ObjectId
+ *                description: "작성자"
+ *              title:
+ *                type: string
+ *                description: "게시글 제목"
+ *              content:
+ *                type: string
+ *                description: "게시들 내용"
+ *              image:
+ *                type: string
+ *                description: "게시들 이미지"
+ *    responses:
+ *      "200":
+ *        description: 게시글 조회
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                ok:
+ *                  type: boolean
+ *                boards:
+ *                  type: object
+ *                  example: [{"_id": "640b1b002269b4729b8881e9","title": "test123","content": "test content","author": "t123","image": "image url"}]
+ */
 boardRouter.delete(
   "/:id",
-  authMiddleware.verifyAuthorizedUser("body"),
   boardMiddleware.checkBoardIdFrom("params"),
+  authMiddleware.verifyBoardUser("params"),
   boardController.deleteBoard
 );
 
@@ -137,10 +235,15 @@ boardRouter.post(
   boardController.createComment
 );
 
-boardRouter.put("/:boardId/comment/:commentId", boardController.editComment);
+boardRouter.put(
+  "/:boardId/comment/:commentId",
+  authMiddleware.verifyLogin,
+  boardController.editComment
+);
 
 boardRouter.delete(
   "/:boardId/comment/:commentId",
+  authMiddleware.verifyLogin,
   boardController.deleteComment
 );
 

@@ -23,7 +23,7 @@ const boardDAO = {
 
   async findOne(id) {
     const [board, comments] = await Promise.all([
-      Board.findById(id),
+      Board.findById(id).populate("author", "nickname"),
       Comment.find({ parentId: id, category: "board" }).populate("writer", "nickname"),
     ]);
     return { board, comments };
