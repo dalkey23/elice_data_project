@@ -175,7 +175,6 @@ recruitmentRouter.post(
 recruitmentRouter.delete(
   "/:recruitmentId/participants/:participantId",
   participantsMiddleware.checkRecruitmentIdFrom("params"),
-  participantsMiddleware.checkMinParticipantIdConditionFrom("body"),
   participantsController.deleteParticipant
 );
 

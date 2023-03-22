@@ -9,9 +9,9 @@ const participationDAO = {
       participantId,
     });
     await Recruitment.updateOne(
-      { recruitmentId },
+      { _id: recruitmentId },
       {
-        $addToSet: { participants: participantId },
+        $push: { participants: participants._id },
       }
     );
 

@@ -48,6 +48,7 @@ const recruitmentDAO = {
       .populate("participants")
       .lean();
     // 검색된 회의를 JavaScript 객체로 변환하여 반환
+    console.log(plainRecruitment);
     return plainRecruitment;
   },
 
