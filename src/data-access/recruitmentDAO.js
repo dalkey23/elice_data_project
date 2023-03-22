@@ -52,8 +52,6 @@ const recruitmentDAO = {
 
   // 필터를 사용하여 모집글을 검색
   async findMany(filter, page, perPage) {
-    // 검색 조건에 사용될 필터를 purify-object 모듈을 사용하여 정제
-    // 제목, 작성자, 주소, 카테고리, 모집인원
     const sanitizedFilter = util.sanitizeObject({
       borough: filter.borough,
       title: filter.title,
@@ -64,7 +62,7 @@ const recruitmentDAO = {
       participants: filter.participants,
     });
     const [total, recruitments] = await Promise.all([
-      Recruitment.countDocuments({}),
+      Recruitment.countDocuments(sanitizedFilter),
       Recruitment.find(sanitizedFilter)
         .populate("borough")
         .populate("author")

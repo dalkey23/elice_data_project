@@ -4,7 +4,7 @@ const util = require("../misc/util");
 const recruitmentController = {
   async createRecruitment(req, res, next) {
     try {
-      const author = req.userId;
+      // const author = req.userId;
       const {
         borough,
         title,
@@ -25,7 +25,7 @@ const recruitmentController = {
         volunteerTime,
         recruitments,
         content,
-        author,
+        author: req.userId,
         image,
         address,
         category,
@@ -60,19 +60,30 @@ const recruitmentController = {
         meetingStatus,
         participants,
       } = req.query;
-      const Recruitments = await recruitmentService.getRecruitments({
-        borough: boroughId,
-        title,
-        volunteerTime,
-        author,
-        address,
-        category,
-        meetingStatus,
-        participants,
-        page,
-        perPage,
-      });
-      res.json(util.buildResponse(Recruitments));
+      const { recruitments, total, totalPage } =
+        await recruitmentService.getRecruitments(
+          {
+            borough: boroughId,
+            title,
+            volunteerTime,
+            author,
+            address,
+            category,
+            meetingStatus,
+            participants,
+          },
+          page,
+          perPage
+        );
+      res.json(
+        util.buildResponse({
+          page: page,
+          perPage: perPage,
+          totalPage: totalPage,
+          recruitmentCount: total,
+          recruitments,
+        })
+      );
     } catch (error) {
       next(error);
     }

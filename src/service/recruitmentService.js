@@ -54,7 +54,7 @@ const recruitmentService = {
     page,
     perPage
   ) {
-    const recruitment = await recruitmentDAO.findMany(
+    const recruitments = await recruitmentDAO.findMany(
       {
         borough,
         title,
@@ -68,7 +68,7 @@ const recruitmentService = {
       page,
       perPage
     );
-    return recruitment;
+    return recruitments;
   },
 
   //모든 모집글 찾기

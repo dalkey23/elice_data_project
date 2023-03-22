@@ -83,7 +83,7 @@ recruitmentRouter.get(
  *              items:
  *                $ref: '#/components/schemas/Recruitment'
  */
-recruitmentRouter.get("/", recruitmentController.getAllRecruitments);
+recruitmentRouter.get("/", recruitmentController.getRecruitments);
 
 /**
  * @swagger
@@ -114,7 +114,7 @@ recruitmentRouter.get("/", recruitmentController.getAllRecruitments);
  */
 recruitmentRouter.put(
   "/:id",
-  authMiddleware.verifyAuthorizedUser("params"),
+  authMiddleware.verifyRecuitmentUser("params"),
   recruitmentMiddleware.checkRecruitmentIdFrom("params"),
   recruitmentMiddleware.checkMinRecruitmentConditionFrom("body"),
   recruitmentController.putRecruitment
@@ -143,7 +143,7 @@ recruitmentRouter.put(
  */
 recruitmentRouter.delete(
   "/:id",
-  authMiddleware.verifyAuthorizedUser("body"),
+  authMiddleware.verifyRecuitmentUser("params"),
   recruitmentMiddleware.checkRecruitmentIdFrom("params"),
   recruitmentController.deleteRecruitment
 );
