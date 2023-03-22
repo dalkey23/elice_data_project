@@ -37,17 +37,21 @@ const boardService = {
     });
     return comment;
   },
-  async updateComment(id, comment_id, { title, content }) {
-    const updateComment = await boardDAO.updateComment(id, comment_id, {
-      title,
+  async updateComment(boardId, commentId, { content }) {
+    const updateComment = await boardDAO.updateComment(boardId, commentId, {
       content,
     });
     return updateComment;
   },
 
-  async deleteComment(id, comment_id) {
-    const deletedComment = await boardDAO.deleteComment(id, comment_id);
+  async deleteComment(boardId, commentId) {
+    const deletedComment = await boardDAO.deleteComment(boardId, commentId);
     return deletedComment;
+  },
+
+  async getComment(commentId) {
+    const comment = await boardDAO.getComment(commentId);
+    return comment;
   },
 };
 
