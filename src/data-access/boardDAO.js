@@ -11,7 +11,8 @@ const boardDAO = {
   async findAll(page, perPage) {
     const [total, boards] = await Promise.all([
       Board.countDocuments({}),
-      Board.find().populate("author", "nickname")
+      Board.find()
+        .populate("author", "nickname")
         .lean()
         .sort({ createdAt: -1 })
         .skip(perPage * (page - 1))
@@ -24,7 +25,10 @@ const boardDAO = {
   async findOne(id) {
     const [board, comments] = await Promise.all([
       Board.findById(id).populate("author", "nickname"),
-      Comment.find({ parentId: id, category: "board" }).populate("writer", "nickname"),
+      Comment.find({ parentId: id, category: "board" }).populate(
+        "writer",
+        "nickname"
+      ),
     ]);
     return { board, comments };
   },
@@ -40,7 +44,10 @@ const boardDAO = {
   },
 
   async deleteOne(id) {
-    const deleteBoard = await Board.findByIdAndDelete(id);
+    const deleteBoard = await Promise.all([
+      Board.findByIdAndDelete(id),
+      Comment.deleteMany({ parentId: id }),
+    ]);
     return deleteBoard;
   },
 
@@ -55,21 +62,26 @@ const boardDAO = {
     return newComment.toObject();
   },
 
-  async updateComment(id, comment_id, toUpdate) {
+  async updateComment(boardId, commentId, toUpdate) {
     const sanitizedToUpdate = util.sanitizeObject({
-      title: toUpdate.title,
       content: toUpdate.content,
     });
+
     const updateComment = await Comment.findByIdAndUpdate(
-      { _id: comment_id },
+      { _id: commentId },
       sanitizedToUpdate
     );
     return updateComment;
   },
 
-  async deleteComment(id, comment_id) {
-    const deletedComment = await Comment.findByIdAndDelete({ _id: comment_id });
+  async deleteComment(boardId, commentId) {
+    const deletedComment = await Comment.findByIdAndDelete({ _id: commentId });
     return deletedComment;
+  },
+
+  async getComment(commentId) {
+    const comment = await Comment.findById({ _id: commentId });
+    return comment;
   },
 };
 

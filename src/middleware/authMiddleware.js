@@ -40,13 +40,7 @@ const checkLoginFrom = (from) => async (req, res, next) => {
     });
     next();
   } catch (error) {
-    next(
-      new AppError(
-        commonErrors.inputError, 
-        400, 
-        `${error}`
-      )
-    );
+    next(new AppError(commonErrors.inputError, 400, `${error}`));
   }
 };
 
@@ -56,11 +50,12 @@ const existsToken = (req, res, next) => {
     // 토큰이 존재할 경우
     if (req.cookies.accessToken) {
       const user = jwt.verify(
-        req.cookies.accessToken, 
-        process.env.SECRET, 
+        req.cookies.accessToken,
+        process.env.SECRET,
         (err, decode) => {
           return decode;
-      });
+        }
+      );
       // 토큰이 유효한 경우
       if (user) {
         throw new AppError(
@@ -100,7 +95,7 @@ const verifyLogin = (req, res, next) => {
     const user = jwt.verify(req.cookies.accessToken, process.env.SECRET);
     req.userId = user.id;
     next();
-  } catch(error) {
+  } catch (error) {
     // 토큰이 만료된 경우
     if (error.name == "TokenExpiredError") {
       next(
@@ -129,7 +124,7 @@ const verifyAuthorizedUser = (from) => (req, res, next) => {
         return decoded.id;
       }
     );
-    
+
     // 각 사용자의 id 비교
     if (id !== loginedUser) {
       next(
@@ -156,7 +151,7 @@ const verifyAuthorizedUser = (from) => (req, res, next) => {
 const verifyRecuitmentUser = (from) => async (req, res, next) => {
   try {
     const { id } = req[from];
-     // 접근하려는 기능의 권한을 가진 사용자 id
+    // 접근하려는 기능의 권한을 가진 사용자 id
     const author = await recruitmentService.getRecruitment(id);
 
     // 로그인한 사용자의 id
@@ -169,7 +164,7 @@ const verifyRecuitmentUser = (from) => async (req, res, next) => {
     );
 
     // 각 사용자의 id 비교
-    if (JSON.stringify(author.author._id).replace(/"/g, '') !== loginedUser) {
+    if (JSON.stringify(author.author._id).replace(/"/g, "") !== loginedUser) {
       next(
         new AppError(
           commonErrors.authorizationError,
@@ -196,7 +191,7 @@ const verifyBoardUser = (from) => async (req, res, next) => {
     const { id } = req[from];
     // 접근하려는 기능의 권한을 가진 사용자 id
     const author = await boardService.getBoard(id);
-    
+
     // 로그인한 사용자의 id
     const loginedUser = jwt.verify(
       req.cookies.accessToken,
@@ -206,7 +201,46 @@ const verifyBoardUser = (from) => async (req, res, next) => {
       }
     );
     // 각 사용자의 id 비교
-    if (JSON.stringify(author.board.author._id).replace(/"/g, '') !== loginedUser) {
+    if (
+      JSON.stringify(author.board.author._id).replace(/"/g, "") !== loginedUser
+    ) {
+      next(
+        new AppError(
+          commonErrors.authorizationError,
+          403,
+          "권한이 없는 사용자입니다."
+        )
+      );
+    }
+    next();
+  } catch (error) {
+    next(
+      new AppError(
+        commonErrors.authorizationError,
+        401,
+        "토큰이 유효하지 않습니다."
+      )
+    );
+  }
+};
+
+// 토큰 유효 검증, 로그인된 사용자와 커뮤니티 글 접근 권한을 가진 사용자(글 작성자)가 일치하는지 검사
+const verifyCommentUser = (from) => async (req, res, next) => {
+  try {
+    const { commentId } = req[from];
+    // 접근하려는 기능의 권한을 가진 사용자 id
+    const author = await boardService.getComment(commentId);
+
+    // 로그인한 사용자의 id
+    const loginedUser = jwt.verify(
+      req.cookies.accessToken,
+      process.env.SECRET,
+      (err, decoded) => {
+        return decoded.id;
+      }
+    );
+    // 각 사용자의 id 비교
+    if (JSON.stringify(author.writer).replace(/"/g, "") !== loginedUser) {
       next(
         new AppError(
           commonErrors.authorizationError,
@@ -267,4 +301,5 @@ module.exports = {
   verifyAuthorizedUser,
   verifyRecuitmentUser,
   verifyBoardUser,
+  verifyCommentUser,
 };
