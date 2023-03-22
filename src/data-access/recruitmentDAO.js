@@ -162,6 +162,11 @@ const recruitmentDAO = {
     // 삭제된 모집글의 수를 반환
     return plainDeletedRecruitments;
   },
+
+  async myFind(userId) {
+    const myRecruitments = await Recruitment.find({ author: userId });
+    return myRecruitments;
+  },
 };
 
 module.exports = recruitmentDAO;

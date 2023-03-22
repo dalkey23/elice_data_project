@@ -145,6 +145,10 @@ const recruitmentService = {
     });
     return deletedRecruitments;
   },
+  async getMyRecruitments(userId) {
+    const myRecruitments = await recruitmentDAO.myFind(userId);
+    return myRecruitments;
+  },
 };
 
 module.exports = recruitmentService;

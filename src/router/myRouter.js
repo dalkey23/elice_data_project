@@ -1,5 +1,5 @@
 const express = require("express");
-const { userController } = require("../controller");
+const { userController, recruitmentController } = require("../controller");
 const { userMiddleware, authMiddleware } = require("../middleware");
 
 const myRouter = express.Router();
@@ -115,7 +115,12 @@ myRouter.get(
 );
 
 // 개설한 게시글 조회
-//myRouter.get();
+// /recruitment로 하면 사용자 정보조회로 넘어감
+myRouter.get(
+  "/all/recruitments",
+  authMiddleware.verifyLogin,
+  recruitmentController.getMyRecruitments
+);
 
 // 참여한 게시글 조회
 //myRouter.get();

@@ -186,6 +186,17 @@ const recruitmentController = {
       next(error);
     }
   },
+
+  async getMyRecruitments(req, res, next) {
+    try {
+      const userId = req.userId;
+      console.log(userId)
+      const myRecruitments = await recruitmentService.getMyRecruitments(userId);
+      res.json(myRecruitments);
+    } catch (error) {
+      next(error);
+    }
+  },
 };
 
 module.exports = recruitmentController;
