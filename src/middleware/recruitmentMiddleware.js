@@ -14,7 +14,7 @@ const schema = Joi.object({
   category: Joi.string().required(),
   address: Joi.string().required(),
   image: Joi.string(),
-  meetingStatus: Joi.string().required(),
+  meetingStatus: Joi.string(),
   participants: Joi.array().items(JoiObjectId()).default([]),
 });
 

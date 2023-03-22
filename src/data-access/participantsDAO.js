@@ -1,4 +1,4 @@
-const { Participants } = require("./model");
+const { Participants, Recruitment } = require("./model");
 
 // mongoose 모듈에서 생성된 RecruitmentParticipaint 스키마를 사용하여 CRUD 작업을 수행하는 participationDAO 객체
 const participationDAO = {
@@ -8,6 +8,13 @@ const participationDAO = {
       recruitmentId,
       participantId,
     });
+    await Recruitment.updateOne(
+      { _id: recruitmentId },
+      {
+        $push: { participants: participants._id },
+      }
+    );
+
     await participants.save();
     return participants.toObject();
   },
