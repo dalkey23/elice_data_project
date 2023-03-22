@@ -114,4 +114,10 @@ myRouter.get(
   userController.getUser
 );
 
+// 개설한 게시글 조회
+//myRouter.get();
+
+// 참여한 게시글 조회
+//myRouter.get();
+
 module.exports = myRouter;

@@ -17,8 +17,6 @@ const checkCompleteParticipantsFrom = (from) => async (req, res, next) => {
     });
     next();
   } catch (error) {
-    //Object.entries() 메서드는 객체의 각 속성을 [key, value] 형태의 배열로 변환
-    //이렇게 변환된 배열은 reduce() 메서드를 사용하여 하나의 문자열로 합쳐지는데, 이때 [key: value] 형태의 문자열로 변환
     const result = Object.entries(req[from]).reduce((map, [key, value]) => {
       map += `[${key} : ${value}] `;
       return map;
@@ -34,13 +32,13 @@ const checkCompleteParticipantsFrom = (from) => async (req, res, next) => {
 };
 
 const checkRecruitmentIdFrom = (from) => (req, res, next) => {
-  const { id } = req[from];
+  const { recruitmentId } = req[from];
   try {
-    if (id === undefined) {
+    if (recruitmentId === undefined) {
       throw new AppError(
         commonErrors.inputError,
         400,
-        `${from}: id는 필수값입니다.`
+        `${from}: recruitmentId값은 필수값입니다.`
       );
     }
     next();

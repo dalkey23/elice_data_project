@@ -4,7 +4,6 @@ const util = require("../misc/util");
 const recruitmentController = {
   async createRecruitment(req, res, next) {
     try {
-      // const author = req.userId;
       const {
         borough,
         title,
@@ -89,25 +88,25 @@ const recruitmentController = {
     }
   },
 
-  async getAllRecruitments(req, res, next) {
-    try {
-      const page = Number(req.query.page ?? 1);
-      const perPage = Number(req.query.perPage ?? 6);
-      const { recruitments, total, totalPage } =
-        await recruitmentService.getAllRecruitments(page, perPage);
-      res.json(
-        util.buildResponse({
-          page: page,
-          perPage: perPage,
-          totalPage: totalPage,
-          recruitmentCount: total,
-          recruitments,
-        })
-      );
-    } catch (error) {
-      next(error);
-    }
-  },
+  // async getAllRecruitments(req, res, next) {
+  //   try {
+  //     const page = Number(req.query.page ?? 1);
+  //     const perPage = Number(req.query.perPage ?? 6);
+  //     const { recruitments, total, totalPage } =
+  //       await recruitmentService.getAllRecruitments(page, perPage);
+  //     res.json(
+  //       util.buildResponse({
+  //         page: page,
+  //         perPage: perPage,
+  //         totalPage: totalPage,
+  //         recruitmentCount: total,
+  //         recruitments,
+  //       })
+  //     );
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // },
 
   async putRecruitment(req, res, next) {
     try {

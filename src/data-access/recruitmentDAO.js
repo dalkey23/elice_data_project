@@ -78,22 +78,22 @@ const recruitmentDAO = {
 
   //
 
-  // 페이지별 모든 모집글
-  async findAll(page, perPage) {
-    const [total, recruitments] = await Promise.all([
-      Recruitment.countDocuments({}),
-      Recruitment.find()
-        .populate("borough")
-        .populate("author")
-        .populate("participants")
-        .lean()
-        .sort({ createdAt: -1 })
-        .skip(perPage * (page - 1))
-        .limit(perPage),
-    ]);
-    const totalPage = Math.ceil(total / perPage);
-    return { recruitments, total, totalPage };
-  },
+  // // 페이지별 모든 모집글
+  // async findAll(page, perPage) {
+  //   const [total, recruitments] = await Promise.all([
+  //     Recruitment.countDocuments({}),
+  //     Recruitment.find()
+  //       .populate("borough")
+  //       .populate("author")
+  //       .populate("participants")
+  //       .lean()
+  //       .sort({ createdAt: -1 })
+  //       .skip(perPage * (page - 1))
+  //       .limit(perPage),
+  //   ]);
+  //   const totalPage = Math.ceil(total / perPage);
+  //   return { recruitments, total, totalPage };
+  // },
 
   // ID를 사용하여 모집글 정보를 업데이트
   async updateOne(id, toUpdate) {
