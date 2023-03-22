@@ -15,7 +15,7 @@ const recruitmentRouter = express.Router();
 
 /**
  * @swagger
- * /api/v1/recruitment
+ * /api/v1/recruitment:
  *  post:
  *    summary: "모집글 등록"
  *    tags: [Recruitment]
@@ -166,6 +166,7 @@ recruitmentRouter.get(
 // 참여자 추가
 recruitmentRouter.post(
   "/:recruitmentId/participants",
+  authMiddleware.verifyLogin,
   participantsMiddleware.checkRecruitmentIdFrom("params"),
   participantsController.addParticipant
 );

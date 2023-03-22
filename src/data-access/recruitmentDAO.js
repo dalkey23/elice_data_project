@@ -38,6 +38,7 @@ const recruitmentDAO = {
     // 생성된 회의를 JavaScript 객체로 변환하여 반환
     return recruitment.toObject();
   },
+
   // ID를 사용하여 모집글을 검색
   async findOne(id) {
     // MongoDB에서 ID에 해당하는 모집글 검색
