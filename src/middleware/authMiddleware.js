@@ -206,7 +206,7 @@ const verifyBoardUser = (from) => async (req, res, next) => {
       }
     );
     // 각 사용자의 id 비교
-    if (JSON.stringify(author.board.author).replace(/"/g, '') !== loginedUser) {
+    if (JSON.stringify(author.board.author._id).replace(/"/g, '') !== loginedUser) {
       next(
         new AppError(
           commonErrors.authorizationError,

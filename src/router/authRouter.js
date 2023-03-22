@@ -8,8 +8,8 @@ const authRouter = express.Router();
 /**
  * @swagger
  * tags:
- *   name: Users
- *   description: 사용자 관리
+ *   name: auth
+ *   description: 인증 관리
  */
 
 /**
@@ -18,7 +18,7 @@ const authRouter = express.Router();
  *  post:
  *    summary: "회원가입"
  *    description: "새로운 사용자 생성."
- *    tags: [Users]
+ *    tags: [auth]
  *    requestBody:
  *      description: 사용자가 서버로 전달하는 값에 따라 결과 값은 다릅니다.
  *      required: true
@@ -44,10 +44,10 @@ const authRouter = express.Router();
  *                description: "휴대폰 번호"
  *              nickname:
  *                type: string
- *                description: "작성자"
+ *                description: "닉네임"
  *    responses:     
  *      "201":
- *        description: 회원가입
+ *        description: 회원가입한 사용자 정보
  *        content: 
  *          application/json:
  *            schema:
@@ -55,26 +55,10 @@ const authRouter = express.Router();
  *              properties:
  *                error:
  *                  type: string
+ *                  example: null
  *                data:
  *                  type: object
- *                  example: [{
-                      "error": null,
-                      "data": {
-                          "name": "아무개",
-                          "email": "email@gmail.com",
-                          "password": "hashedPassword",
-                          "address": "address",
-                          "phoneNumber": "010-1234-5678",
-                          "nickname": "닉네임",
-                          "profileImage": null,
-                          "userType": "user",
-                          "_id": "_id",
-                          "createdAt": "2023-03-14T07:28:36.874Z",
-                          "updatedAt": "2023-03-14T07:28:36.874Z",
-                          "__v": 0
-                      }
-                  }]
- *                  
+ *                  example: {"name": "아무개", "id": "userId", "nickname": "닉네임", "email": "email@gmail.com", "address": "address", "phoneNumber": "010-1234-5678", "userType": "user", "profileImage": "profileImageUrl(없을 경우 null)", "createdAt": "2023-03-14T07:28:36.874Z", "updatedAt": "2023-03-14T07:28:36.874Z", "__v": 0} 
  */
 
 // 회원가입
@@ -90,7 +74,7 @@ authRouter.post(
  *  post:
  *    summary: "로그인"
  *    description: "사용자 인증"
- *    tags: [Users]
+ *    tags: [auth]
  *    requestBody:
  *      description: 이메일, 비밀번호
  *      required: true
@@ -105,6 +89,20 @@ authRouter.post(
  *              password:
  *                type: string
  *                description: "비밀번호"
+ *    responses:     
+ *      "200":
+ *        description: 로그인한 사용자 정보
+ *        content: 
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                error:
+ *                  type: string
+ *                  exapmle: null
+ *                data:
+ *                  type: object
+ *                  example: {"id": "userId", "nickname": "닉네임", "email": "email@gmail.com", "userType": "user", "profileImage": "profileImageUrl(없을 경우 null)"}
  */
 
 // 로그인
@@ -118,19 +116,26 @@ authRouter.post(
 
 /**
  * @swagger
- * /api/v1/auth/login:
+ * /api/v1/auth/logout:
  *  post:
  *    summary: "로그아웃"
  *    description: "인증 해제"
- *    tags: [Users]
- *    requestBody:
- *      description: 
- *      required: false
- *      content:
- *        application/x-www-form-urlencoded:
- *          schema:
- *            type: object
- *            properties:
+ *    tags: [auth]
+ *    responses:     
+ *      "200":
+ *        description: 로그인한 사용자 정보
+ *        content: 
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                error:
+ *                  type: string
+ *                  example: null
+ *                data:
+ *                  type: object
+ *                  example: "로그아웃되었습니다."
+
  */
 
 // 로그아웃
@@ -138,6 +143,30 @@ authRouter.post(
   "/logout", 
   authController.logout
 );
+
+/**
+ * @swagger
+ * /api/v1/auth/{id}:
+ *  delete:
+ *    summary: "회원 탈퇴"
+ *    description: "기존 사용자 정보 삭제."
+ *    tags: [auth]
+ *    parameters:
+ *      - in: path
+ *        name: id
+ *        required: true
+ *        description: 탈퇴하려는 유저 id
+ *        schema:
+ *          type: string
+ *    responses:     
+ *      "200":
+ *        description: 회원 탈퇴 완료
+ *        content: 
+ *          application/json:
+ *            schema:
+ *                  type: string
+ *                  example: "{nickname}님의 탈퇴가 완료되었습니다."
+ */
 
 // 사용자 정보 삭제 (회원 탈퇴)
 authRouter.delete(
