@@ -205,7 +205,7 @@ const recruitmentController = {
       const { content } = req.body;
       const userId = req.userId;
 
-      const comment = await boardService.createComment(userId, {
+      const comment = await recruitmentService.createComment(userId, {
         recruitmentId,
         content,
       });
@@ -219,7 +219,7 @@ const recruitmentController = {
     try {
       const { recruitmentId, commentId } = req.params;
       const { content } = req.body;
-      const updatedComment = await boardService.updateComment(
+      const updatedComment = await recruitmentService.updateComment(
         recruitmentId,
         commentId,
         { content }
@@ -234,7 +234,7 @@ const recruitmentController = {
     try {
       const { recruitmentId, commentId } = req.params;
       console.log(commentId);
-      const comment = await boardService.deleteComment(
+      const comment = await recruitmentService.deleteComment(
         recruitmentId,
         commentId
       );

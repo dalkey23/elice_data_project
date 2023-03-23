@@ -158,7 +158,7 @@ const recruitmentService = {
     });
     return comment;
   },
-  async updateComment(recruitmentId, recruitmentId, { content }) {
+  async updateComment(recruitmentId, commentId, { content }) {
     const updateComment = await recruitmentDAO.updateComment(
       recruitmentId,
       commentId,

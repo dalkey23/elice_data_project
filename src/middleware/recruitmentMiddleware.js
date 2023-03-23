@@ -120,8 +120,38 @@ const checkMinRecruitmentConditionFrom = (from) => (req, res, next) => {
   }
 };
 
+const checkCommentFrom = (from) => (req, res, next) => {
+  const { content } = req[from];
+  if (content === undefined) {
+    next(
+      new AppError(
+        commonErrors.inputError,
+        400,
+        `${from}: content는 필수값입니다.`
+      )
+    );
+  }
+  next();
+};
+
+const checkCommentIdFrom = (from) => (req, res, next) => {
+  const { commentId } = req[from];
+  if (commentId === undefined) {
+    next(
+      new AppError(
+        commonErrors.inputError,
+        400,
+        `${from}: commentId는 필수값입니다.`
+      )
+    );
+  }
+  next();
+};
+
 module.exports = {
   checkCompleteRecruitmentFrom,
   checkRecruitmentIdFrom,
   checkMinRecruitmentConditionFrom,
+  checkCommentFrom,
+  checkCommentIdFrom,
 };

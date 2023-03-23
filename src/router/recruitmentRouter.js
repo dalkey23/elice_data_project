@@ -199,11 +199,15 @@ recruitmentRouter.post(
 
 recruitmentRouter.put(
   "/:recruitmentId/comment/:commentId",
+  authMiddleware.verifyCommentUser("params"),
+  recruitmentMiddleware.checkCommentFrom("body"),
   recruitmentController.editComment
 );
 
 recruitmentRouter.delete(
   "/:recruitmentId/comment/:commentId",
+  recruitmentMiddleware.checkCommentIdFrom("params"),
+  authMiddleware.verifyCommentUser("params"),
   recruitmentController.deleteComment
 );
 
