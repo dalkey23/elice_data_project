@@ -50,7 +50,8 @@ const participantsController = {
   // 모집글 별 참가자 삭제
   async deleteParticipant(req, res, next) {
     try {
-      const { recruitmentId, participantId } = req.params;
+      const { recruitmentId } = req.params;
+      const participantId = req.userId;
       const deletedParticipant = await participantsService.deleteParticipant(
         recruitmentId,
         participantId

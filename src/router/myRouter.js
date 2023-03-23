@@ -106,27 +106,27 @@ myRouter.put(
  *                  example: {"_id": "userId", "name": "사용자 이름", "email": "email123@gmail.com", "address": "사용자 주소", "phoneNumber": "010-1234-5678", "nickname": "사용자 닉네임", "profileImage": "프로필 이미지 url", "userType": "user", "createdAt": "2023-03-20T16:27:35.255Z", "updatedAt": "2023-03-21T07:19:32.821Z", "__v": 0}
  */
 
-// 사용자 정보 조회
-myRouter.get(
-  "/:id",
-  authMiddleware.verifyAuthorizedUser("params"),
-  userMiddleware.checkUserIdFrom("params"),
-  userController.getUser
-);
-
 // 개설한 게시글 조회
 // /recruitment로 하면 사용자 정보조회로 넘어감
 myRouter.get(
-  "/all/recruitments",
+  "/authorRecruitments",
   authMiddleware.verifyLogin,
   recruitmentController.getMyRecruitments
 );
 
 // 참여한 게시글 조회
 myRouter.get(
-  "/:participantId/recruitments",
+  "/participantRecruitments",
   authMiddleware.verifyLogin,
   recruitmentController.getMyParticipants
+);
+
+// 사용자 정보 조회
+myRouter.get(
+  "/:id",
+  authMiddleware.verifyAuthorizedUser("params"),
+  userMiddleware.checkUserIdFrom("params"),
+  userController.getUser
 );
 
 module.exports = myRouter;

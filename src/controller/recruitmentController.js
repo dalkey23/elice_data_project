@@ -185,7 +185,7 @@ const recruitmentController = {
 
   async getMyParticipants(req, res, next) {
     try {
-      const { participantId } = req.params;
+      const participantId = req.userId;
       const page = Number(req.query.page ?? 1);
       const perPage = Number(req.query.perPage ?? 6);
       const { myParticipants, total, totalPage } =

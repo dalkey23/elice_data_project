@@ -156,12 +156,12 @@ recruitmentRouter.delete(
   recruitmentController.deleteRecruitment
 );
 
-// 모집글 별 참여자 목록조회
-recruitmentRouter.get(
-  "/:recruitmentId/participants",
-  authMiddleware.verifyLogin,
-  participantsController.getParticipantsByRecruitmentId
-);
+// // 모집글 별 참여자 목록조회
+// recruitmentRouter.get(
+//   "/:recruitmentId/participants",
+//   authMiddleware.verifyLogin,
+//   participantsController.getParticipantsByRecruitmentId
+// );
 
 // 참여자 추가
 recruitmentRouter.post(
@@ -173,7 +173,8 @@ recruitmentRouter.post(
 
 // 모집글 별 참가자 탈퇴
 recruitmentRouter.delete(
-  "/:recruitmentId/participants/:participantId",
+  "/:recruitmentId/participants",
+  authMiddleware.verifyLogin,
   participantsMiddleware.checkRecruitmentIdFrom("params"),
   participantsController.deleteParticipant
 );

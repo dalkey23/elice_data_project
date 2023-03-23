@@ -162,9 +162,11 @@ const verifyRecuitmentUser = (from) => async (req, res, next) => {
         return decoded.id;
       }
     );
-
     // 각 사용자의 id 비교
-    if (JSON.stringify(author.author._id).replace(/"/g, "") !== loginedUser) {
+    if (
+      JSON.stringify(author.plainRecruitment.author._id).replace(/"/g, "") !==
+      loginedUser
+    ) {
       next(
         new AppError(
           commonErrors.authorizationError,
@@ -175,6 +177,7 @@ const verifyRecuitmentUser = (from) => async (req, res, next) => {
     }
     next();
   } catch (error) {
+    console.dir(error);
     next(
       new AppError(
         commonErrors.authorizationError,

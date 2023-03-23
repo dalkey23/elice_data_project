@@ -1,4 +1,4 @@
-const { Recruitment, Comment } = require("./model");
+const { Recruitment, Comment, Participants } = require("./model");
 const util = require("../misc/util");
 
 // mongoose 모듈에서 생성된 Recruitment 스키마를 사용하여 CRUD 작업을 수행하는 recruitmentDAO 객체
@@ -41,7 +41,7 @@ const recruitmentDAO = {
   async findAuthor(filter) {
     console.log(filter);
     const sanitizedFilter = util.sanitizeObject({
-      id: filter.recruitmentId,
+      _id: filter.recruitmentId,
       author: filter.participantId,
     });
     console.log(sanitizedFilter);
@@ -179,13 +179,10 @@ const recruitmentDAO = {
   },
 
   async myParticipantsFind(participantId, page, perPage) {
-    console.log(participantId);
     const [total, myParticipants] = await Promise.all([
-      Recruitment.countDocuments(participantId),
-      Recruitment.find({ participants: participantId })
-        .populate("borough")
-        .populate("author")
-        .populate("participants")
+      Participants.countDocuments({ participantId: participantId }),
+      Participants.find({ participantId: participantId })
+        .populate("recruitmentId")
         .lean()
         .sort({ createdAt: -1 })
         .skip(perPage * (page - 1))

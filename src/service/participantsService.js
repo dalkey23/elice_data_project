@@ -13,8 +13,6 @@ const participantsService = {
       participantId,
     });
 
-    console.log(recruitmentAuthor);
-
     if (existedParticipants) {
       throw new Error("이미 참가하셨습니다.");
     }
