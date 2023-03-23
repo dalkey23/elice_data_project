@@ -1,4 +1,5 @@
 const { Participants, Recruitment } = require("./model");
+const util = require("../misc/util");
 
 // mongoose 모듈에서 생성된 RecruitmentParticipaint 스키마를 사용하여 CRUD 작업을 수행하는 participationDAO 객체
 const participationDAO = {
@@ -27,6 +28,18 @@ const participationDAO = {
     return participants;
   },
 
+  // 단일 참가자 조회
+  async findOne(filter) {
+    const sanitizedFilter = util.sanitizeObject({
+      recruitmentId: filter.recruitmentId,
+      participantId: filter.participantId,
+    });
+    const plainParticipants = await Participants.findOne(
+      sanitizedFilter
+    ).lean();
+    return plainParticipants;
+  },
+
   // 참가/개설한 게시글 목록
   async findMany(filter, page, perPage) {
     const sanitizedFilter = util.sanitizeObject({
@@ -53,6 +66,7 @@ const participationDAO = {
       recruitmentId,
       participantId,
     }).lean();
+
     return deletedParticipant;
   },
 };

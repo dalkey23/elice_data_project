@@ -3,6 +3,13 @@ const { participantsDAO } = require("../data-access");
 const participantsService = {
   // 새로운 참가자 추가
   async addParticipant({ recruitmentId, participantId }) {
+    const existedParticipants = await participantsDAO.findOne({
+      recruitmentId,
+      participantId,
+    });
+    if (existedParticipants) {
+      throw new Error("이미 참가하셨습니다.");
+    }
     const createdParticipant = await participantsDAO.create({
       recruitmentId,
       participantId,
