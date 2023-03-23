@@ -54,7 +54,7 @@ const recruitmentService = {
     page,
     perPage
   ) {
-    const recruitment = await recruitmentDAO.findMany(
+    const recruitments = await recruitmentDAO.findMany(
       {
         borough,
         title,
@@ -68,14 +68,14 @@ const recruitmentService = {
       page,
       perPage
     );
-    return recruitment;
-  },
-
-  //모든 모집글 찾기
-  async getAllRecruitments(page, perPage) {
-    const recruitments = await recruitmentDAO.findAll(page, perPage);
     return recruitments;
   },
+
+  // //모든 모집글 찾기
+  // async getAllRecruitments(page, perPage) {
+  //   const recruitments = await recruitmentDAO.findAll(page, perPage);
+  //   return recruitments;
+  // },
 
   async updateRecruitment(
     id,
@@ -144,6 +144,10 @@ const recruitmentService = {
       participants,
     });
     return deletedRecruitments;
+  },
+  async getMyRecruitments(userId) {
+    const myRecruitments = await recruitmentDAO.myFind(userId);
+    return myRecruitments;
   },
 };
 

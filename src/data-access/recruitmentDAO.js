@@ -38,6 +38,7 @@ const recruitmentDAO = {
     // 생성된 회의를 JavaScript 객체로 변환하여 반환
     return recruitment.toObject();
   },
+
   // ID를 사용하여 모집글을 검색
   async findOne(id) {
     // MongoDB에서 ID에 해당하는 모집글 검색
@@ -47,13 +48,12 @@ const recruitmentDAO = {
       .populate("participants")
       .lean();
     // 검색된 회의를 JavaScript 객체로 변환하여 반환
+    console.log(plainRecruitment);
     return plainRecruitment;
   },
 
   // 필터를 사용하여 모집글을 검색
   async findMany(filter, page, perPage) {
-    // 검색 조건에 사용될 필터를 purify-object 모듈을 사용하여 정제
-    // 제목, 작성자, 주소, 카테고리, 모집인원
     const sanitizedFilter = util.sanitizeObject({
       borough: filter.borough,
       title: filter.title,
@@ -64,7 +64,7 @@ const recruitmentDAO = {
       participants: filter.participants,
     });
     const [total, recruitments] = await Promise.all([
-      Recruitment.countDocuments({}),
+      Recruitment.countDocuments(sanitizedFilter),
       Recruitment.find(sanitizedFilter)
         .populate("borough")
         .populate("author")
@@ -80,22 +80,22 @@ const recruitmentDAO = {
 
   //
 
-  // 페이지별 모든 모집글
-  async findAll(page, perPage) {
-    const [total, recruitments] = await Promise.all([
-      Recruitment.countDocuments({}),
-      Recruitment.find()
-        .populate("borough")
-        .populate("author")
-        .populate("participants")
-        .lean()
-        .sort({ createdAt: -1 })
-        .skip(perPage * (page - 1))
-        .limit(perPage),
-    ]);
-    const totalPage = Math.ceil(total / perPage);
-    return { recruitments, total, totalPage };
-  },
+  // // 페이지별 모든 모집글
+  // async findAll(page, perPage) {
+  //   const [total, recruitments] = await Promise.all([
+  //     Recruitment.countDocuments({}),
+  //     Recruitment.find()
+  //       .populate("borough")
+  //       .populate("author")
+  //       .populate("participants")
+  //       .lean()
+  //       .sort({ createdAt: -1 })
+  //       .skip(perPage * (page - 1))
+  //       .limit(perPage),
+  //   ]);
+  //   const totalPage = Math.ceil(total / perPage);
+  //   return { recruitments, total, totalPage };
+  // },
 
   // ID를 사용하여 모집글 정보를 업데이트
   async updateOne(id, toUpdate) {
@@ -163,6 +163,11 @@ const recruitmentDAO = {
     ).lean();
     // 삭제된 모집글의 수를 반환
     return plainDeletedRecruitments;
+  },
+
+  async myFind(userId) {
+    const myRecruitments = await Recruitment.find({ author: userId });
+    return myRecruitments;
   },
 };
 

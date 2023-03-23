@@ -6,7 +6,7 @@ const commonErrors = require("../misc/commonErrors");
 const schema = Joi.object({
   borough: JoiObjectId().required(),
   title: Joi.string().required(),
-  author: JoiObjectId().required(),
+  author: JoiObjectId(),
   comment: Joi.string(),
   volunteerTime: Joi.string().required(),
   recruitments: Joi.number().required(),
@@ -14,7 +14,7 @@ const schema = Joi.object({
   category: Joi.string().required(),
   address: Joi.string().required(),
   image: Joi.string(),
-  meetingStatus: Joi.string().required(),
+  meetingStatus: Joi.string(),
   participants: Joi.array().items(JoiObjectId()).default([]),
 });
 
@@ -26,7 +26,6 @@ const checkCompleteRecruitmentFrom = (from) => async (req, res, next) => {
     volunteerTime,
     recruitments,
     content,
-    author,
     image,
     address,
     category,
@@ -41,7 +40,6 @@ const checkCompleteRecruitmentFrom = (from) => async (req, res, next) => {
       volunteerTime,
       recruitments,
       content,
-      author,
       image,
       address,
       category,
@@ -50,8 +48,6 @@ const checkCompleteRecruitmentFrom = (from) => async (req, res, next) => {
     });
     next();
   } catch (error) {
-    //Object.entries() 메서드는 객체의 각 속성을 [key, value] 형태의 배열로 변환
-    //이렇게 변환된 배열은 reduce() 메서드를 사용하여 하나의 문자열로 합쳐지는데, 이때 [key: value] 형태의 문자열로 변환
     const result = Object.entries(req[from]).reduce((map, [key, value]) => {
       map += `[${key} : ${value}] `;
       return map;

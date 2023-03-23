@@ -5,10 +5,10 @@ const participantsController = {
   // 새로운 참가자 추가
   async addParticipant(req, res, next) {
     try {
-      const { recruitmentId, participantId } = req.body;
+      const { recruitmentId } = req.params;
       const createdParticipant = await participantsService.addParticipant({
         recruitmentId,
-        participantId,
+        participantId: req.userId,
       });
       res.status(201).json(util.buildResponse(createdParticipant));
     } catch (error) {

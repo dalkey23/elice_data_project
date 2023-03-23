@@ -41,6 +41,7 @@ const checkLoginFrom = (from) => async (req, res, next) => {
     next();
   } catch (error) {
     next(new AppError(commonErrors.inputError, 400, `${error}`));
+    next(new AppError(commonErrors.inputError, 400, `${error}`));
   }
 };
 
@@ -52,8 +53,12 @@ const existsToken = (req, res, next) => {
       const user = jwt.verify(
         req.cookies.accessToken,
         process.env.SECRET,
+        req.cookies.accessToken,
+        process.env.SECRET,
         (err, decode) => {
           return decode;
+        }
+      );
         }
       );
       // 토큰이 유효한 경우
@@ -96,6 +101,7 @@ const verifyLogin = (req, res, next) => {
     req.userId = user.id;
     next();
   } catch (error) {
+  } catch (error) {
     // 토큰이 만료된 경우
     if (error.name == "TokenExpiredError") {
       next(
@@ -125,6 +131,7 @@ const verifyAuthorizedUser = (from) => (req, res, next) => {
       }
     );
 
+
     // 각 사용자의 id 비교
     if (id !== loginedUser) {
       next(
@@ -152,6 +159,7 @@ const verifyRecuitmentUser = (from) => async (req, res, next) => {
   try {
     const { id } = req[from];
     // 접근하려는 기능의 권한을 가진 사용자 id
+    // 접근하려는 기능의 권한을 가진 사용자 id
     const author = await recruitmentService.getRecruitment(id);
 
     // 로그인한 사용자의 id
@@ -164,6 +172,7 @@ const verifyRecuitmentUser = (from) => async (req, res, next) => {
     );
 
     // 각 사용자의 id 비교
+    if (JSON.stringify(author.author._id).replace(/"/g, "") !== loginedUser) {
     if (JSON.stringify(author.author._id).replace(/"/g, "") !== loginedUser) {
       next(
         new AppError(
@@ -191,6 +200,7 @@ const verifyBoardUser = (from) => async (req, res, next) => {
     const { id } = req[from];
     // 접근하려는 기능의 권한을 가진 사용자 id
     const author = await boardService.getBoard(id);
+
 
     // 로그인한 사용자의 id
     const loginedUser = jwt.verify(

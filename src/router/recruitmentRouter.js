@@ -35,6 +35,7 @@ const recruitmentRouter = express.Router();
  */
 recruitmentRouter.post(
   "/",
+  authMiddleware.verifyLogin,
   recruitmentMiddleware.checkCompleteRecruitmentFrom("body"),
   recruitmentController.createRecruitment
 );
@@ -68,10 +69,18 @@ recruitmentRouter.get(
 
 /**
  * @swagger
- * /api/v1/recruitment/all:
+ * /api/v1/recruitment:
  *  get:
- *    summary: "모든 모집글 조회"
+ *    summary: "모든 모집글 조회 (자치구별로 선택 가능)"
  *    tags: [Recruitment]
+ *    parameters:
+ *      - in: query
+ *        name: boroughId
+ *        schema:
+ *          type: integer
+ *        description: 자치구별로 게시글을 조회하려면 boroughId 값을 전달하세요.
+ *        example: 1
+ *        required: false
  *    responses:
  *      200:
  *        description: 조회된 모든 모집글 목록
@@ -82,7 +91,7 @@ recruitmentRouter.get(
  *              items:
  *                $ref: '#/components/schemas/Recruitment'
  */
-recruitmentRouter.get("/", recruitmentController.getAllRecruitments);
+recruitmentRouter.get("/", recruitmentController.getRecruitments);
 
 /**
  * @swagger
@@ -147,21 +156,17 @@ recruitmentRouter.delete(
   recruitmentController.deleteRecruitment
 );
 
-// 자치구별 모집글 조회
-recruitmentRouter.get(
-  "/borough/:borough",
-  recruitmentController.getRecruitments
-);
-
 // 모집글 별 참여자 목록조회
 recruitmentRouter.get(
   "/:recruitmentId/participants",
+  authMiddleware.verifyLogin,
   participantsController.getParticipantsByRecruitmentId
 );
 
 // 참여자 추가
 recruitmentRouter.post(
   "/:recruitmentId/participants",
+  authMiddleware.verifyLogin,
   participantsMiddleware.checkRecruitmentIdFrom("params"),
   participantsController.addParticipant
 );
@@ -170,7 +175,6 @@ recruitmentRouter.post(
 recruitmentRouter.delete(
   "/:recruitmentId/participants/:participantId",
   participantsMiddleware.checkRecruitmentIdFrom("params"),
-  participantsMiddleware.checkMinParticipantIdConditionFrom("body"),
   participantsController.deleteParticipant
 );
 

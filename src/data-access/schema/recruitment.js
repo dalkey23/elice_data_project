@@ -67,7 +67,8 @@ const recruitmentSchema = new mongoose.Schema(
     meetingStatus: {
       type: String,
       enum: ["모집중", "모집완료"],
-      required: true,
+      required: false,
+      default: "모집중",
     },
   },
   {

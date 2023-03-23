@@ -11,7 +11,6 @@ const recruitmentController = {
         volunteerTime,
         recruitments,
         content,
-        author,
         image,
         address,
         category,
@@ -25,7 +24,7 @@ const recruitmentController = {
         volunteerTime,
         recruitments,
         content,
-        author,
+        author: req.userId,
         image,
         address,
         category,
@@ -48,10 +47,10 @@ const recruitmentController = {
   },
   async getRecruitments(req, res, next) {
     try {
+      const boroughId = req.query.boroughId;
       const page = Number(req.query.page ?? 1);
       const perPage = Number(req.query.perPage ?? 6);
       const {
-        borough,
         title,
         volunteerTime,
         author,
@@ -60,30 +59,21 @@ const recruitmentController = {
         meetingStatus,
         participants,
       } = req.query;
-      const Recruitments = await recruitmentService.getRecruitments({
-        borough,
-        title,
-        volunteerTime,
-        author,
-        address,
-        category,
-        meetingStatus,
-        participants,
-        page,
-        perPage,
-      });
-      res.json(util.buildResponse(Recruitments));
-    } catch (error) {
-      next(error);
-    }
-  },
-
-  async getAllRecruitments(req, res, next) {
-    try {
-      const page = Number(req.query.page ?? 1);
-      const perPage = Number(req.query.perPage ?? 6);
       const { recruitments, total, totalPage } =
-        await recruitmentService.getAllRecruitments(page, perPage);
+        await recruitmentService.getRecruitments(
+          {
+            borough: boroughId,
+            title,
+            volunteerTime,
+            author,
+            address,
+            category,
+            meetingStatus,
+            participants,
+          },
+          page,
+          perPage
+        );
       res.json(
         util.buildResponse({
           page: page,
@@ -98,6 +88,26 @@ const recruitmentController = {
     }
   },
 
+  // async getAllRecruitments(req, res, next) {
+  //   try {
+  //     const page = Number(req.query.page ?? 1);
+  //     const perPage = Number(req.query.perPage ?? 6);
+  //     const { recruitments, total, totalPage } =
+  //       await recruitmentService.getAllRecruitments(page, perPage);
+  //     res.json(
+  //       util.buildResponse({
+  //         page: page,
+  //         perPage: perPage,
+  //         totalPage: totalPage,
+  //         recruitmentCount: total,
+  //         recruitments,
+  //       })
+  //     );
+  //   } catch (error) {
+  //     next(error);
+  //   }
+  // },
+
   async putRecruitment(req, res, next) {
     try {
       const { id } = req.params;
@@ -108,7 +118,6 @@ const recruitmentController = {
         volunteerTime,
         recruitments,
         content,
-        author,
         image,
         address,
         category,
@@ -122,7 +131,6 @@ const recruitmentController = {
         volunteerTime,
         recruitments,
         content,
-        author,
         image,
         address,
         category,
@@ -174,6 +182,17 @@ const recruitmentController = {
         participants,
       });
       res.json(util.buildResponse(Recruitments));
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async getMyRecruitments(req, res, next) {
+    try {
+      const userId = req.userId;
+      console.log(userId)
+      const myRecruitments = await recruitmentService.getMyRecruitments(userId);
+      res.json(myRecruitments);
     } catch (error) {
       next(error);
     }
