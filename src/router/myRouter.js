@@ -7,8 +7,8 @@ const myRouter = express.Router();
 /**
  * @swagger
  * tags:
- *   name: Users
- *   description: 사용자 관리
+ *   name: my
+ *   description: 마이 페이지
  */
 
 /**
@@ -17,10 +17,10 @@ const myRouter = express.Router();
  *  put:
  *    summary: "사용자 정보 수정"
  *    description: "로그인한 사용자 개인정보 수정."
- *    tags: [Users]
+ *    tags: [my]
  *    parameters:
  *      - in: path
- *        name: userId
+ *        name: id
  *        required: true
  *        description: 수정하려는 사용자 아이디
  *        schema:
@@ -61,10 +61,10 @@ const myRouter = express.Router();
  *              properties:
  *                error:
  *                  type: string
+ *                  example: null
  *                data:
  *                  type: object
- *                  example: [{"error": null,
- * "data": {"_id": "userId", "name": "사용자 이름", "email": "email123@gmail.com", "address": "사용자 주소", "phoneNumber": "010-1234-5678", "nickname": "사용자 닉네임", "profileImage": "프로필 이미지 url", "userType": "user", "createdAt": "2023-03-20T16:27:35.255Z", "updatedAt": "2023-03-21T07:19:32.821Z", "__v": 0}}]
+ *                  example: {"_id": "userId", "name": "사용자 이름", "email": "email123@gmail.com", "address": "사용자 주소", "phoneNumber": "010-1234-5678", "nickname": "사용자 닉네임", "profileImage": "프로필 이미지 url", "userType": "user", "createdAt": "2023-03-20T16:27:35.255Z", "updatedAt": "2023-03-21T07:19:32.821Z", "__v": 0}
  */
 
 // 사용자 정보 수정
@@ -82,10 +82,10 @@ myRouter.put(
  *  get:
  *    summary: "사용자 정보 조회"
  *    description: "로그인한 사용자 개인정보 조회."
- *    tags: [Users]
+ *    tags: [my]
  *    parameters:
  *      - in: path
- *        name: userId
+ *        name: id
  *        required: true
  *        description: 조회하려는 사용자 아이디
  *        schema:
@@ -100,10 +100,10 @@ myRouter.put(
  *              properties:
  *                error:
  *                  type: string
+ *                  example: null
  *                data:
  *                  type: object
- *                  example: [{"error": null,
- * "data": {"_id": "userId", "name": "사용자 이름", "email": "email123@gmail.com", "address": "사용자 주소", "phoneNumber": "010-1234-5678", "nickname": "사용자 닉네임", "profileImage": "프로필 이미지 url", "userType": "user", "createdAt": "2023-03-20T16:27:35.255Z", "updatedAt": "2023-03-21T07:19:32.821Z", "__v": 0}}]
+ *                  example: {"_id": "userId", "name": "사용자 이름", "email": "email123@gmail.com", "address": "사용자 주소", "phoneNumber": "010-1234-5678", "nickname": "사용자 닉네임", "profileImage": "프로필 이미지 url", "userType": "user", "createdAt": "2023-03-20T16:27:35.255Z", "updatedAt": "2023-03-21T07:19:32.821Z", "__v": 0}
  */
 
 // 사용자 정보 조회
@@ -117,7 +117,7 @@ myRouter.get(
 // 개설한 게시글 조회
 // /recruitment로 하면 사용자 정보조회로 넘어감
 myRouter.get(
-  "/all/recruitments",
+  "/recruitments",
   authMiddleware.verifyLogin,
   recruitmentController.getMyRecruitments
 );

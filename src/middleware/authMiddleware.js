@@ -201,7 +201,46 @@ const verifyBoardUser = (from) => async (req, res, next) => {
       }
     );
     // 각 사용자의 id 비교
-    if (JSON.stringify(author.board.author).replace(/"/g, "") !== loginedUser) {
+    if (
+      JSON.stringify(author.board.author._id).replace(/"/g, "") !== loginedUser
+    ) {
+      next(
+        new AppError(
+          commonErrors.authorizationError,
+          403,
+          "권한이 없는 사용자입니다."
+        )
+      );
+    }
+    next();
+  } catch (error) {
+    next(
+      new AppError(
+        commonErrors.authorizationError,
+        401,
+        "토큰이 유효하지 않습니다."
+      )
+    );
+  }
+};
+
+// 토큰 유효 검증, 로그인된 사용자와 커뮤니티 글 접근 권한을 가진 사용자(글 작성자)가 일치하는지 검사
+const verifyCommentUser = (from) => async (req, res, next) => {
+  try {
+    const { commentId } = req[from];
+    // 접근하려는 기능의 권한을 가진 사용자 id
+    const author = await boardService.getComment(commentId);
+
+    // 로그인한 사용자의 id
+    const loginedUser = jwt.verify(
+      req.cookies.accessToken,
+      process.env.SECRET,
+      (err, decoded) => {
+        return decoded.id;
+      }
+    );
+    // 각 사용자의 id 비교
+    if (JSON.stringify(author.writer).replace(/"/g, "") !== loginedUser) {
       next(
         new AppError(
           commonErrors.authorizationError,
@@ -262,4 +301,5 @@ module.exports = {
   verifyAuthorizedUser,
   verifyRecuitmentUser,
   verifyBoardUser,
+  verifyCommentUser,
 };

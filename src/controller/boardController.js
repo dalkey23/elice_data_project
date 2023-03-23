@@ -85,13 +85,12 @@ const boardController = {
   async editComment(req, res, next) {
     try {
       const { boardId, commentId } = req.params;
-      const { title, content } = req.body;
-      const updatedComment = await boardService.updateComment({
+      const { content } = req.body;
+      const updatedComment = await boardService.updateComment(
         boardId,
         commentId,
-        title,
-        content,
-      });
+        { content }
+      );
       res.json(updatedComment);
     } catch (error) {
       next(error);
@@ -100,8 +99,9 @@ const boardController = {
 
   async deleteComment(req, res, next) {
     try {
-      const { id, comment_id } = req.params;
-      const comment = await boardService.deleteComment(id, comment_id);
+      const { boardId, commentId } = req.params;
+      console.log(commentId);
+      const comment = await boardService.deleteComment(boardId, commentId);
       res.json(comment);
     } catch (error) {
       next(error);

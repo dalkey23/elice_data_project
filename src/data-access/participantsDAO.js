@@ -66,7 +66,12 @@ const participationDAO = {
       recruitmentId,
       participantId,
     }).lean();
-
+    await Recruitment.updateOne(
+      { _id: recruitmentId },
+      {
+        $pull: { participants: deletedParticipant._id },
+      }
+    );
     return deletedParticipant;
   },
 };
