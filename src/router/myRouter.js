@@ -117,7 +117,7 @@ myRouter.get(
 // 개설한 게시글 조회
 // /recruitment로 하면 사용자 정보조회로 넘어감
 myRouter.get(
-  "/all/recruitments",
+  "/recruitments",
   authMiddleware.verifyLogin,
   recruitmentController.getMyRecruitments
 );
