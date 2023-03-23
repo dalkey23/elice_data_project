@@ -1,4 +1,4 @@
-const { Recruitment } = require("./model");
+const { Recruitment, Comment } = require("./model");
 const util = require("../misc/util");
 
 // mongoose 모듈에서 생성된 Recruitment 스키마를 사용하여 CRUD 작업을 수행하는 recruitmentDAO 객체
@@ -42,14 +42,18 @@ const recruitmentDAO = {
   // ID를 사용하여 모집글을 검색
   async findOne(id) {
     // MongoDB에서 ID에 해당하는 모집글 검색
-    const plainRecruitment = await Recruitment.findById(id)
-      .populate("borough")
-      .populate("author")
-      .populate("participants")
-      .lean();
-    // 검색된 회의를 JavaScript 객체로 변환하여 반환
-    console.log(plainRecruitment);
-    return plainRecruitment;
+    const [plainRecruitment, comments] = await Promise.all([
+      Recruitment.findById(id)
+        .populate("borough")
+        .populate("author")
+        .populate("participants")
+        .lean(), // 검색된 회의를 JavaScript 객체로 변환하여 반환
+      Comment.find({ parentId: id, category: "recruitment" })
+        .populate("writer", "nickname")
+        .lean(),
+    ]);
+
+    return { plainRecruitment, comments };
   },
 
   // 필터를 사용하여 모집글을 검색
@@ -168,6 +172,35 @@ const recruitmentDAO = {
   async myFind(userId) {
     const myRecruitments = await Recruitment.find({ author: userId });
     return myRecruitments;
+  },
+
+  //댓글
+  async createComment(userId, { recruitmentId, content }) {
+    const newComment = new Comment({
+      parentId: recruitmentId,
+      writer: userId,
+      content,
+      category: "recruitment",
+    });
+    await newComment.save();
+    return newComment.toObject();
+  },
+
+  async updateComment(recruitmentId, commentId, toUpdate) {
+    const sanitizedToUpdate = util.sanitizeObject({
+      content: toUpdate.content,
+    });
+
+    const updateComment = await Comment.findByIdAndUpdate(
+      { _id: commentId },
+      sanitizedToUpdate
+    );
+    return updateComment;
+  },
+
+  async deleteComment(recruitmentId, commentId) {
+    const deletedComment = await Comment.findByIdAndDelete({ _id: commentId });
+    return deletedComment;
   },
 };
 

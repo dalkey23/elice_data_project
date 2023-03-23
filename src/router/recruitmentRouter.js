@@ -190,4 +190,21 @@ recruitmentRouter.get(
   authMiddleware.verifyAuthorizedUser("body")
 );
 
+//댓글
+recruitmentRouter.post(
+  "/:recruitmentId/comment",
+  authMiddleware.verifyLogin,
+  recruitmentController.createComment
+);
+
+recruitmentRouter.put(
+  "/:recruitmentId/comment/:commentId",
+  recruitmentController.editComment
+);
+
+recruitmentRouter.delete(
+  "/:recruitmentId/comment/:commentId",
+  recruitmentController.deleteComment
+);
+
 module.exports = recruitmentRouter;

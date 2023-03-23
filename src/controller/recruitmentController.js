@@ -190,9 +190,55 @@ const recruitmentController = {
   async getMyRecruitments(req, res, next) {
     try {
       const userId = req.userId;
-      console.log(userId)
+      console.log(userId);
       const myRecruitments = await recruitmentService.getMyRecruitments(userId);
       res.json(myRecruitments);
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  //댓글
+  async createComment(req, res, next) {
+    try {
+      const { recruitmentId } = req.params;
+      const { content } = req.body;
+      const userId = req.userId;
+
+      const comment = await boardService.createComment(userId, {
+        recruitmentId,
+        content,
+      });
+      res.json(comment);
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async editComment(req, res, next) {
+    try {
+      const { recruitmentId, commentId } = req.params;
+      const { content } = req.body;
+      const updatedComment = await boardService.updateComment(
+        recruitmentId,
+        commentId,
+        { content }
+      );
+      res.json(updatedComment);
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async deleteComment(req, res, next) {
+    try {
+      const { recruitmentId, commentId } = req.params;
+      console.log(commentId);
+      const comment = await boardService.deleteComment(
+        recruitmentId,
+        commentId
+      );
+      res.json(comment);
     } catch (error) {
       next(error);
     }

@@ -149,6 +149,33 @@ const recruitmentService = {
     const myRecruitments = await recruitmentDAO.myFind(userId);
     return myRecruitments;
   },
+
+  //댓글
+  async createComment(userId, { recruitmentId, content }) {
+    const comment = await recruitmentDAO.createComment(userId, {
+      recruitmentId,
+      content,
+    });
+    return comment;
+  },
+  async updateComment(recruitmentId, recruitmentId, { content }) {
+    const updateComment = await recruitmentDAO.updateComment(
+      recruitmentId,
+      commentId,
+      {
+        content,
+      }
+    );
+    return updateComment;
+  },
+
+  async deleteComment(recruitmentId, commentId) {
+    const deletedComment = await recruitmentDAO.deleteComment(
+      recruitmentId,
+      commentId
+    );
+    return deletedComment;
+  },
 };
 
 module.exports = recruitmentService;
