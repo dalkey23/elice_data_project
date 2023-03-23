@@ -137,40 +137,43 @@ const recruitmentDAO = {
   // ID를 사용하여 회의를 삭제
   async deleteOne(id) {
     // MongoDB에서 ID에 해당하는 모집글 삭제하고 삭제된 모집글을 반환
-    const plainDeletedRecruitment = await Recruitment.findByIdAndDelete(
-      id
-    ).lean();
-    // 삭제된 회의를 JavaScript 객체로 변환하여 반환
+    const plainDeletedRecruitment = await Promise.all([
+      Recruitment.findByIdAndDelete(id).lean(),
+      // 삭제된 회의를 JavaScript 객체로 변환하여 반환
+      Comment.deleteMany({ parentId: id }),
+    ]);
+
     return plainDeletedRecruitment;
   },
 
-  // 필터를 사용하여 여러 모집글을 삭제
-  async deleteMany(condition) {
-    // 삭제 조건에 사용될 필터를 purify-object 모듈을 사용하여 정제
-    const sanitizedCondition = util.sanitizeObject({
-      borough: condition.borough,
-      title: condition.title,
-      author: condition.author,
-      comment: condition.comment,
-      volunteerTime: condition.volunteerTime,
-      recruitments: condition.recruitments,
-      content: condition.content,
-      image: condition.image,
-      address: condition.address,
-      category: condition.category,
-      meetingStatus: condition.meeting,
-      participants: condition.participants,
-    });
-    // MongoDB에서 조건에 해당하는 모든 모집글을 삭제하고 삭제된 모집글 수를 반환
-    const plainDeletedRecruitments = await Recruitment.deleteMany(
-      sanitizedCondition
-    ).lean();
-    // 삭제된 모집글의 수를 반환
-    return plainDeletedRecruitments;
-  },
+  // // 필터를 사용하여 여러 모집글을 삭제 + 필요하면 댓글 삭제도 추가해야함
+  // async deleteMany(condition) {
+  //   // 삭제 조건에 사용될 필터를 purify-object 모듈을 사용하여 정제
+  //   const sanitizedCondition = util.sanitizeObject({
+  //     borough: condition.borough,
+  //     title: condition.title,
+  //     author: condition.author,
+  //     comment: condition.comment,
+  //     volunteerTime: condition.volunteerTime,
+  //     recruitments: condition.recruitments,
+  //     content: condition.content,
+  //     image: condition.image,
+  //     address: condition.address,
+  //     category: condition.category,
+  //     meetingStatus: condition.meeting,
+  //     participants: condition.participants,
+  //   });
+  //   // MongoDB에서 조건에 해당하는 모든 모집글을 삭제하고 삭제된 모집글 수를 반환
+  //   const plainDeletedRecruitments = await Recruitment.deleteMany(
+  //     sanitizedCondition
+  //   ).lean();
+  //   // 삭제된 모집글의 수를 반환
+  //   return plainDeletedRecruitments;
+  // },
 
   async myFind(userId) {
     const myRecruitments = await Recruitment.find({ author: userId });
+    console.log(myRecruitments)
     return myRecruitments;
   },
 
