@@ -1,4 +1,4 @@
-const { participantsDAO } = require("../data-access");
+const { participantsDAO, recruitmentDAO } = require("../data-access");
 
 const participantsService = {
   // 새로운 참가자 추가
@@ -7,9 +7,22 @@ const participantsService = {
       recruitmentId,
       participantId,
     });
+
+    const recruitmentAuthor = await recruitmentDAO.findAuthor({
+      recruitmentId,
+      participantId,
+    });
+
+    console.log(recruitmentAuthor);
+
     if (existedParticipants) {
       throw new Error("이미 참가하셨습니다.");
     }
+
+    if (recruitmentAuthor) {
+      throw new Error("자신이 개설한 모집글에는 참여신청을 할 수 없습니다.");
+    }
+
     const createdParticipant = await participantsDAO.create({
       recruitmentId,
       participantId,

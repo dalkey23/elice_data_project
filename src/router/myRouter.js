@@ -117,12 +117,16 @@ myRouter.get(
 // 개설한 게시글 조회
 // /recruitment로 하면 사용자 정보조회로 넘어감
 myRouter.get(
-  "/recruitments",
+  "/all/recruitments",
   authMiddleware.verifyLogin,
   recruitmentController.getMyRecruitments
 );
 
 // 참여한 게시글 조회
-//myRouter.get();
+myRouter.get(
+  "/:participantId/recruitments",
+  authMiddleware.verifyLogin,
+  recruitmentController.getMyParticipants
+);
 
 module.exports = myRouter;

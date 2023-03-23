@@ -7,7 +7,6 @@ const recruitmentController = {
       const {
         borough,
         title,
-        comment,
         volunteerTime,
         recruitments,
         content,
@@ -20,7 +19,6 @@ const recruitmentController = {
       const recruitment = await recruitmentService.createRecruitment({
         borough,
         title,
-        comment,
         volunteerTime,
         recruitments,
         content,
@@ -58,7 +56,7 @@ const recruitmentController = {
         category,
         meetingStatus,
         participants,
-      } = req.query;
+      } = req.body;
       const { recruitments, total, totalPage } =
         await recruitmentService.getRecruitments(
           {
@@ -88,33 +86,12 @@ const recruitmentController = {
     }
   },
 
-  // async getAllRecruitments(req, res, next) {
-  //   try {
-  //     const page = Number(req.query.page ?? 1);
-  //     const perPage = Number(req.query.perPage ?? 6);
-  //     const { recruitments, total, totalPage } =
-  //       await recruitmentService.getAllRecruitments(page, perPage);
-  //     res.json(
-  //       util.buildResponse({
-  //         page: page,
-  //         perPage: perPage,
-  //         totalPage: totalPage,
-  //         recruitmentCount: total,
-  //         recruitments,
-  //       })
-  //     );
-  //   } catch (error) {
-  //     next(error);
-  //   }
-  // },
-
   async putRecruitment(req, res, next) {
     try {
       const { id } = req.params;
       const {
         borough,
         title,
-        comment,
         volunteerTime,
         recruitments,
         content,
@@ -127,7 +104,6 @@ const recruitmentController = {
       const recruitment = await recruitmentService.updateRecruitment(id, {
         borough,
         title,
-        comment,
         volunteerTime,
         recruitments,
         content,
@@ -156,7 +132,6 @@ const recruitmentController = {
       const {
         borough,
         title,
-        comment,
         volunteerTime,
         recruitments,
         content,
@@ -170,7 +145,6 @@ const recruitmentController = {
       const Recruitments = await recruitmentService.deleteRecruitments({
         borough,
         title,
-        comment,
         volunteerTime,
         recruitments,
         content,
@@ -191,8 +165,44 @@ const recruitmentController = {
     try {
       const userId = req.userId;
       console.log(userId);
-      const myRecruitments = await recruitmentService.getMyRecruitments(userId);
-      res.json(myRecruitments);
+      const page = Number(req.query.page ?? 1);
+      const perPage = Number(req.query.perPage ?? 6);
+      const { myRecruitments, total, totalPage } =
+        await recruitmentService.getMyRecruitments(userId, page, perPage);
+      res.json(
+        util.buildResponse({
+          page: page,
+          perPage: perPage,
+          totalPage: totalPage,
+          myRecruitmentsCount: total,
+          myRecruitments,
+        })
+      );
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async getMyParticipants(req, res, next) {
+    try {
+      const { participantId } = req.params;
+      const page = Number(req.query.page ?? 1);
+      const perPage = Number(req.query.perPage ?? 6);
+      const { myParticipants, total, totalPage } =
+        await recruitmentService.getMyParticipants(
+          participantId,
+          page,
+          perPage
+        );
+      res.json(
+        util.buildResponse({
+          page: page,
+          perPage: perPage,
+          totalPage: totalPage,
+          myParticipantsCount: total,
+          myParticipants,
+        })
+      );
     } catch (error) {
       next(error);
     }

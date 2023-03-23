@@ -5,7 +5,6 @@ const recruitmentService = {
   async createRecruitment({
     borough,
     title,
-    comment,
     volunteerTime,
     recruitments,
     content,
@@ -19,7 +18,6 @@ const recruitmentService = {
     const createdRecruitment = await recruitmentDAO.create({
       borough,
       title,
-      comment,
       volunteerTime,
       recruitments,
       content,
@@ -71,18 +69,11 @@ const recruitmentService = {
     return recruitments;
   },
 
-  // //모든 모집글 찾기
-  // async getAllRecruitments(page, perPage) {
-  //   const recruitments = await recruitmentDAO.findAll(page, perPage);
-  //   return recruitments;
-  // },
-
   async updateRecruitment(
     id,
     {
       borough,
       title,
-      comment,
       volunteerTime,
       recruitments,
       content,
@@ -97,7 +88,6 @@ const recruitmentService = {
     const updatedRecruitment = await recruitmentDAO.updateOne(id, {
       borough,
       title,
-      comment,
       volunteerTime,
       recruitments,
       content,
@@ -118,7 +108,6 @@ const recruitmentService = {
   async deleteRecruitments({
     borough,
     title,
-    comment,
     volunteerTime,
     recruitments,
     content,
@@ -132,7 +121,6 @@ const recruitmentService = {
     const deletedRecruitments = await recruitmentDAO.deleteMany({
       borough,
       title,
-      comment,
       volunteerTime,
       recruitments,
       content,
@@ -145,9 +133,23 @@ const recruitmentService = {
     });
     return deletedRecruitments;
   },
-  async getMyRecruitments(userId) {
-    const myRecruitments = await recruitmentDAO.myFind(userId);
+
+  async getMyRecruitments(userId, page, perPage) {
+    const myRecruitments = await recruitmentDAO.myRecruitmentsFind(
+      userId,
+      page,
+      perPage
+    );
     return myRecruitments;
+  },
+
+  async getMyParticipants(participantId, page, perPage) {
+    const myParticipants = await recruitmentDAO.myParticipantsFind(
+      participantId,
+      page,
+      perPage
+    );
+    return myParticipants;
   },
 
   //댓글

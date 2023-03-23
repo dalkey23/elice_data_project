@@ -7,7 +7,6 @@ const recruitmentDAO = {
   async create({
     borough,
     title,
-    comment,
     volunteerTime,
     recruitments,
     content,
@@ -22,7 +21,6 @@ const recruitmentDAO = {
     const recruitment = new Recruitment({
       borough,
       title,
-      comment,
       volunteerTime,
       recruitments,
       content,
@@ -37,6 +35,19 @@ const recruitmentDAO = {
     await recruitment.save();
     // 생성된 회의를 JavaScript 객체로 변환하여 반환
     return recruitment.toObject();
+  },
+
+  // 작성자 조회
+  async findAuthor(filter) {
+    console.log(filter);
+    const sanitizedFilter = util.sanitizeObject({
+      id: filter.recruitmentId,
+      author: filter.participantId,
+    });
+    console.log(sanitizedFilter);
+    const plainRecruitment = await Recruitment.findOne(sanitizedFilter).lean();
+    console.log(sanitizedFilter);
+    return plainRecruitment;
   },
 
   // ID를 사용하여 모집글을 검색
@@ -82,25 +93,6 @@ const recruitmentDAO = {
     return { recruitments, total, totalPage };
   },
 
-  //
-
-  // // 페이지별 모든 모집글
-  // async findAll(page, perPage) {
-  //   const [total, recruitments] = await Promise.all([
-  //     Recruitment.countDocuments({}),
-  //     Recruitment.find()
-  //       .populate("borough")
-  //       .populate("author")
-  //       .populate("participants")
-  //       .lean()
-  //       .sort({ createdAt: -1 })
-  //       .skip(perPage * (page - 1))
-  //       .limit(perPage),
-  //   ]);
-  //   const totalPage = Math.ceil(total / perPage);
-  //   return { recruitments, total, totalPage };
-  // },
-
   // ID를 사용하여 모집글 정보를 업데이트
   async updateOne(id, toUpdate) {
     // 업데이트할 정보를 purify-object 모듈을 사용하여 정제
@@ -145,33 +137,62 @@ const recruitmentDAO = {
   },
 
   // 필터를 사용하여 여러 모집글을 삭제
-  async deleteMany(condition) {
-    // 삭제 조건에 사용될 필터를 purify-object 모듈을 사용하여 정제
-    const sanitizedCondition = util.sanitizeObject({
-      borough: condition.borough,
-      title: condition.title,
-      author: condition.author,
-      comment: condition.comment,
-      volunteerTime: condition.volunteerTime,
-      recruitments: condition.recruitments,
-      content: condition.content,
-      image: condition.image,
-      address: condition.address,
-      category: condition.category,
-      meetingStatus: condition.meeting,
-      participants: condition.participants,
-    });
-    // MongoDB에서 조건에 해당하는 모든 모집글을 삭제하고 삭제된 모집글 수를 반환
-    const plainDeletedRecruitments = await Recruitment.deleteMany(
-      sanitizedCondition
-    ).lean();
-    // 삭제된 모집글의 수를 반환
-    return plainDeletedRecruitments;
+  // async deleteMany(condition) {
+  //   // 삭제 조건에 사용될 필터를 purify-object 모듈을 사용하여 정제
+  //   const sanitizedCondition = util.sanitizeObject({
+  //     borough: condition.borough,
+  //     title: condition.title,
+  //     author: condition.author,
+  //     comment: condition.comment,
+  //     volunteerTime: condition.volunteerTime,
+  //     recruitments: condition.recruitments,
+  //     content: condition.content,
+  //     image: condition.image,
+  //     address: condition.address,
+  //     category: condition.category,
+  //     meetingStatus: condition.meeting,
+  //     participants: condition.participants,
+  //   });
+  //   // MongoDB에서 조건에 해당하는 모든 모집글을 삭제하고 삭제된 모집글 수를 반환
+  //   const plainDeletedRecruitments = await Recruitment.deleteMany(
+  //     sanitizedCondition
+  //   ).lean();
+  //   // 삭제된 모집글의 수를 반환
+  //   return plainDeletedRecruitments;
+  // },
+
+  async myRecruitmentsFind(userId, page, perPage) {
+    const filter = { author: userId };
+    const [total, myRecruitments] = await Promise.all([
+      Recruitment.countDocuments(filter),
+      Recruitment.find(filter)
+        .populate("borough")
+        .populate("author")
+        .populate("participants")
+        .lean()
+        .sort({ createdAt: -1 })
+        .skip(perPage * (page - 1))
+        .limit(perPage),
+    ]);
+    const totalPage = Math.ceil(total / perPage);
+    return { myRecruitments, total, totalPage };
   },
 
-  async myFind(userId) {
-    const myRecruitments = await Recruitment.find({ author: userId });
-    return myRecruitments;
+  async myParticipantsFind(participantId, page, perPage) {
+    console.log(participantId);
+    const [total, myParticipants] = await Promise.all([
+      Recruitment.countDocuments(participantId),
+      Recruitment.find({ participants: participantId })
+        .populate("borough")
+        .populate("author")
+        .populate("participants")
+        .lean()
+        .sort({ createdAt: -1 })
+        .skip(perPage * (page - 1))
+        .limit(perPage),
+    ]);
+    const totalPage = Math.ceil(total / perPage);
+    return { myParticipants, total, totalPage };
   },
 
   //댓글

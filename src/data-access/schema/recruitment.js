@@ -13,11 +13,6 @@ const recruitmentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    // 댓글
-    comment: {
-      type: String,
-      required: false,
-    },
     // 봉사 시간
     volunteerTime: {
       type: String,

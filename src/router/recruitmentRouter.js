@@ -178,18 +178,6 @@ recruitmentRouter.delete(
   participantsController.deleteParticipant
 );
 
-// 참여한 개시글 목록
-recruitmentRouter.get(
-  "/:participantId",
-  participantsController.getParticipantIds
-);
-
-// 개설한 게시글 목록
-recruitmentRouter.get(
-  "/:recruitmentId",
-  authMiddleware.verifyAuthorizedUser("body")
-);
-
 //댓글
 recruitmentRouter.post(
   "/:recruitmentId/comment",
