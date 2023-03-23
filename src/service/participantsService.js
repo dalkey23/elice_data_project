@@ -13,12 +13,18 @@ const participantsService = {
       participantId,
     });
 
+    const isClosed = await recruitmentDAO.isRecruitmentClosed(recruitmentId);
+
     if (existedParticipants) {
       throw new Error("이미 참가하셨습니다.");
     }
 
     if (recruitmentAuthor) {
       throw new Error("자신이 개설한 모집글에는 참여신청을 할 수 없습니다.");
+    }
+
+    if (isClosed) {
+      throw new Error("이미 마감된 모집이거나 모집 인원이 가득 찼습니다.");
     }
 
     const createdParticipant = await participantsDAO.create({
