@@ -35,10 +35,7 @@ const userService = {
 
   async getAllUsers(page, perPage) {
     const { users, total, totalPage } = await userDAO.findAll(page, perPage);
-    const sanitzedUsers = users.reduce((map, object) => {
-      map.push(util.removePassword(object));
-      return map;
-    }, []);
+    const sanitzedUsers = users.map(object => util.removePassword(object));
     return { sanitzedUsers, total, totalPage };
   },
 
