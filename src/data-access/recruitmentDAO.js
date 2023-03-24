@@ -137,9 +137,11 @@ const recruitmentDAO = {
 
   // ID를 사용하여 회의를 삭제
   async deleteOne(id) {
-    const plainDeletedRecruitment = await Recruitment.findByIdAndDelete(
-      id
-    ).lean();
+    const plainDeletedRecruitment = await Promise.all([
+      Recruitment.findByIdAndDelete(id).lean(),
+      Participants.deleteMany({ recruitmentId: id }),
+      Comment.deleteMany({ parentId: id }),
+    ]);
     return plainDeletedRecruitment;
   },
 
