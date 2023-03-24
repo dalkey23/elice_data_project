@@ -182,14 +182,78 @@ adminRouter.delete(
   boardController.deleteBoard
 )
 
-// 모집글 댓글 삭제(보완 필요)
+/**
+ * @swagger
+ * /api/v1/admin/recruitment/{recruitmentId}/comment/{commentId}:
+ *  delete:
+ *    summary: "모집글 댓글 삭제"
+ *    description: "관리자 권한으로 모집글 댓글 삭제"
+ *    tags: [Admin]
+ *    parameters:
+ *      - in: path
+ *        name: recruitmentId
+ *        required: true
+ *        description: 모집글 아이디
+ *        schema:
+ *          type: string
+ *      - in: path
+ *        name: commentId
+ *        required: true
+ *        description: 댓글 아이디
+ *        schema:
+ *          type: string
+ *    responses:
+ *      200:
+ *        description: 삭제된 댓글 정보
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Comment'
+ */
+
+// 모집글 댓글 삭제
 adminRouter.delete(
   "/recruitment/:recruitmentId/comment/:commentId",
   authMiddleware.verifyAdmin,
-  //recruitmentController.
+  recruitmentController.deleteComment
 )
 
-// 게시글 댓글 삭제(보완 필요)
+/**
+ * @swagger
+ * /api/v1/admin/board/{boardId}/comment/{commentId}:
+ *  delete:
+ *    summary: "커뮤니티 댓글 삭제"
+ *    description: "관리자 권한으로 커뮤니티 댓글 삭제"
+ *    tags: [Admin]
+ *    parameters:
+ *      - in: path
+ *        name: board_id
+ *        required: true
+ *        description: 게시글 아이디
+ *        schema:
+ *          type: string
+ *      - in: path
+ *        name: commentId
+ *        required: true
+ *        description: 댓글 아이디
+ *        schema:
+ *          type: string
+ *    responses:
+ *      "200":
+ *        description: 댓글 삭제
+ *        content:
+ *          application/json:
+ *            schema:
+ *              type: object
+ *              properties:
+ *                ok:
+ *                  type: boolean
+ *                boards:
+ *                  type: object
+ *                  example: [{"_id": "641a84a00cb38132ac73be45","writer": "6417fde6bdbf8824233b7ec2","content": "안녕하세여여","parentId": "641a43a5787a32395e83f497","category": "board","createdAt": "2023-03-22T04:31:28.044Z","updatedAt": "2023-03-22T04:31:28.044Z","__v": 0}]
+ */
+
+// 게시글 댓글 삭제
 adminRouter.delete(
   "/board/:boardId/comment/:commentId",
   authMiddleware.verifyAdmin,
