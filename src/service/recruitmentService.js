@@ -105,34 +105,6 @@ const recruitmentService = {
     const deletedRecruitment = await recruitmentDAO.deleteOne(id);
     return deletedRecruitment;
   },
-  async deleteRecruitments({
-    borough,
-    title,
-    volunteerTime,
-    recruitments,
-    content,
-    author,
-    image,
-    address,
-    category,
-    meetingStatus,
-    participants,
-  }) {
-    const deletedRecruitments = await recruitmentDAO.deleteMany({
-      borough,
-      title,
-      volunteerTime,
-      recruitments,
-      content,
-      author,
-      image,
-      address,
-      category,
-      meetingStatus,
-      participants,
-    });
-    return deletedRecruitments;
-  },
 
   async getMyRecruitments(userId, page, perPage) {
     const myRecruitments = await recruitmentDAO.myRecruitmentsFind(

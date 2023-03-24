@@ -127,39 +127,6 @@ const recruitmentController = {
       next(error);
     }
   },
-  async deleteRecruitments(req, res, next) {
-    try {
-      const {
-        borough,
-        title,
-        volunteerTime,
-        recruitments,
-        content,
-        author,
-        image,
-        address,
-        category,
-        meetingStatus,
-        participants,
-      } = req.body;
-      const Recruitments = await recruitmentService.deleteRecruitments({
-        borough,
-        title,
-        volunteerTime,
-        recruitments,
-        content,
-        author,
-        image,
-        address,
-        category,
-        meetingStatus,
-        participants,
-      });
-      res.json(util.buildResponse(Recruitments));
-    } catch (error) {
-      next(error);
-    }
-  },
 
   async getMyRecruitments(req, res, next) {
     try {

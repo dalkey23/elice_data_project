@@ -1,4 +1,3 @@
-const Post = require("./Post");
 const Board = require("./Board");
 const Comment = require("./Comment");
 const User = require("./User");
@@ -15,7 +14,6 @@ const Borough = require("./Borough");
 const Participants = require("./Participants");
 
 module.exports = {
-  Post,
   Board,
   Comment,
   User,

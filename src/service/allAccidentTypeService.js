@@ -1,12 +1,8 @@
 const { allAccidentTypeDAO } = require("../data-access");
 
 const allAccidentTypeService = {
-  async getAllAccidentType({ accident_type, death_toll, number_of_injured }) {
-    const allAccidentType = await allAccidentTypeDAO.findAll({
-      accident_type,
-      death_toll,
-      number_of_injured,
-    });
+  async getAllAccidentType() {
+    const allAccidentType = await allAccidentTypeDAO.findAll();
     return allAccidentType;
   },
 };

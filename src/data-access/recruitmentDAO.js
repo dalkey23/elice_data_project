@@ -1,7 +1,6 @@
 const { Recruitment, Comment, Participants } = require("./model");
 const util = require("../misc/util");
 
-// mongoose 모듈에서 생성된 Recruitment 스키마를 사용하여 CRUD 작업을 수행하는 recruitmentDAO 객체
 const recruitmentDAO = {
   // 새로운 모집글 생성
   async create({
@@ -17,7 +16,6 @@ const recruitmentDAO = {
     meetingStatus,
     participants,
   }) {
-    // Recruitment 스키마를 이용하여 새로운 모집글 생성
     const recruitment = new Recruitment({
       borough,
       title,
@@ -33,7 +31,7 @@ const recruitmentDAO = {
     });
     // MongoDB에 저장
     await recruitment.save();
-    // 생성된 회의를 JavaScript 객체로 변환하여 반환
+
     return recruitment.toObject();
   },
 
@@ -62,7 +60,6 @@ const recruitmentDAO = {
 
   // ID를 사용하여 모집글을 검색
   async findOne(id) {
-    // MongoDB에서 ID에 해당하는 모집글 검색
     const [plainRecruitment, comments] = await Promise.all([
       Recruitment.findById(id)
         .populate("borough")
@@ -71,7 +68,7 @@ const recruitmentDAO = {
           path: "participants",
           populate: { path: "participantId", select: "nickname" },
         })
-        .lean(), // 검색된 회의를 JavaScript 객체로 변환하여 반환
+        .lean(),
       Comment.find({ parentId: id, category: "recruitment" })
         .populate("writer", "nickname")
         .lean(),
@@ -108,7 +105,6 @@ const recruitmentDAO = {
 
   // ID를 사용하여 모집글 정보를 업데이트
   async updateOne(id, toUpdate) {
-    // 업데이트할 정보를 purify-object 모듈을 사용하여 정제
     const sanitizedToUpdate = util.sanitizeObject({
       borough: toUpdate.borough,
       title: toUpdate.title,
@@ -122,30 +118,28 @@ const recruitmentDAO = {
       meetingStatus: toUpdate.meetingStatus,
       participants: toUpdate.participants,
     });
-    // MongoDB에서 ID에 해당하는 모집글을 업데이트하고 새로운 버전의 모집글을 반환
+
     const plainUpdatedRecruitment = await Recruitment.findByIdAndUpdate(
       id,
       sanitizedToUpdate,
       {
-        runValidators: true, // 유효성 검사를 실행
-        new: true, // 업데이트된 버전의 모집글을 반환
+        runValidators: true,
+        new: true,
       }
     )
       .populate("borough")
       .populate("author")
       .populate("participants")
       .lean();
-    // 업데이트된 회의를 JavaScript 객체로 변환하여 반환
+
     return plainUpdatedRecruitment;
   },
 
   // ID를 사용하여 회의를 삭제
   async deleteOne(id) {
-    // MongoDB에서 ID에 해당하는 모집글 삭제하고 삭제된 모집글을 반환
     const plainDeletedRecruitment = await Recruitment.findByIdAndDelete(
       id
     ).lean();
-    // 삭제된 회의를 JavaScript 객체로 변환하여 반환
     return plainDeletedRecruitment;
   },
 

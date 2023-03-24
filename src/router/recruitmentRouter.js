@@ -156,14 +156,28 @@ recruitmentRouter.delete(
   recruitmentController.deleteRecruitment
 );
 
-// // 모집글 별 참여자 목록조회
-// recruitmentRouter.get(
-//   "/:recruitmentId/participants",
-//   authMiddleware.verifyLogin,
-//   participantsController.getParticipantsByRecruitmentId
-// );
-
 // 참여자 추가
+/**
+ * @swagger
+ * /api/v1/recruitment/{recruitmentId}/participants:
+ *  post:
+ *    summary: "참여자 추가"
+ *    tags: [Recruitment]
+ *    parameters:
+ *      - in: path
+ *        name: recruitmentId
+ *        required: true
+ *        description: 모집글 아이디
+ *        schema:
+ *          type: string
+ *    responses:
+ *      200:
+ *        description: 참여자가 추가된 모집글 정보
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Recruitment'
+ */
 recruitmentRouter.post(
   "/:recruitmentId/participants",
   authMiddleware.verifyLogin,
@@ -172,6 +186,27 @@ recruitmentRouter.post(
 );
 
 // 모집글 별 참가자 탈퇴
+/**
+ * @swagger
+ * /api/v1/recruitment/{recruitmentId}/participants:
+ *  delete:
+ *    summary: "참여자 탈퇴"
+ *    tags: [Recruitment]
+ *    parameters:
+ *      - in: path
+ *        name: recruitmentId
+ *        required: true
+ *        description: 모집글 아이디
+ *        schema:
+ *          type: string
+ *    responses:
+ *      200:
+ *        description: 참여자가 탈퇴한 모집글 정보
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Recruitment'
+ */
 recruitmentRouter.delete(
   "/:recruitmentId/participants",
   authMiddleware.verifyLogin,
@@ -179,20 +214,109 @@ recruitmentRouter.delete(
   participantsController.deleteParticipant
 );
 
-//댓글
+// 댓글
+/**
+ * @swagger
+ * /api/v1/recruitment/{recruitmentId}/comment:
+ *  post:
+ *    summary: "댓글 생성"
+ *    tags: [Recruitment]
+ *    parameters:
+ *      - in: path
+ *        name: recruitmentId
+ *        required: true
+ *        description: 모집글 아이디
+ *        schema:
+ *          type: string
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/Comment'
+ *    responses:
+ *      201:
+ *        description: 생성된 댓글 정보
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Comment'
+ */
+
 recruitmentRouter.post(
   "/:recruitmentId/comment",
   authMiddleware.verifyLogin,
   recruitmentController.createComment
 );
 
+// 댓글 수정
+/**
+ * @swagger
+ * /api/v1/recruitment/{recruitmentId}/comment/{commentId}:
+ *  put:
+ *    summary: "댓글 수정"
+ *    tags: [Recruitment]
+ *    parameters:
+ *      - in: path
+ *        name: recruitmentId
+ *        required: true
+ *        description: 모집글 아이디
+ *        schema:
+ *          type: string
+ *      - in: path
+ *        name: commentId
+ *        required: true
+ *        description: 댓글 아이디
+ *        schema:
+ *          type: string
+ *    requestBody:
+ *      required: true
+ *      content:
+ *        application/json:
+ *          schema:
+ *            $ref: '#/components/schemas/Comment'
+ *    responses:
+ *      200:
+ *        description: 수정된 댓글 정보
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Comment'
+ */
 recruitmentRouter.put(
   "/:recruitmentId/comment/:commentId",
   authMiddleware.verifyCommentUser("params"),
   recruitmentMiddleware.checkCommentFrom("body"),
   recruitmentController.editComment
 );
-
+// 댓글 삭제
+/**
+ * @swagger
+ * /api/v1/recruitment/{recruitmentId}/comment/{commentId}:
+ *  delete:
+ *    summary: "댓글 삭제"
+ *    tags: [Recruitment]
+ *    parameters:
+ *      - in: path
+ *        name: recruitmentId
+ *        required: true
+ *        description: 모집글 아이디
+ *        schema:
+ *          type: string
+ *      - in: path
+ *        name: commentId
+ *        required: true
+ *        description: 댓글 아이디
+ *        schema:
+ *          type: string
+ *    responses:
+ *      200:
+ *        description: 삭제된 댓글 정보
+ *        content:
+ *          application/json:
+ *            schema:
+ *              $ref: '#/components/schemas/Comment'
+ */
 recruitmentRouter.delete(
   "/:recruitmentId/comment/:commentId",
   recruitmentMiddleware.checkCommentIdFrom("params"),
