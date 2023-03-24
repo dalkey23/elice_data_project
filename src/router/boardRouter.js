@@ -258,6 +258,7 @@ boardRouter.delete(
 boardRouter.post(
   "/:boardId/comment",
   authMiddleware.verifyLogin,
+  boardMiddleware.checkBoard("params"),
   boardController.createComment
 );
 
@@ -309,6 +310,7 @@ boardRouter.post(
 boardRouter.put(
   "/:boardId/comment/:commentId",
   authMiddleware.verifyCommentUser("params"),
+  boardMiddleware.checkBoard("params"),
   boardMiddleware.checkCommentFrom("body"),
   boardController.editComment
 );
@@ -350,6 +352,7 @@ boardRouter.put(
 boardRouter.delete(
   "/:boardId/comment/:commentId",
   boardMiddleware.checkCommentIdFrom("params"),
+  boardMiddleware.checkBoard("params"),
   authMiddleware.verifyCommentUser("params"),
   boardController.deleteComment
 );

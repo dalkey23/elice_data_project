@@ -246,6 +246,7 @@ recruitmentRouter.delete(
 recruitmentRouter.post(
   "/:recruitmentId/comment",
   authMiddleware.verifyLogin,
+  recruitmentMiddleware.checkRecruitment("params"),
   recruitmentController.createComment
 );
 
@@ -286,6 +287,7 @@ recruitmentRouter.post(
 recruitmentRouter.put(
   "/:recruitmentId/comment/:commentId",
   authMiddleware.verifyCommentUser("params"),
+  recruitmentMiddleware.checkRecruitment("params"),
   recruitmentMiddleware.checkCommentFrom("body"),
   recruitmentController.editComment
 );
@@ -320,6 +322,7 @@ recruitmentRouter.put(
 recruitmentRouter.delete(
   "/:recruitmentId/comment/:commentId",
   recruitmentMiddleware.checkCommentIdFrom("params"),
+  recruitmentMiddleware.checkRecruitment("params"),
   authMiddleware.verifyCommentUser("params"),
   recruitmentController.deleteComment
 );
