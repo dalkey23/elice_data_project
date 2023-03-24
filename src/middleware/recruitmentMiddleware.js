@@ -13,7 +13,7 @@ const schema = Joi.object({
   content: Joi.string().required(),
   category: Joi.string().required(),
   address: Joi.string().required(),
-  image: Joi.string(),
+  image: Joi.string().allow(""),
   meetingStatus: Joi.string(),
   participants: Joi.array().items(JoiObjectId()).default([]),
 });
