@@ -1,5 +1,6 @@
 const AppError = require("../misc/AppError");
 const commonErrors = require("../misc/commonErrors");
+const { boardService } = require("../service");
 
 const checkCompleteBoardFrom = (from) => (req, res, next) => {
   const { title, content, author } = req[from];
@@ -76,10 +77,28 @@ const checkCommentIdFrom = (from) => (req, res, next) => {
   next();
 };
 
+const checkBoard = (from) => async (req, res, next) => {
+  const { boardId } = req[from];
+  const existRecruitment = await boardService.getBoard(boardId);
+  console.log(existRecruitment.board);
+
+  if (!existRecruitment.board) {
+    next(
+      new AppError(
+        commonErrors.resourceNotFoundError,
+        404,
+        "게시글을 찾을 수 없습니다."
+      )
+    );
+  }
+  next();
+};
+
 module.exports = {
   checkCompleteBoardFrom,
   checkBoardIdFrom,
   checkMinBoardConditionFrom,
   checkCommentFrom,
   checkCommentIdFrom,
+  checkBoard,
 };

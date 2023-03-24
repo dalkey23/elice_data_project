@@ -2,6 +2,7 @@ const Joi = require("joi");
 const JoiObjectId = require("joi-objectid")(Joi);
 const AppError = require("../misc/AppError");
 const commonErrors = require("../misc/commonErrors");
+const { recruitmentService } = require("../service");
 
 const schema = Joi.object({
   borough: JoiObjectId().required(),
@@ -148,10 +149,28 @@ const checkCommentIdFrom = (from) => (req, res, next) => {
   next();
 };
 
+const checkRecruitment = (from) => async (req, res, next) => {
+  const { recruitmentId } = req[from];
+  const existRecruitment = await recruitmentService.getRecruitment(
+    recruitmentId
+  );
+  if (!existRecruitment.plainRecruitment) {
+    next(
+      new AppError(
+        commonErrors.resourceNotFoundError,
+        404,
+        "게시글을 찾을 수 없습니다."
+      )
+    );
+  }
+  next();
+};
+
 module.exports = {
   checkCompleteRecruitmentFrom,
   checkRecruitmentIdFrom,
   checkMinRecruitmentConditionFrom,
   checkCommentFrom,
   checkCommentIdFrom,
+  checkRecruitment,
 };
