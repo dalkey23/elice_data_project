@@ -3,18 +3,13 @@ const { Schema, mongoose } = require("mongoose");
 const recruitmentSchema = new mongoose.Schema(
   {
     // 자치구별
-    // borough: {
-    //   type: Schema.Types.ObjectId,
-    //   required: true,
-    //   ref: "Borough",
-    // },
+    borough: {
+      type: Schema.Types.ObjectId,
+      required: true,
+      ref: "Borough",
+    },
     // 제목
     title: {
-      type: String,
-      required: true,
-    },
-    // 댓글
-    comment: {
       type: String,
       required: true,
     },
@@ -42,7 +37,7 @@ const recruitmentSchema = new mongoose.Schema(
     // 이미지
     image: {
       type: String,
-      required: true,
+      required: false,
     },
     // 주소
     address: {
@@ -54,18 +49,21 @@ const recruitmentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    // // 참가자명단
-    // participation: [
-    //   {
-    //     type: Schema.Types.ObjectId,
-    //     required: false,
-    //     ref: "RecruitmentParticipaint",
-    //   },
-    // ],
+    // 참가자명단
+    participants: [
+      {
+        type: Schema.Types.ObjectId,
+        required: false,
+        default: [],
+        ref: "Participants",
+      },
+    ],
     // 모집중, 모집완료
     meetingStatus: {
       type: String,
-      required: true,
+      enum: ["모집중", "모집완료"],
+      required: false,
+      default: "모집중",
     },
   },
   {

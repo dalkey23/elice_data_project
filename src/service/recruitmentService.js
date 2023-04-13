@@ -3,8 +3,8 @@ const { recruitmentDAO } = require("../data-access");
 const recruitmentService = {
   //생성
   async createRecruitment({
+    borough,
     title,
-    comment,
     volunteerTime,
     recruitments,
     content,
@@ -13,11 +13,11 @@ const recruitmentService = {
     address,
     category,
     meetingStatus,
-    participation,
+    participants,
   }) {
     const createdRecruitment = await recruitmentDAO.create({
+      borough,
       title,
-      comment,
       volunteerTime,
       recruitments,
       content,
@@ -26,7 +26,7 @@ const recruitmentService = {
       address,
       category,
       meetingStatus,
-      participation,
+      participants,
     });
     return createdRecruitment;
   },
@@ -40,52 +40,40 @@ const recruitmentService = {
   //모집글들 찾기
   async getRecruitments(
     {
+      borough,
       title,
-      comment,
       volunteerTime,
-      recruitments,
-      content,
       author,
-      image,
       address,
       category,
       meetingStatus,
-      participation,
+      participants,
     },
     page,
     perPage
   ) {
-    const recruitment = await recruitmentDAO.findMany(
+    const recruitments = await recruitmentDAO.findMany(
       {
+        borough,
         title,
-        comment,
         volunteerTime,
-        recruitments,
-        content,
         author,
-        image,
         address,
         category,
         meetingStatus,
-        participation,
+        participants,
       },
       page,
       perPage
     );
-    return recruitment;
-  },
-
-  //모든 모집글 찾기
-  async getAllRecruitments(page, perPage) {
-    const recruitments = await recruitmentDAO.findAll(page, perPage);
     return recruitments;
   },
 
   async updateRecruitment(
     id,
     {
+      borough,
       title,
-      comment,
       volunteerTime,
       recruitments,
       content,
@@ -94,12 +82,12 @@ const recruitmentService = {
       address,
       category,
       meetingStatus,
-      participation,
+      participants,
     }
   ) {
     const updatedRecruitment = await recruitmentDAO.updateOne(id, {
+      borough,
       title,
-      comment,
       volunteerTime,
       recruitments,
       content,
@@ -108,7 +96,7 @@ const recruitmentService = {
       address,
       category,
       meetingStatus,
-      participation,
+      participants,
     });
     return updatedRecruitment;
   },
@@ -117,33 +105,50 @@ const recruitmentService = {
     const deletedRecruitment = await recruitmentDAO.deleteOne(id);
     return deletedRecruitment;
   },
-  async deleteRecruitments({
-    title,
-    comment,
-    volunteerTime,
-    recruitments,
-    content,
-    author,
-    image,
-    address,
-    category,
-    meetingStatus,
-    participation,
-  }) {
-    const deletedRecruitments = await recruitmentDAO.deleteMany({
-      title,
-      comment,
-      volunteerTime,
-      recruitments,
+
+  async getMyRecruitments(userId, page, perPage) {
+    const myRecruitments = await recruitmentDAO.myRecruitmentsFind(
+      userId,
+      page,
+      perPage
+    );
+    return myRecruitments;
+  },
+
+  async getMyParticipants(participantId, page, perPage) {
+    const myParticipants = await recruitmentDAO.myParticipantsFind(
+      participantId,
+      page,
+      perPage
+    );
+    return myParticipants;
+  },
+
+  //댓글
+  async createComment(userId, { recruitmentId, content }) {
+    const comment = await recruitmentDAO.createComment(userId, {
+      recruitmentId,
       content,
-      author,
-      image,
-      address,
-      category,
-      meetingStatus,
-      participation,
     });
-    return deletedRecruitments;
+    return comment;
+  },
+  async updateComment(recruitmentId, commentId, { content }) {
+    const updateComment = await recruitmentDAO.updateComment(
+      recruitmentId,
+      commentId,
+      {
+        content,
+      }
+    );
+    return updateComment;
+  },
+
+  async deleteComment(recruitmentId, commentId) {
+    const deletedComment = await recruitmentDAO.deleteComment(
+      recruitmentId,
+      commentId
+    );
+    return deletedComment;
   },
 };
 

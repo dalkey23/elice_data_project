@@ -1,4 +1,3 @@
-const postController = require("./postController");
 const boardController = require("./boardController");
 const userController = require("./userController");
 const authController = require("./authController");
@@ -12,9 +11,9 @@ const seoulCarAndPeoCasesController = require("./seoulCarAndPeoCasesController")
 const seoulTeenagerAccidentController = require("./seoulTeenagerAccidentController");
 const teenagerAccidentController = require("./teenagerAccidentController");
 const teenagerTimeAccidentController = require("./teenagerTimeAccidentController");
+const participantsController = require("./participantsController");
 
 module.exports = {
-  postController,
   boardController,
   userController,
   authController,
@@ -28,4 +27,5 @@ module.exports = {
   seoulTeenagerAccidentController,
   teenagerAccidentController,
   teenagerTimeAccidentController,
+  participantsController,
 };

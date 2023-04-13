@@ -35,10 +35,7 @@ const userService = {
 
   async getAllUsers(page, perPage) {
     const { users, total, totalPage } = await userDAO.findAll(page, perPage);
-    const sanitzedUsers = users.reduce((map, object) => {
-      map.push(util.removePassword(object));
-      return map;
-    }, []);
+    const sanitzedUsers = users.map(object => util.removePassword(object));
     return { sanitzedUsers, total, totalPage };
   },
 
@@ -70,7 +67,7 @@ const userService = {
     }
     
     // password 수정하는 경우 해싱
-    const hashedPassword = await password? bcrypt.hash(password, 10) : password;
+    const hashedPassword = password !== undefined ? await bcrypt.hash(password, 10) : await Promise.resolve(undefined);
 
     const updatedUser = await userDAO.updateOne(id, {
       name,

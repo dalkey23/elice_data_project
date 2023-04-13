@@ -5,6 +5,7 @@ const boroughSchema = new mongoose.Schema(
     borough: {
       type: String,
       required: true,
+      unique: true,
     },
   },
   {
